@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+  }
+
+  pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+  }
+
+  html {
+    @apply bg-white text-gray-700 antialiased;
+  }
+
+  .line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .line-numbers-rows > span {
+    display: block;
+    counter-increment: linenumber;
+  }
+
+  .line-numbers-rows > span:before {
+    content: counter(linenumber);
+    color: #999;
+    display: block;
+    padding-right: 0.8em;
+    text-align: right;
+  }
+
+  .nuxt-content {
+    @apply break-words;
+
+    & h2,
+    & h3 {
+      /* Fix anchor scrollTo */
+      &::before {
+        display: block;
+        content: " ";
+        margin-top: -85px;
+        height: 85px;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* Style anchor links on headings added by @nuxt/content */
+      & > a {
+        @apply ml-5;
+
+        &::before {
+          content: "#";
+          @apply text-primary-500 absolute -ml-5 pr-2 text-xl font-normal leading-8 opacity-100;
+        }
+
+        @screen lg {
+          @apply ml-0;
+
+          &::before {
+            @apply opacity-0;
+          }
+        }
+      }
+      &:hover {
+        & > a::before {
+          @apply opacity-100;
+        }
+      }
+    }
+
+    & .nuxt-content-highlight {
+      @apply relative;
+
+      /* Style filename span added by @nuxt/content */
+      & > .filename {
+        @apply absolute right-0 top-0 z-10 mr-4 mt-3 font-mono text-sm leading-none tracking-tight text-gray-100;
+      }
+
+      /* Add top padding to code blocks with filename */
+      & > .filename + pre[class*="language-"] {
+        @apply pt-8;
+      }
+
+      /* Style copy button added in `pages/_.vue` */
+      & > .copy {
+        @apply absolute right-0 bottom-0 mr-3 mb-3 hidden rounded-md border border-white bg-gray-800 px-2 py-2 text-sm font-semibold uppercase leading-none text-white shadow-lg;
+
+        &:hover {
+          @apply bg-gray-700;
+        }
+
+        &:focus {
+          @apply bg-gray-600 outline-none;
+        }
+      }
+      &:hover {
+        & > .copy {
+          @apply block;
+        }
+      }
+    }
+
+    /* Force style on pre elements */
+    & pre[class*="language-"] {
+      /* Make pre static so the relative goes to the parent (.nuxt-content-highlight) */
+      @apply static bg-gray-800;
+    }
+  }
+}

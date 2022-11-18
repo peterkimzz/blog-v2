@@ -1,7 +1,9 @@
 <template>
   <div>
-    <TopNavigationBar />
+    <TopHeader />
 
     <slot />
+
+    <Footer />
   </div>
 </template>

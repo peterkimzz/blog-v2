@@ -45,7 +45,7 @@ const { data, pending, error } = await useAsyncData(
     // get the surround information,
     // which is an array of documeents that come before and after the current document
     let surround = queryContent()
-      .only(["_path", "title", "description"])
+      .only(["_path", "title", "description", "created", "category"])
       .sort({ created: -1 })
       .findSurround(route.path);
     return {
@@ -54,6 +54,8 @@ const { data, pending, error } = await useAsyncData(
     };
   }
 );
+
+const [prev, next] = data.value?.surround || [];
 </script>
 
 <template>
@@ -76,10 +78,6 @@ const { data, pending, error } = await useAsyncData(
           </Container>
         </header>
 
-        <section>
-          <Toc :links="data?.article.body.toc.links" />
-        </section>
-
         <!-- <div>
           {{ Object.keys(article) }}
         </div>
@@ -87,23 +85,54 @@ const { data, pending, error } = await useAsyncData(
 
         <main>
           <Container>
-            <article
-              class="prose-md sm:prose-lg prose prose-img:mx-auto prose-a:underline-offset-2 prose-headings:no-underline mx-auto py-6"
-            >
-              <ContentDoc />
-            </article>
+            <div class="relative">
+              <article
+                class="prose-md sm:prose-lg prose prose-img:mx-auto prose-a:underline-offset-2 prose-headings:no-underline"
+              >
+                <ContentDoc />
+              </article>
+
+              <aside
+                class="absolute top-0 left-full hidden h-full w-[300px] lg:block"
+              >
+                <div class="sticky top-0 -mt-6 min-h-[300px] py-6 px-10">
+                  <Toc :links="data?.article.body.toc.links" />
+                </div>
+              </aside>
+            </div>
           </Container>
         </main>
 
-        <section class="py-6">
+        <section>
           <Container>
-            {{ data?.surround }}
+            <div class="giscus border-t py-10"></div>
           </Container>
         </section>
 
-        <section>
+        <section v-if="prev && next">
           <Container>
-            <div class="giscus border-t py-6"></div>
+            <div class="border-t py-10">
+              <h3 class="font-semibold">다른 글</h3>
+              <ul class="mt-2 grid gap-6">
+                <ArticleCard
+                  :key="next._path"
+                  :path="next._path"
+                  :title="next.title"
+                  :description="next.description"
+                  :category="next.category"
+                  :created="next.created"
+                />
+
+                <ArticleCard
+                  :key="prev._path"
+                  :path="prev._path"
+                  :title="prev.title"
+                  :description="prev.description"
+                  :category="prev.category"
+                  :created="prev.created"
+                />
+              </ul>
+            </div>
           </Container>
         </section>
       </template>

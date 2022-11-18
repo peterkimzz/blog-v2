@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply bg-white text-gray-600 antialiased;
+  }
+
   pre[class*="language-"].line-numbers {
     position: relative;
     padding-left: 3.8em;
@@ -12,10 +16,6 @@
   pre[class*="language-"].line-numbers > code {
     position: relative;
     white-space: inherit;
-  }
-
-  html {
-    @apply bg-white text-gray-700 antialiased;
   }
 
   .line-numbers .line-numbers-rows {

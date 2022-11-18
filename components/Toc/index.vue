@@ -1,8 +1,6 @@
 <script setup lang="ts">
-// define links prop
 defineProps(["links"]);
 
-// flatten TOC links nested arrays to one array
 const flattenLinks = (links) => {
   let _links = links
     .map((link) => {
@@ -20,14 +18,16 @@ const flattenLinks = (links) => {
 </script>
 
 <template>
-  <nav class="toc">
-    <header class="toc-header">
-      <h3 class="text-xl font-bold">Table of contents</h3>
+  <nav>
+    <header>
+      <h3 class="text-lg font-bold">목차</h3>
     </header>
-    <ul class="toc-links">
-      <!-- render each link with depth class -->
+    <ul class="py-1">
       <li v-for="link of flattenLinks(links)" :key="link.id">
-        <a :href="`#${link.id}`">
+        <a
+          :href="`#${link.id}`"
+          class="block border-l py-0.5 pl-4 hover:font-semibold"
+        >
           {{ link.text }}
         </a>
       </li>

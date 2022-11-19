@@ -101,18 +101,3 @@ _(내가 넥슨과 삼성전자 다니시는 분들과 어깨를 나란히..!? �
 꽤 깔끔하게 UI를 뽑았다고 생각하고, 이 모든 건 모두 Refactoring UI와 Tailwind UI를 적절히 조화시킨 결과라고 생각한다.
 
 지금은 여러 가지 이유로 버전 업데이트를 못하고 있지만, 내년에는 라이브에서 사용할 수 있을 정도로 개선해볼 생각이다.
-
-<!-- ## 그 외
-
-> This is highlighted text box qwfmq wfoqi wfoiqm fiq wofqm oi qowi fqiwfoqwmfoqimwfoqimwoqwif
-
-```js{0,0}[server.js]
-const http = require('http')
-const bodyParser = require('body-parser')
-
-http.createServer((req, res) => {
-  bodyParser.parse(req, (error, body) => {
-    res.end(body)
-  })
-}).listen(3000)
-``` -->

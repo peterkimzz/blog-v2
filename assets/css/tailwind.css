@@ -5,6 +5,7 @@
 @layer base {
   html {
     @apply bg-white text-gray-600 antialiased;
+    word-break: keep-all;
   }
 
   pre[class*="language-"].line-numbers {

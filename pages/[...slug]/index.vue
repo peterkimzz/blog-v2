@@ -2,7 +2,6 @@
 import dayjs from "dayjs";
 import Prism from "prismjs";
 import "prismjs/plugins/line-numbers/prism-line-numbers.js";
-import { Article } from "~~/types/content";
 
 useHead({
   script: [
@@ -95,7 +94,7 @@ const [prev, next] = data.value?.surround || [];
               <aside
                 class="absolute top-0 left-full hidden h-full w-[300px] lg:block"
               >
-                <div class="sticky top-0 -mt-6 min-h-[300px] py-6 px-10">
+                <div class="sticky top-0 -mt-6 min-h-fit py-6 px-10">
                   <Toc :links="data?.article.body.toc.links" />
                 </div>
               </aside>

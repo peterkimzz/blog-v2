@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ko">
+<head><meta charset="utf-8">
+<title>Vue.js로 크롬 확장 프로그램 만들기 강의 - 3부</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css" crossorigin="anonymous">
+<meta property="og:title" content="Vue.js로 크롬 확장 프로그램 만들기 강의 - 3부">
+<meta name="description" content="이전 포스팅에서는 Vite을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다.">
+<meta property="og:description" content="이전 포스팅에서는 Vite을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다."><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/entry.79114c47.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/default.d951ec69.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/nuxt-link.1a0c7ca0.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.2a729291.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/_plugin-vue_export-helper.c27b6911.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.d7df6e1f.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentDoc.d0af00a0.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentRenderer.0c8f79ae.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentRendererMarkdown.d275c58e.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.a6ef77ff.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/preview.cbf1dd32.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentQuery.a66614bb.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/query.c8f1a254.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/utils.ee097093.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseP.07b8d9d3.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseA.694256e7.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseH2.693b43d3.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseCodeInline.673aebb1.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseCode.0c8a05e5.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseImg.c22bfdf6.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseStrong.901a2179.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseOl.604716f6.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseLi.77006913.js"><link rel="prefetch" as="script" crossorigin href="/blog-v2/_nuxt/error-404.20273c51.js"><link rel="prefetch" as="script" crossorigin href="/blog-v2/_nuxt/error-500.02c6558b.js"><style>pre code .line{display:block;min-height:1rem}</style><style>/*! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:""}html{-webkit-text-size-adjust:100%;font-feature-settings:normal;font-family:Pretendard Variable,Pretendard,-apple-system,BlinkMacSystemFont,system-ui,Roboto,Helvetica Neue,Segoe UI,Apple SD Gothic Neo,Noto Sans KR,Malgun Gothic,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,sans-serif;font-variation-settings:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{font-feature-settings:inherit;color:inherit;font-family:inherit;font-size:100%;font-variation-settings:inherit;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}html{--tw-bg-opacity:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#fff;background-color:rgb(255 255 255/var(--tw-bg-opacity));line-height:1.75rem}a{text-underline-offset:4px}a:hover{text-decoration-line:underline}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\!container{max-width:1536px!important}.container{max-width:1536px}}.prose{color:var(--tw-prose-body);max-width:65ch}.prose :where(p):not(:where([class~=not-prose] *)){margin-bottom:1.25em;margin-top:1.25em}.prose :where([class~=lead]):not(:where([class~=not-prose] *)){color:var(--tw-prose-lead);font-size:1.25em;line-height:1.6;margin-bottom:1.2em;margin-top:1.2em}.prose :where(a):not(:where([class~=not-prose] *)){color:var(--tw-prose-links);font-weight:500;text-decoration:underline}.prose :where(strong):not(:where([class~=not-prose] *)){color:var(--tw-prose-bold);font-weight:600}.prose :where(a strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(ol):not(:where([class~=not-prose] *)){list-style-type:decimal;margin-bottom:1.25em;margin-top:1.25em;padding-left:1.625em}.prose :where(ol[type=A]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=A s]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a s]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=I]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type=I s]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i s]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type="1"]):not(:where([class~=not-prose] *)){list-style-type:decimal}.prose :where(ul):not(:where([class~=not-prose] *)){list-style-type:disc;margin-bottom:1.25em;margin-top:1.25em;padding-left:1.625em}.prose :where(ol>li):not(:where([class~=not-prose] *))::marker{color:var(--tw-prose-counters);font-weight:400}.prose :where(ul>li):not(:where([class~=not-prose] *))::marker{color:var(--tw-prose-bullets)}.prose :where(hr):not(:where([class~=not-prose] *)){border-color:var(--tw-prose-hr);border-top-width:1px;margin-bottom:3em;margin-top:3em}.prose :where(blockquote):not(:where([class~=not-prose] *)){border-left-color:var(--tw-prose-quote-borders);border-left-width:.25rem;color:var(--tw-prose-quotes);font-style:italic;font-weight:500;margin-bottom:1.6em;margin-top:1.6em;padding-left:1em;quotes:"\201C""\201D""\2018""\2019"}.prose :where(blockquote p:first-of-type):not(:where([class~=not-prose] *)):before{content:open-quote}.prose :where(blockquote p:last-of-type):not(:where([class~=not-prose] *)):after{content:close-quote}.prose :where(h1):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:2.25em;font-weight:800;line-height:1.1111111;margin-bottom:.8888889em;margin-top:0}.prose :where(h1 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:900}.prose :where(h2):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:1.5em;font-weight:700;line-height:1.3333333;margin-bottom:1em;margin-top:2em}.prose :where(h2 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:800}.prose :where(h3):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:1.25em;font-weight:600;line-height:1.6;margin-bottom:.6em;margin-top:1.6em}.prose :where(h3 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:700}.prose :where(h4):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;line-height:1.5;margin-bottom:.5em;margin-top:1.5em}.prose :where(h4 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:700}.prose :where(img):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(figure>*):not(:where([class~=not-prose] *)){margin-bottom:0;margin-top:0}.prose :where(figcaption):not(:where([class~=not-prose] *)){color:var(--tw-prose-captions);font-size:.875em;line-height:1.4285714;margin-top:.8571429em}.prose :where(code):not(:where([class~=not-prose] *)){color:var(--tw-prose-code);font-size:.875em;font-weight:600}.prose :where(code):not(:where([class~=not-prose] *)):before{content:"`"}.prose :where(code):not(:where([class~=not-prose] *)):after{content:"`"}.prose :where(a code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h1 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h2 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.875em}.prose :where(h3 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.9em}.prose :where(h4 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(pre):not(:where([class~=not-prose] *)){background-color:var(--tw-prose-pre-bg);border-radius:.375rem;color:var(--tw-prose-pre-code);font-size:.875em;font-weight:400;line-height:1.7142857;margin-bottom:1.7142857em;margin-top:1.7142857em;overflow-x:auto;padding:.8571429em 1.1428571em}.prose :where(pre code):not(:where([class~=not-prose] *)){background-color:transparent;border-radius:0;border-width:0;color:inherit;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;padding:0}.prose :where(pre code):not(:where([class~=not-prose] *)):before{content:none}.prose :where(pre code):not(:where([class~=not-prose] *)):after{content:none}.prose :where(table):not(:where([class~=not-prose] *)){font-size:.875em;line-height:1.7142857;margin-bottom:2em;margin-top:2em;table-layout:auto;text-align:left;width:100%}.prose :where(thead):not(:where([class~=not-prose] *)){border-bottom-color:var(--tw-prose-th-borders);border-bottom-width:1px}.prose :where(thead th):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;padding-bottom:.5714286em;padding-left:.5714286em;padding-right:.5714286em;vertical-align:bottom}.prose :where(tbody tr):not(:where([class~=not-prose] *)){border-bottom-color:var(--tw-prose-td-borders);border-bottom-width:1px}.prose :where(tbody tr:last-child):not(:where([class~=not-prose] *)){border-bottom-width:0}.prose :where(tbody td):not(:where([class~=not-prose] *)){vertical-align:baseline}.prose :where(tfoot):not(:where([class~=not-prose] *)){border-top-color:var(--tw-prose-th-borders);border-top-width:1px}.prose :where(tfoot td):not(:where([class~=not-prose] *)){vertical-align:top}.prose{--tw-prose-body:#374151;--tw-prose-headings:#111827;--tw-prose-lead:#4b5563;--tw-prose-links:#111827;--tw-prose-bold:#111827;--tw-prose-counters:#6b7280;--tw-prose-bullets:#d1d5db;--tw-prose-hr:#e5e7eb;--tw-prose-quotes:#111827;--tw-prose-quote-borders:#e5e7eb;--tw-prose-captions:#6b7280;--tw-prose-code:#111827;--tw-prose-pre-code:#e5e7eb;--tw-prose-pre-bg:#1f2937;--tw-prose-th-borders:#d1d5db;--tw-prose-td-borders:#e5e7eb;--tw-prose-invert-body:#d1d5db;--tw-prose-invert-headings:#fff;--tw-prose-invert-lead:#9ca3af;--tw-prose-invert-links:#fff;--tw-prose-invert-bold:#fff;--tw-prose-invert-counters:#9ca3af;--tw-prose-invert-bullets:#4b5563;--tw-prose-invert-hr:#374151;--tw-prose-invert-quotes:#f3f4f6;--tw-prose-invert-quote-borders:#374151;--tw-prose-invert-captions:#9ca3af;--tw-prose-invert-code:#fff;--tw-prose-invert-pre-code:#d1d5db;--tw-prose-invert-pre-bg:rgba(0,0,0,.5);--tw-prose-invert-th-borders:#4b5563;--tw-prose-invert-td-borders:#374151;font-size:1rem;line-height:1.75}.prose :where(video):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(figure):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(li):not(:where([class~=not-prose] *)){margin-bottom:.5em;margin-top:.5em}.prose :where(ol>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(ul>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(.prose>ul>li p):not(:where([class~=not-prose] *)){margin-bottom:.75em;margin-top:.75em}.prose :where(.prose>ul>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ul>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(.prose>ol>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ol>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose] *)){margin-bottom:.75em;margin-top:.75em}.prose :where(hr+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h2+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h3+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h4+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(thead th:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(thead th:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(tbody td,tfoot td):not(:where([class~=not-prose] *)){padding:.5714286em}.prose :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(.prose>:first-child):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(.prose>:last-child):not(:where([class~=not-prose] *)){margin-bottom:0}.relative{position:relative}.sticky{position:sticky}.top-0{top:0}.\!m-0{margin:0!important}.mx-auto{margin-left:auto;margin-right:auto}.line-clamp-3{-webkit-box-orient:vertical;-webkit-line-clamp:3;display:-webkit-box;overflow:hidden}.block{display:block}.flex{display:flex}.table{display:table}.grid{display:grid}.aspect-video{aspect-ratio:16/9}.h-\[100dvh\]{height:100dvh}.h-full{height:100%}.w-\[180px\]{width:180px}.w-full{width:100%}.min-w-\[30rem\]{min-width:30rem}.max-w-7xl{max-width:80rem}.max-w-prose{max-width:65ch}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:0;margin-bottom:calc(1.25rem*var(--tw-space-y-reverse));margin-top:1.25rem;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)))}.overflow-hidden{overflow:hidden}.overflow-y-scroll{overflow-y:scroll}.rounded-lg{border-radius:.5rem}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-gray-100{--tw-border-opacity:1;border-color:#f3f4f6;border-color:rgb(243 244 246/var(--tw-border-opacity))}.border-gray-300{--tw-border-opacity:1;border-color:#d1d5db;border-color:rgb(209 213 219/var(--tw-border-opacity))}.bg-gray-100\/50{background-color:rgba(243,244,246,.5)}.bg-white{--tw-bg-opacity:1;background-color:#fff;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-10{padding-bottom:2.5rem;padding-top:2.5rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.py-3{padding-bottom:.75rem;padding-top:.75rem}.pb-2{padding-bottom:.5rem}.pt-1{padding-top:.25rem}.text-left{text-align:left}.text-right{text-align:right}.align-top{vertical-align:top}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[1\.1rem\]{font-size:1.1rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-\[0\.9rem\]{font-weight:.9rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.leading-tight{line-height:1.25}.tracking-\[-0\.01em\]{letter-spacing:-.01em}.tracking-wide{letter-spacing:.025em}.text-blue-600{--tw-text-opacity:1;color:#2563eb;color:rgb(37 99 235/var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:#6b7280;color:rgb(107 114 128/var(--tw-text-opacity))}.text-gray-600{--tw-text-opacity:1;color:#4b5563;color:rgb(75 85 99/var(--tw-text-opacity))}.text-gray-600\/90{color:rgba(75,85,99,.9)}.text-gray-700{--tw-text-opacity:1;color:#374151;color:rgb(55 65 81/var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:#111827;color:rgb(17 24 39/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:#dc2626;color:rgb(220 38 38/var(--tw-text-opacity))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) grayscale(100%) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}@media (min-width:768px){.md\:prose-lg{font-size:1.125rem;line-height:1.7777778}.md\:prose-lg :where(p):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em}.md\:prose-lg :where([class~=lead]):not(:where([class~=not-prose] *)){font-size:1.2222222em;line-height:1.4545455;margin-bottom:1.0909091em;margin-top:1.0909091em}.md\:prose-lg :where(blockquote):not(:where([class~=not-prose] *)){margin-bottom:1.6666667em;margin-top:1.6666667em;padding-left:1em}.md\:prose-lg :where(h1):not(:where([class~=not-prose] *)){font-size:2.6666667em;line-height:1;margin-bottom:.8333333em;margin-top:0}.md\:prose-lg :where(h2):not(:where([class~=not-prose] *)){font-size:1.6666667em;line-height:1.3333333;margin-bottom:1.0666667em;margin-top:1.8666667em}.md\:prose-lg :where(h3):not(:where([class~=not-prose] *)){font-size:1.3333333em;line-height:1.5;margin-bottom:.6666667em;margin-top:1.6666667em}.md\:prose-lg :where(h4):not(:where([class~=not-prose] *)){line-height:1.5555556;margin-bottom:.4444444em;margin-top:1.7777778em}.md\:prose-lg :where(img):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(video):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(figure):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(figure>*):not(:where([class~=not-prose] *)){margin-bottom:0;margin-top:0}.md\:prose-lg :where(figcaption):not(:where([class~=not-prose] *)){font-size:.8888889em;line-height:1.5;margin-top:1em}.md\:prose-lg :where(code):not(:where([class~=not-prose] *)){font-size:.8888889em}.md\:prose-lg :where(h2 code):not(:where([class~=not-prose] *)){font-size:.8666667em}.md\:prose-lg :where(h3 code):not(:where([class~=not-prose] *)){font-size:.875em}.md\:prose-lg :where(pre):not(:where([class~=not-prose] *)){border-radius:.375rem;font-size:.8888889em;line-height:1.75;margin-bottom:2em;margin-top:2em;padding:1em 1.5em}.md\:prose-lg :where(ol):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em;padding-left:1.5555556em}.md\:prose-lg :where(ul):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em;padding-left:1.5555556em}.md\:prose-lg :where(li):not(:where([class~=not-prose] *)){margin-bottom:.6666667em;margin-top:.6666667em}.md\:prose-lg :where(ol>li):not(:where([class~=not-prose] *)){padding-left:.4444444em}.md\:prose-lg :where(ul>li):not(:where([class~=not-prose] *)){padding-left:.4444444em}.md\:prose-lg :where(.md\:prose-lg>ul>li p):not(:where([class~=not-prose] *)){margin-bottom:.8888889em;margin-top:.8888889em}.md\:prose-lg :where(.md\:prose-lg>ul>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ul>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ol>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ol>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em}.md\:prose-lg :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose] *)){margin-bottom:.8888889em;margin-top:.8888889em}.md\:prose-lg :where(hr):not(:where([class~=not-prose] *)){margin-bottom:3.1111111em;margin-top:3.1111111em}.md\:prose-lg :where(hr+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h2+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h3+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h4+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(table):not(:where([class~=not-prose] *)){font-size:.8888889em;line-height:1.5}.md\:prose-lg :where(thead th):not(:where([class~=not-prose] *)){padding-bottom:.75em;padding-left:.75em;padding-right:.75em}.md\:prose-lg :where(thead th:first-child):not(:where([class~=not-prose] *)){padding-left:0}.md\:prose-lg :where(thead th:last-child):not(:where([class~=not-prose] *)){padding-right:0}.md\:prose-lg :where(tbody td,tfoot td):not(:where([class~=not-prose] *)){padding:.75em}.md\:prose-lg :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose] *)){padding-left:0}.md\:prose-lg :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose] *)){padding-right:0}.md\:prose-lg :where(.md\:prose-lg>:first-child):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(.md\:prose-lg>:last-child):not(:where([class~=not-prose] *)){margin-bottom:0}}.hover\:no-underline:hover{text-decoration-line:none}.group:hover .group-hover\:underline{text-decoration-line:underline}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style></head>
+<body ><div id="__nuxt"><div><header class="bg-white border-b sticky top-0"><div class="mx-auto max-w-7xl px-6"><!--[--><nav class="flex items-center justify-between"><a href="/blog-v2/" class="font-bold text-xl italic tracking-wide"><span>PETERKIM</span><span class="text-gray-600">ZZ</span></a><ul class="flex items-center gap-5 font-semibold"><li><a href="https://resume.peterkimzz.com" rel="noopener noreferrer" target="_blank" class="py-3 block"> Résumé </a></li><li><a href="https://github.com/peterkimzz" rel="noopener noreferrer" target="_blank" class="py-3 block"> GitHub </a></li></ul></nav><!--]--></div></header><!--[--><main><div class="mx-auto max-w-7xl px-6 max-w-prose"><!--[--><!--[--><div class="prose md:prose-lg"><p><!--[--><a href="/blog-v2/vuejs-chrome-extension-2" class=""><!--[-->이전 포스팅<!--]--></a>에서는 <a href="https://vitejs.dev/" rel="nofollow"><!--[-->Vite<!--]--></a>을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다.<!--]--></p><h2 id="개발-시작하기"><a href="#개발-시작하기"><!--[-->개발 시작하기<!--]--></a></h2><p><!--[-->일단 저는 개발 단계에서 크롬 확장 프로그램으로 올려서 개발하기 보다는, 그냥 브라우저에서 핫 리로드를 하며 빠르게 개발을 하도록 하겠습니다.<!--]--></p><p><!--[-->일단 <code><!--[-->package.json<!--]--></code>의 scripts를 조금 수정해줍시다.<!--]--></p><!--[--><pre><code>{
+  &quot;dev&quot;: &quot;vite&quot;,
+  &quot;dev:extension&quot;: &quot;vite build --watch&quot;,
+  &quot;build&quot;: &quot;vite build&quot;,
+  &quot;build:extension&quot;: &quot;bestzip dist.zip dist/&quot;
+}
+</code></pre><!--]--><p><!--[-->브라우저로 개발하고 싶을 땐 <code><!--[-->npm run dev<!--]--></code>를, 크롬 확장 프로그램에 올려서 하고 싶을 땐 <code><!--[-->npm run dev:extension<!--]--></code> 으로 하면 됩니다. <code><!--[-->build<!--]--></code>도 똑같습니다.<!--]--></p><p><!--[-->개발 서버를 열어줍니다.<!--]--></p><!--[--><pre><code>npm run dev
+# http://localhost:3000
+</code></pre><!--]--><p><!--[-->이런 화면이 보인다면 정상적으로 개발 서버가 열린겁니다.<!--]--></p><p><!--[-->일단 시작 페이지를 깔끔하게 만들어주도록 하죠. <code><!--[-->src/App.vue<!--]--></code> 파일을 열어주세요.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;img alt=&quot;Vue logo&quot; src=&quot;./assets/logo.png&quot; /&gt;
+  &lt;HelloWorld msg=&quot;Hello Vue 3 + Vite&quot; /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import HelloWorld from &quot;./components/HelloWorld.vue&quot;;
+
+// This starter template is using Vue 3 experimental &lt;script setup&gt; SFCs
+// Check out https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+&lt;/style&gt;
+</code></pre><!--]--><p><!--[-->Vue는 <code><!--[-->Single File Component (SFC)<!--]--></code> 라는 기술로 한 파일에서 <code><!--[-->HTML<!--]--></code>, <code><!--[-->Javascript<!--]--></code>, <code><!--[-->CSS<!--]--></code>를 모두 정의합니다. 이 자체로 장점이 있다면 있을 수 있고, 코드가 길어진다면 단점이 될 수도 있겠죠.<!--]--></p><p><!--[-->기존 코드를 아래처럼 정리해주고, <code><!--[-->src/components<!--]--></code> 폴더에 있는 <code><!--[-->HelloWorld.vue<!--]--></code> 파일도 지워주세요.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div&gt;Hello, world!&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;&lt;/script&gt;
+
+&lt;style&gt;&lt;/style&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129522620-b5c4c974-3d97-42f7-9c06-ab7c010e9f03.png" alt="image"><!--]--></p><h2 id="레이아웃-디자인"><a href="#레이아웃-디자인"><!--[-->레이아웃 디자인<!--]--></a></h2><p><!--[-->보통 웹사이트는 <code><!--[-->Navigation Bar<!--]--></code>, <code><!--[-->Main Contents<!--]--></code>, <code><!--[-->Footer Bar<!--]--></code> 크게 세 가지의 영역으로 나누어 디자인을 하게 됩니다. 이게 대부분의 유저들에게 가장 익숙합니다.<!--]--></p><p><!--[--><code><!--[-->Navigation Bar<!--]--></code> 에는 로고와 자주 사용하는 메뉴들을 넣게 됩니다.<!--]--></p><p><!--[--><code><!--[-->Main Contents<!--]--></code> 는 말 그대로 메인 콘텐츠가 보여집니다.<!--]--></p><p><!--[--><code><!--[-->Footer bar<!--]--></code> 영역엔 주로 회사 정보나, 사이트 내 접근 가능한 링크 혹은 외부 채널들을 넣어줍니다.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129524227-83ddb4d9-fd9d-4310-a6a3-ca1575361ddf.png" alt="image"><!--]--></p><p><!--[-->간단하게 위의 구조로 HTML을 작성해줍시다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;main&gt;Hello, world!&lt;/main&gt;
+
+  &lt;footer&gt;peterkimzz.com&lt;/footer&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129525100-9a13e16f-5e16-45a1-b90d-b95397317f17.png" alt="image"><!--]--></p><p><!--[-->코드 상으로는 세 개의 영역이 확실히 구분되지만, 사람 눈에는 전혀 구분되어 보이지 않습니다. <code><!--[-->css<!--]--></code>를 활용해 지금보다 약간만 개선을 해봅시다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;main&gt;Hello, world!&lt;/main&gt;
+
+  &lt;footer&gt;peterkimzz.com&lt;/footer&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;&lt;/script&gt;
+
+&lt;style&gt;
+nav {
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+main {
+  padding-top: 1rem;
+  padding-bottom: 10rem;
+}
+
+footer {
+  font-size: 0.9rem;
+  color: gray;
+  border-top: 1px solid #e2e2e2;
+  padding-top: 0.5rem;
+}
+&lt;/style&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129525960-0010088b-6627-4ed8-a40b-0176bc277956.png" alt="image"><!--]--></p><p><!--[-->음.. 네 뭐 전보다는 낫네요. 예쁜게 좋은 디자인은 아닙니다. 익숙하고 편하면 좋은 겁니다.<!--]--></p><h2 id="코인-거래소-ui-분석"><a href="#코인-거래소-ui-분석"><!--[-->코인 거래소 UI 분석<!--]--></a></h2><p><!--[-->구조는 대충 잡았는데, 어디부터 어떻게 서비스를 만들어야 할지 막막합니다. 왜냐하면 거기까지는 생각을 안해봤거든요.<!--]--></p><p><!--[-->그렇다면 실제 코인 거래소들은 어떤 UI를 구성했을까요? 저는 한국 거래소 1등인 <a href="https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" rel="nofollow"><!--[-->업비트<!--]--></a> 를 슬쩍 보도록 하겠습니다.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129527876-f79dd52b-828e-49f5-a052-c8c73e57473f.png" alt="image"><!--]--></p><p><!--[-->우리가 만들어 볼 부분은 바로 여기입니다.<!--]--></p><p><!--[-->간단히 UI를 분석해보자면, 최상단에는 <strong><!--[-->검색<!--]--></strong>과 <strong><!--[-->설정<!--]--></strong>이 있습니다.<!--]--></p><p><!--[-->그 아래는 화폐에 따라 다른 시세를 볼 수 있는 <strong><!--[-->화폐 탭<!--]--></strong>이 있네요.<!--]--></p><p><!--[-->그리고 아래에는 테이블 형식으로 된 <strong><!--[-->코인 시세<!--]--></strong>가 있습니다.<!--]--></p><p><!--[-->근데 저는 개선해보고 싶은 부분이 하나 있습니다. 바로 테이블 쪽의 <strong><!--[-->거래대금<!--]--></strong> 입니다. <code><!--[-->1,783,893백만<!--]--></code> 이라는 숫자가 바로 읽히지 않기 때문입니다. 어차피 백만 아래 단위를 잘라서 보여줄 것 같으면 차라리 <code><!--[-->1조 7838억<!--]--></code> 정도로만 나와도 훨씬 이해하기 쉬울 것 같은데 말이죠.<!--]--></p><p><!--[-->그래서 전 업비트의 UI를 참고하되, 저만의 차별점을 약간 줘보도록 하겠습니다.<!--]--></p><p><!--[-->참고로 다른 서비스들을 최대한 많이 접해보는 게 좋습니다. 나중에 좋은 서비스를 만드는데 큰 밑거름이 됩니다. 자주 베끼고, 따라하세요. (그렇다고 아예 베끼라는 건 아닙니다)<!--]--></p><h2 id="ui-만들기"><a href="#ui-만들기"><!--[-->UI 만들기<!--]--></a></h2><p><!--[-->일단 이 강의 시리즈에서는 검색이나 설정, 화폐 탭 바꾸기 기능 등 부가 기능들은 만들지 않도록 하겠습니다. 단순히 시세를 보여주기만 하는 것 까지만 하겠습니다. (너무 많아요)<!--]--></p><p><!--[-->그렇다면 일단 테이블만 먼저 스타일링 없이 만들어보도록 하겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;한글명&lt;/th&gt;
+        &lt;th&gt;현재가&lt;/th&gt;
+        &lt;th&gt;전일대비&lt;/th&gt;
+        &lt;th&gt;거래대금&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;div&gt;도지코인&lt;/div&gt;
+          &lt;div&gt;DOGE/KRW&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;394&lt;/td&gt;
+        &lt;td&gt;
+          &lt;div&gt;-0.76%&lt;/div&gt;
+          &lt;div&gt;-3.00&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;1,783,893백만&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;div&gt;리플&lt;/div&gt;
+          &lt;div&gt;XRP/KRW&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;1500&lt;/td&gt;
+        &lt;td&gt;
+          &lt;div&gt;+0.67%&lt;/div&gt;
+          &lt;div&gt;10.00&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;1,159,312백만&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;div&gt;이더리움클래식&lt;/div&gt;
+          &lt;div&gt;ETC/KRW&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;85,340&lt;/td&gt;
+        &lt;td&gt;
+          &lt;div&gt;-2.33%&lt;/div&gt;
+          &lt;div&gt;-2040&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;933,497백만&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;footer&gt;peterkimzz.com&lt;/footer&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129530856-94661816-0592-45fb-a7b6-031175c33a1c.png" alt="image"><!--]--></p><p><!--[-->실제 데이터를 받아오기 전에, 3개의 코인 정보만 업비트랑 같은 레이아웃으로 작성했습니다.<!--]--></p><p><!--[-->우리가 주목해야할 부분은, <code><!--[-->&lt;tr&gt;<!--]--></code> 태그 부분이 반복된다는 점입니다. 그렇다는 이야기는 자바스크립트를 이용해 좀 더 프로그램스럽게 만들 수 있다는 것이죠.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;한글명&lt;/th&gt;
+        &lt;th&gt;현재가&lt;/th&gt;
+        &lt;th&gt;전일대비&lt;/th&gt;
+        &lt;th&gt;거래대금&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr v-for=&quot;coin in coins&quot; :key=&quot;coin.symbol&quot;&gt;
+        &lt;td&gt;
+          &lt;div&gt;{{ coin.korean_name }}&lt;/div&gt;
+          &lt;div&gt;{{ coin.symbol }}/KRW&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;{{ coin.price }}&lt;/td&gt;
+        &lt;td&gt;
+          &lt;div&gt;{{ coin.change }}%&lt;/div&gt;
+          &lt;div&gt;{{ coin.change_price }}&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;{{ coin.volume }}백만&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;footer&gt;peterkimzz.com&lt;/footer&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from &quot;vue&quot;;
+
+const coins = ref([
+  {
+    symbol: &quot;DOGE&quot;,
+    korean_name: &quot;도지코인&quot;,
+    price: 394,
+    change: -0.76,
+    change_price: -3.0,
+    volume: 1783783,
+  },
+  {
+    symbol: &quot;XRP&quot;,
+    korean_name: &quot;리플&quot;,
+    price: 1500,
+    change: 0.67,
+    change_price: 10.0,
+    volume: 1159312,
+  },
+  {
+    symbol: &quot;ETC&quot;,
+    korean_name: &quot;이더리움클래식&quot;,
+    price: 85340,
+    change: -2.33,
+    change_price: -2040,
+    volume: 933497,
+  },
+]);
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><code><!--[-->script<!--]--></code> 태그에 내부에 있는 변수들을, <code><!--[-->&lt;template&gt;<!--]--></code> 영역에서 참조가 가능합니다.<!--]--></p><p><!--[--><code><!--[-->coins<!--]--></code> 변수를 Vue에서 반복문을 만들 때 사용하는 <code><!--[-->v-for<!--]--></code>를 이용해서 연결해두었으니, 나중에 <code><!--[-->coins<!--]--></code> 에 실제 코인 데이터를 넣어주면 업비트랑 똑같은 정보를 보여줄 수 있겠겠요. 그렇게 어렵지 않죠?<!--]--></p><p><!--[-->숫자가 보여지는 부분이 아까랑은 약간 다르게 보이겠지만, 나중에 개선해보도록 합시다.<!--]--></p><h2 id="업비트-api"><a href="#업비트-api"><!--[-->업비트 API<!--]--></a></h2><p><!--[--><code><!--[-->API<!--]--></code> 라는 말 들어보셨나요? <code><!--[-->Application Programming Interface<!--]--></code> 라는 뜻입니다. 뭔 소리냐구요? 그냥 프로그램이 사용하는 인터페이스라고 생각하시면 됩니다.<!--]--></p><p><!--[-->인터페이스가 뭐냐구요? 그렇다면 <code><!--[-->UI<!--]--></code> 라는 말은 들어보셨겠죠. <code><!--[-->User Interface<!--]--></code> 라는 뜻입니다. 사람이 사용하는 인터페이스라는 뜻이겠죠.<!--]--></p><p><!--[-->즉, 인터페이스는 진짜 간단하게 <strong><!--[-->사용법<!--]--></strong> 이라는 뜻입니다.<!--]--></p><p><!--[-->그렇다면 업비트 API를 사용한다는 것은 업비트에서 제공하는 시세 데이터를 받아오거나, 매수/매도 주문을 넣거나 하는 행위를 업비트 사람이 웹사이트에서 하는 게 아니라 (이건 UI죠), <strong><!--[-->애플리케이션 끼리 하도록 하는 것<!--]--></strong>을 말합니다.<!--]--></p><p><!--[--><a href="https://docs.upbit.com/docs" rel="nofollow"><!--[-->업비트 API 가이드<!--]--></a>에는 개발자들이 쉽게 가상화폐 관련 데이터를 사용할 수 있도록 API 사용 문서가 제공되고 있습니다.<!--]--></p><p><!--[-->일단 맛을 보기 위해 브라우저 주소창에 <a href="https://api.upbit.com/v1/market/all" rel="nofollow"><!--[-->https://api.upbit.com/v1/market/all<!--]--></a>를 입력해보세요.<!--]--></p><p><!--[-->업비트에서 취급하는 모든 코인 목록이 보이실겁니다. 이 데이터를 이용하면 아까 우리가 만들었던 테이블을 좀 더 풍성하게 만들 수 있겠다는 생각이 드네요.<!--]--></p><h2 id="http-요청"><a href="#http-요청"><!--[-->HTTP 요청<!--]--></a></h2><p><!--[-->아까 브라우저에 <code><!--[-->api.upbit.com<!--]--></code> 어쩌구를 입력했던 게 HTTP 요청이라는 거 알고 계셨나요? 우린 사실 이미 수 많은 HTTP 요청을 하고 살아왔습니다.<!--]--></p><p><!--[-->근데 <code><!--[-->naver.com<!--]--></code>을 쳤을 때는 왜 웹사이트가 보일까요? 그건 네이버에서 <code><!--[-->HTML<!--]--></code>을 응답했기 때문입니다. 업비트는 그냥 단순 데이터를 응답한거구요. 별 거 아닙니다.<!--]--></p><p><!--[-->이걸 브라우저에서 요청하는 게 아니라, 우리 웹사이트가 요청하도록 하기만 하면 아까 보였던 코인 목록들을 우리 웹사이트에서 활용할 수 있습니다.<!--]--></p><!--[--><pre><code>npm i axios
+</code></pre><!--]--><p><!--[-->패키지 하나 설치해주세요. 자바스크립트에서 제일 많이 사용하는 HTTP 요청 라이브러리입니다.<!--]--></p><p><!--[-->그리고 Vue script 코드를 수정해줍시다.<!--]--></p><!--[--><pre><code>&lt;script setup&gt;
+import { ref } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+
+const coins = ref([]);
+
+async function GetSymbols() {
+  try {
+    const { data } = await axios.get(&quot;https://api.upbit.com/v1/market/all&quot;);
+    console.log(data);
+
+    coins.value = data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+GetSymbols();
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->저장하고, 브라우저에서 F12를 눌러 개발자 콘솔을 열어보면 255개의 배열이 응답된 것을 확인할 수 있습니다. 그리고 우리 웹사이트에도 255개의 코인 목록이 보여지고 있네요.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129536005-a8b0d29e-c2d0-42a8-a869-b7f658fea4e2.png" alt="image"><!--]--></p><p><!--[-->다만 단순 코인 목록만 요청했기 때문에, 시세 정보는 다른 API를 이용해 받아와야 합니다.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129536612-e93e607f-48d1-4ee2-80c4-4df6f881860f.png" alt="image"><!--]--></p><p><!--[-->업비트 개발 문서에서 가져왔습니다. <code><!--[-->/v1/ticker<!--]--></code> 주소에 <code><!--[-->markets<!--]--></code> 라는 값과 함께 요청하면 된다는군요. 복수로 보내려면 컴마를 이용해서 가져올 수도 있다고 합니다.<!--]--></p><p><!--[-->그럼 아까 불러왔던 코인 목록에서 <code><!--[-->market<!--]--></code> 값만 추출해서 배열로 이어주고, API 요청을 날리면 되겠다는 생각을 하면 되겠네요.<!--]--></p><p><!--[-->코드도 조금 개선해보겠습니다.<!--]--></p><!--[--><pre><code>&lt;script setup&gt;
+import { onMounted, ref } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+
+const coins = ref([]);
+
+function GetSymbols() {
+  return axios.get(&quot;https://api.upbit.com/v1/market/all&quot;);
+}
+
+function GetTickers(markets = []) {
+  return axios.get(&quot;https://api.upbit.com/v1/ticker&quot;, {
+    params: { markets: markets.join(&quot;,&quot;) },
+  });
+}
+
+// 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수
+onMounted(async () =&gt; {
+  try {
+    const { data: symbols } = await GetSymbols();
+
+    const markets = symbols.map((symbol) =&gt; symbol.market);
+    const { data: tickers } = await GetTickers(markets);
+
+    coins.value = tickers;
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129537276-a3a206c6-61fd-4aae-ae9c-dad840f5ad55.png" alt="image"><!--]--></p><p><!--[-->콘솔을 확인해보니, 아까보단 각 코인들이 가지고 있는 데이터가 훨씬 더 많아졌습니다. 이것만 가지고도 아까 업비트에서 봤던 UI를 만들 수 있겠다는 생각이 드네요.<!--]--></p><p><!--[-->근데 하나 문제가 있습니다. <code><!--[-->ticker<!--]--></code>를 받아오는 API에는 코인 한글명을 응답해주지 않는다는 점입니다.<!--]--></p><h2 id="데이터-합치기"><a href="#데이터-합치기"><!--[-->데이터 합치기<!--]--></a></h2><p><!--[-->그럼 심볼이랑 티커를 합치면 되겠네요.<!--]--></p><p><!--[-->근데 잠깐, 데이터를 합치기 전에 잠깐 생각을 해봅시다. <code><!--[-->symbols<!--]--></code> 도 배열로 응답되고, <code><!--[-->tickers<!--]--></code> 도 배열로 응답됩니다.<!--]--></p><p><!--[--><code><!--[-->tickers<!--]--></code> 안에는 <code><!--[-->market<!--]--></code> 변수가 제공되니까 먼저 <code><!--[-->symbols<!--]--></code>을 반복문 돌리고, <code><!--[-->symbols<!--]--></code>도 반복문을 돌려서 <code><!--[-->market<!--]--></code> 값으로 찾은 다음에 둘을 합쳐야겠네?<!--]--></p><p><!--[-->라고 생각하셨나요? 그럼 배열을 255번 x 255번을 돌아야 합니다. 총 <code><!--[-->65,025<!--]--></code> 번이나 돌게 생겼습니다.<!--]--></p><p><!--[-->그리고 지금은 단 2번의 응답을 받아서 괜찮지만, 이따 실시간으로 거래되는 트래픽을 받을 때는 1초에 수십, 수백번의 응답을 받게 됩니다. 그 때 마다 계속 배열 돌면서 시세를 업데이트 해준다면 분명 앱이 느려서 제대로 작동하지 않을겁니다.<!--]--></p><p><!--[-->그럼 어떡하죠? 방법은 간단합니다. 데이터를 배열이 아니라, <strong><!--[-->객체<!--]--></strong>로 저장하면 됩니다.<!--]--></p><p><!--[-->객체는 <code><!--[-->Key<!--]--></code>, <code><!--[-->Value<!--]--></code>로 구성되어서, <code><!--[-->Key<!--]--></code>를 이용해 데이터를 접근한다는 특징이 있습니다. 데이터가 많아도 매우 빠른 속도로 데이터를 찾아낼 수 있죠.<!--]--></p><p><!--[--><code><!--[-->onMounted<!--]--></code> 를 아래처럼 수정해주세요.<!--]--></p><!--[--><pre><code>onMounted(async () =&gt; {
+  try {
+    const { data: symbols } = await GetSymbols();
+    symbols.forEach((symbol) =&gt; {
+      coins.value[symbol.market] = symbol;
+    });
+
+    const markets = symbols.map((symbol) =&gt; symbol.market);
+    const { data: tickers } = await GetTickers(markets);
+
+    tickers.forEach((ticker) =&gt; {
+      coins.value[ticker.market] = Object.assign(
+        coins.value[ticker.market],
+        ticker
+      );
+    });
+  } catch (err) {}
+});
+</code></pre><!--]--><p><!--[-->근데 데이터를 살펴보니, 코인 데이터가 원화 마켓, BTC 마켓 등 여러 마켓이 짬뽕되어서 나오고 있습니다.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129540617-8255955b-c783-4b6b-a77f-7396cba0df2d.png" alt="image"><!--]--></p><p><!--[-->마켓 구분은 심볼 앞의 접두어를 보면 됩니다. <code><!--[-->KRW-<!--]--></code> 은 원화 마켓, <code><!--[-->BTC-<!--]--></code> 는 비트코인 마켓, <code><!--[-->USDT-<!--]--></code> 는 달러 마켓입니다.<!--]--></p><p><!--[-->우린 <strong><!--[-->원화<!--]--></strong> 마켓 데이터만 가져오고 싶기 때문에 <code><!--[-->KRW-<!--]--></code> 으로 시작하는 코인들만 필터링 해보도록 하겠습니다.<!--]--></p><p><!--[-->변화된 데이터에 따라 <code><!--[-->HTML<!--]--></code>도 조금 수정했습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;한글명&lt;/th&gt;
+        &lt;th&gt;현재가&lt;/th&gt;
+        &lt;th&gt;전일대비&lt;/th&gt;
+        &lt;th&gt;거래대금&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr v-for=&quot;(coin, key) in coins&quot; :key=&quot;key&quot;&gt;
+        &lt;td&gt;
+          &lt;div&gt;{{ coin.korean_name }}&lt;/div&gt;
+          &lt;div&gt;{{ coin.market }}/KRW&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;{{ coin.trade_price }}&lt;/td&gt;
+        &lt;td&gt;
+          &lt;div&gt;{{ coin.change_rate * 100 }}%&lt;/div&gt;
+          &lt;div&gt;{{ coin.change_price }}&lt;/div&gt;
+        &lt;/td&gt;
+        &lt;td&gt;{{ coin.acc_trade_price_24h }}백만&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;footer&gt;peterkimzz.com&lt;/footer&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { onMounted, ref } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+
+const coins = ref({});
+
+function GetSymbols() {
+  return axios.get(&quot;https://api.upbit.com/v1/market/all&quot;);
+}
+
+function GetTickers(markets = []) {
+  return axios.get(&quot;https://api.upbit.com/v1/ticker&quot;, {
+    params: { markets: markets.join(&quot;,&quot;) },
+  });
+}
+
+// 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수
+onMounted(async () =&gt; {
+  try {
+    const markets = [];
+
+    const { data: symbols } = await GetSymbols();
+
+    symbols.forEach((symbol) =&gt; {
+      /** `KRW-` 으로 시작하는 마켓만 핕터링 */
+      if (symbol.market.indexOf(&quot;KRW-&quot;) === -1) {
+        return;
+      }
+
+      markets.push(symbol.market);
+      coins.value[symbol.market] = symbol;
+    });
+
+    const { data: tickers } = await GetTickers(markets);
+
+    tickers.forEach((ticker) =&gt; {
+      coins.value[ticker.market] = Object.assign(
+        coins.value[ticker.market],
+        ticker
+      );
+    });
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129541687-e6d0cba6-53d9-47e1-8234-d3dfaa4fa7a9.png" alt="image"><!--]--></p><p><!--[-->실제 코인과 숫자가 채워지니까 아까보다 훨신 더 있어보이네요.<!--]--></p><h2 id="스타일링"><a href="#스타일링"><!--[-->스타일링<!--]--></a></h2><p><!--[-->여기까지 스크립트는 적당히 잘 작동하는 것 같습니다.<!--]--></p><p><!--[-->헌데.. 솔직히 디자인이 너무 구립니다. 이대로 계속 진행하기엔 저의 내재된 디자인 감각이 허용하지 않네요. UI를 조금만 개선을 해보겠습니다.<!--]--></p><p><!--[-->본격적으로 스타일링을 하기 전에, 라이브러리 하나 설치하고 가도록 하겠습니다.<!--]--></p><!--[--><pre><code>npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+npx tailwindcss init -p
+</code></pre><!--]--><p><!--[--><a href="https://tailwindcss.com/" rel="nofollow"><!--[--><code><!--[-->Tailwind CSS<!--]--></code><!--]--></a> 라는 라이브러리입니다. 이걸 사용하면 매우 빠르게 스타일링을 할 수 있습니다. 저는 이 라이브러리의 도움으로, <code><!--[-->&lt;style&gt;<!--]--></code> 태그를 아예 사용하지 않고 스타일링을 하고 있습니다.<!--]--></p><p><!--[-->위 두 줄을 입력하면 <code><!--[-->tailwind.config.js<!--]--></code> 파일과, <code><!--[-->postcss.config.js<!--]--></code> 파일이 생성됩니다.<!--]--></p><p><!--[--><code><!--[-->tailwind.config.js<!--]--></code> 파일만 조금 수정해줍시다.<!--]--></p><!--[--><pre><code>module.exports = {
+  mode: &quot;jit&quot;,
+  purge: [&quot;./index.html&quot;, &quot;./src/**/*.{vue,js,ts,jsx,tsx}&quot;],
+  darkMode: false,
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+};
+</code></pre><!--]--><p><!--[-->그리고 <code><!--[-->tailwindcss<!--]--></code> 를 우리 프로젝트에서 사용할 수 있도록 전역 <code><!--[-->.css<!--]--></code> 파일을 만들고, import 해주도록 합시다.<!--]--></p><p><!--[--><code><!--[-->src<!--]--></code> 폴더 아래에 <code><!--[-->index.css<!--]--></code> 라는 파일을 만들어주세요.<!--]--></p><!--[--><pre><code>@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</code></pre><!--]--><!--[--><pre><code>import { createApp } from &quot;vue&quot;;
+import App from &quot;./App.vue&quot;;
+import &quot;./index.css&quot;;
+
+createApp(App).mount(&quot;#app&quot;);
+</code></pre><!--]--><p><!--[-->이렇게 하면 구성이 끝났습니다.<!--]--></p><p><!--[-->일단 기존 <code><!--[-->&lt;style&gt;<!--]--></code> 태그는 전부 지워주세요. 같은 스타일링을 <code><!--[-->tailwindcss<!--]--></code> 를 이용해 해보도록 하겠습니다. <code><!--[-->HTML<!--]--></code> 클래스를 주목해주세요.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav class=&quot;border-b border-gray-300 p-2 text-[1.1rem] font-bold&quot;&gt;
+    코인시세보기프로그램
+  &lt;/nav&gt;
+
+  &lt;div class=&quot;p-2&quot;&gt;// ...&lt;/div&gt;
+
+  &lt;footer class=&quot;font-[0.9rem] border-t border-gray-300 p-2 text-gray-600&quot;&gt;
+    peterkimzz.com
+  &lt;/footer&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[-->대충 이해가 가시나요? 부가 설명을 드리자면 <code><!--[-->p-<!--]--></code> 는 <code><!--[-->padding<!--]--></code> 관련 옵션입니다. 그리고 색깔 부분은 미리 정의된 컬러 팔레트를 사용했습니다. 각 색깔마다 100 부터 900까지 다양한 채도로 구성되어있습니다. 자세한 내용이 궁금하신 분들은 <a href="https://tailwindcss.com/docs/customizing-colors" rel="nofollow"><!--[-->여기<!--]--></a>를 확인해보세요.<!--]--></p><p><!--[-->전체적으로 스타일링을 조금 수정해보겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav class=&quot;p-4 text-[1.1rem] font-bold&quot;&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;div&gt;
+    &lt;table class=&quot;table w-full&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr class=&quot;border-b border-gray-100 text-sm text-gray-500&quot;&gt;
+          &lt;th class=&quot;py-2 px-4 text-left&quot;&gt;한글명&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;현재가(원)&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;전일대비&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;거래대금&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody class=&quot;text-gray-900&quot;&gt;
+        &lt;tr v-for=&quot;(coin, key) in coins&quot; :key=&quot;key&quot;&gt;
+          &lt;td class=&quot;py-1 px-4 text-left&quot;&gt;
+            &lt;div class=&quot;font-semibold text-gray-700&quot;&gt;
+              {{ coin.korean_name }}
+            &lt;/div&gt;
+            &lt;div class=&quot;text-sm text-gray-500&quot;&gt;{{ coin.market }}/KRW&lt;/div&gt;
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right align-top font-semibold&quot;&gt;
+            {{ coin.trade_price }}
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right&quot;&gt;
+            &lt;div class=&quot;font-semibold&quot;&gt;{{ coin.change_rate * 100 }}%&lt;/div&gt;
+            &lt;div class=&quot;text-sm text-gray-500&quot;&gt;{{ coin.change_price }}&lt;/div&gt;
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right&quot;&gt;
+            {{ coin.acc_trade_price_24h }}백만
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+
+  &lt;footer class=&quot;font-[0.9rem] border-t border-gray-300 p-4 text-gray-600&quot;&gt;
+    peterkimzz.com
+  &lt;/footer&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129545644-32593360-8259-4ccf-9a48-e16c041af310.png" alt="image"><!--]--></p><p><!--[-->강조하고 싶은 부분을 좀 더 진한 색으로, 진한 폰트로. 덜 중요한 부분을 더 연한 색으로 변경해주었습니다.<!--]--></p><p><!--[-->굳이 색을 넣지 않더라도, 보기 좋은 UI는 얼마든지 만들 수 있습니다.<!--]--></p><p><!--[-->그리고 약간씩 간격을 조정했습니다. 숫자들만 정리되면 훨씬 더 직관적이고 깔끔해 보이겠네요.<!--]--></p><h2 id="정리하기"><a href="#정리하기"><!--[-->정리하기<!--]--></a></h2><p><!--[-->정리하고 싶은 점을 나열해봅시다.<!--]--></p><ol><!--[--><li><!--[-->현재가는 컴마 단위로 구분되서 보이면 좋겠네요. (10100원 -&gt; 10,000원)<!--]--></li><li><!--[-->전일 대비는 소숫점 2번째 자리까지만 반올림해서 보이게 해줍시다. (1.508123% -&gt; 1.51%)<!--]--></li><li><!--[-->현재가와 전일대비의 등락을 <code><!--[-->+<!--]--></code>, <code><!--[-->-<!--]--></code> 기호를 이용해 표시해주고 싶네요.<!--]--></li><li><!--[-->아까 말했던 전일대비의 xxx백만 단위를 xxx억 단위로 바꾸도록 하겠습니다.<!--]--></li><li><!--[-->마지막으로 마켓 심볼 부분의 KRW이 중복되지 않도록 정리해줍시다.<!--]--></li><!--]--></ol><p><!--[-->1번은 간단합니다. 자바스크립트 숫자형 타입에 대해 기본적으로 제공되는 <code><!--[-->toLocaleString()<!--]--></code> 함수를 사용하면 됩니다.<!--]--></p><!--[--><pre><code>function GetCurrency(value) {
+  return Number(value).toLocaleString();
+}
+</code></pre><!--]--><p><!--[-->2번 또한 간단합니다. 자바스크립트 숫자형 타입에 대해 기본적으로 제공되는 <code><!--[-->toFixed()<!--]--></code> 함수를 사용하면 됩니다. 파라미터는 소숫점을 제한하고 싶은 값을 넣어주면 됩니다. 이 경우에는 2를 넣어주면 되겠죠.<!--]--></p><!--[--><pre><code>function GetChangeRate(value) {
+  return Number(value).toFixed(2);
+}
+</code></pre><!--]--><p><!--[-->3번의 경우에는 API를 받아서 데이터를 가공하는 부분을 조금 수정할 필요가 있습니다. 이유는 현재 등락을 <code><!--[-->RISE<!--]--></code>, <code><!--[-->FALL<!--]--></code> 이라는 문자열을 별개로 응답하고 있기 때문입니다. 이러저래 깔끔하게 하려고 시도를 많이 했는데, 음수일 땐 <code><!--[-->-<!--]--></code> 값이 붙어있는 게 조작하긴 더 좋더라구요.<!--]--></p><!--[--><pre><code>onMounted(async () =&gt; {
+  try {
+    const markets = [];
+
+    const { data: symbols } = await GetSymbols();
+
+    symbols.forEach((symbol) =&gt; {
+      if (symbol.market.indexOf(&quot;KRW-&quot;) === -1) {
+        return;
+      }
+
+      markets.push(symbol.market);
+      coins.value[symbol.market] = symbol;
+    });
+
+    const { data: tickers } = await GetTickers(markets);
+
+    tickers.forEach((ticker) =&gt; {
+
+      /** 수정된 부분 */
+      if (ticker.change === &quot;FALL&quot;) {
+        ticker.trade_price = -ticker.trade_price;
+        ticker.change_price = -ticker.change_price;
+      }
+
+      ticker.change_rate = ticker.change_rate * 100;
+      /** 수정된 부분 끝 */
+
+      coins.value[ticker.market] = Object.assign(
+        coins.value[ticker.market],
+        ticker
+      );
+    });
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->4번은 <a href="https://www.npmjs.com/package/num-to-korean" rel="nofollow"><!--[--><code><!--[-->num-to-korean<!--]--></code><!--]--></a> 패키지의 도움을 받도록 하겠습니다.<!--]--></p><!--[--><pre><code>npm i num-to-korean
+</code></pre><!--]--><!--[--><pre><code>function getVolume(volume) {
+  return numToKorean(Math.floor(volume / 100000000) * 100000000, &quot;mixed&quot;);
+}
+</code></pre><!--]--><p><!--[-->억 단위 아래 숫자는 필요 없으니 나눴다 소숫점 버려주고, 다시 곱해주면 되겠죠.<!--]--></p><p><!--[-->이 코드들을 참고해서 만든 전체 결과물입니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;nav class=&quot;p-4 text-[1.1rem] font-bold&quot;&gt;코인시세보기프로그램&lt;/nav&gt;
+
+  &lt;div&gt;
+    &lt;table class=&quot;table w-full&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr class=&quot;border-b border-gray-100 text-sm text-gray-500&quot;&gt;
+          &lt;th class=&quot;py-2 px-4 text-left&quot;&gt;한글명&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;현재가(원)&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;전일대비&lt;/th&gt;
+          &lt;th class=&quot;py-2 px-4 text-right&quot;&gt;거래대금&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody class=&quot;text-gray-900&quot;&gt;
+        &lt;tr v-for=&quot;(coin, key) in coins&quot; :key=&quot;key&quot;&gt;
+          &lt;td class=&quot;py-1 px-4 text-left&quot;&gt;
+            &lt;div class=&quot;font-semibold text-gray-700&quot;&gt;
+              {{ coin.korean_name }}
+            &lt;/div&gt;
+            &lt;div class=&quot;text-sm text-gray-500&quot;&gt;{{ coin.market }}&lt;/div&gt;
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right font-semibold&quot;&gt;
+            {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.trade_price) }}
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right&quot;&gt;
+            &lt;div class=&quot;font-semibold&quot;&gt;
+              {{ GetRatePrefix(coin) }}{{ GetChangeRate(coin.change_rate) }}%
+            &lt;/div&gt;
+            &lt;div class=&quot;text-sm text-gray-500&quot;&gt;
+              {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.change_price) }}
+            &lt;/div&gt;
+          &lt;/td&gt;
+          &lt;td class=&quot;py-1 px-4 text-right font-semibold text-gray-500&quot;&gt;
+            {{ getVolume(coin.acc_trade_price_24h) }}
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+
+  &lt;footer class=&quot;font-[0.9rem] border-t border-gray-300 p-4 text-gray-600&quot;&gt;
+    peterkimzz.com
+  &lt;/footer&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { onMounted, ref } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+import { numToKorean } from &quot;num-to-korean&quot;;
+
+const coins = ref({});
+
+/** Utilities */
+function GetCurrency(price) {
+  return Number(price).toLocaleString();
+}
+function GetRatePrefix(coin) {
+  switch (coin.change) {
+    case &quot;RISE&quot;:
+      return &quot;+&quot;;
+    default:
+      return &quot;&quot;;
+  }
+}
+function GetChangeRate(rate) {
+  return Number(rate).toFixed(2);
+}
+function getVolume(volume) {
+  return numToKorean(Math.floor(volume / 100000000) * 100000000, &quot;mixed&quot;);
+}
+
+/** Upbit APIs */
+function GetSymbols() {
+  return axios.get(&quot;https://api.upbit.com/v1/market/all&quot;);
+}
+function GetTickers(markets = []) {
+  return axios.get(&quot;https://api.upbit.com/v1/ticker&quot;, {
+    params: { markets: markets.join(&quot;,&quot;) },
+  });
+}
+
+/**  페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수 */
+onMounted(async () =&gt; {
+  try {
+    const markets = [];
+
+    const { data: symbols } = await GetSymbols();
+
+    symbols.forEach((symbol) =&gt; {
+      /** `KRW-` 으로 시작하는 마켓만 핕터링 */
+      if (symbol.market.indexOf(&quot;KRW-&quot;) === -1) {
+        return;
+      }
+
+      markets.push(symbol.market);
+      coins.value[symbol.market] = symbol;
+    });
+
+    const { data: tickers } = await GetTickers(markets);
+
+    tickers.forEach((ticker) =&gt; {
+      if (ticker.change === &quot;FALL&quot;) {
+        ticker.trade_price = -ticker.trade_price;
+        ticker.change_price = -ticker.change_price;
+      }
+
+      ticker.change_rate = ticker.change_rate * 100;
+
+      coins.value[ticker.market] = Object.assign(
+        coins.value[ticker.market],
+        ticker
+      );
+    });
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129551073-407c021c-a542-49cd-9c17-f66dd3b42da9.png" alt="image"><!--]--></p><p><!--[-->아까랑 비교해보니 훨씬 낫네요.<!--]--></p><h2 id="색-스타일링"><a href="#색-스타일링"><!--[-->색 스타일링<!--]--></a></h2><p><!--[-->스타일 부분도 조금 더 개선하고 싶은 점이 있습니다. 등락을 색으로 표시해주면 더 직관적일 것 같습니다.<!--]--></p><!--[--><pre><code>function GetColor(change) {
+  switch (change) {
+    case &quot;RISE&quot;:
+      return &quot;text-red-600&quot;;
+    case &quot;FALL&quot;:
+      return &quot;text-blue-600&quot;;
+    default:
+      return &quot;text-gray-900&quot;;
+  }
+}
+</code></pre><!--]--><!--[--><pre><code>&lt;td :class=&quot;[GetColor(coin), &#39;py-1 px-4 text-right font-semibold align-top&#39;]&quot;&gt;
+  {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.trade_price) }}
+&lt;/td&gt;
+&lt;td :class=&quot;[GetColor(coin), &#39;py-1 px-4 text-right&#39;]&quot;&gt;
+  &lt;div class=&quot;font-semibold&quot;&gt;
+    {{ GetRatePrefix(coin) }}{{ GetChangeRate(coin.change_rate) }}%
+  &lt;/div&gt;
+  &lt;div class=&quot;text-sm text-gray-500&quot;&gt;
+    {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.change_price) }}
+  &lt;/div&gt;
+&lt;/td&gt;
+</code></pre><!--]--><p><!--[--><code><!--[-->v-bind<!--]--></code> 를 이용해서 html <code><!--[-->class<!--]--></code> 태그에 js 함수를 적용하는 부분입니다. 이런 방식을 활용해 동적으로 클래스를 계속 바꿔줄 수도 있겠죠.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129552175-d678c3cf-01d8-42ac-81b4-70444ff93dff.png" alt="image"><!--]--></p><h2 id="웹-소켓"><a href="#웹-소켓"><!--[-->웹 소켓<!--]--></a></h2><p><!--[-->실시간 데이터를 받아올 때는 HTTP 요청으로는 사실 한계가 있습니다. 뭐 매 초 HTTP 요청을 날려서 데이터를 가져올 순 있겠지만, 주식이나 코인 거래처럼 파바바박 시세가 바뀌게끔 구현하긴 어렵습니다. 한 꺼번에 숫자들이 바뀔테니까요.<!--]--></p><p><!--[-->그래서 <strong><!--[-->웹 소켓<!--]--></strong>이라는 기술이 필요합니다.<!--]--></p><p><!--[-->HTTP는 요청, 응답 1개의 프로세스로 이루어지고 연결이 끊어집니다. 그래서 구조상 매 요청이 독립적이게 됩니다. 즉, 요청 10번이 필요할 때 무조건 10번의 호출이 필요하게 됩니다. 어떻게 보면 비효율적이죠.<!--]--></p><p><!--[-->반면 웹 소켓은 최초 한 번 연결을 해두면, 그 이후에 연결이 끊어지기 전까지 서로 몇 번이고 요청/응답을 주고받을 수 있습니다. 실시간 데이터를 전송/수신하기엔 안성맞춤입니다.<!--]--></p><p><!--[-->다행히 업비트에서도 웹소켓 API를 제공하고 있습니다.<!--]--></p><p><!--[-->프로세스는 간단합니다.<!--]--></p><ol><!--[--><li><!--[-->소켓 연결 준비하기 (<code><!--[-->Open<!--]--></code>)<!--]--></li><li><!--[-->업비트 소켓 서버에 연결 요청 보내기 (<code><!--[-->Send<!--]--></code>)<!--]--></li><li><!--[-->연결 후 데이터 수신하기 (<code><!--[-->OnMessage<!--]--></code>)<!--]--></li><!--]--></ol><p><!--[-->끝입니다. 간단하죠?<!--]--></p><p><!--[-->일단 좀 더 깔끔한 코드 작성을 위해 기존 코드를 조금 수정해주세요.<!--]--></p><!--[--><pre><code>&lt;script setup&gt;
+import { onMounted, ref } from &quot;vue&quot;;
+import axios from &quot;axios&quot;;
+import { numToKorean } from &quot;num-to-korean&quot;;
+import { v4 as uuidv4 } from &quot;uuid&quot;;
+
+const coins = ref({});
+
+/** 이 부분 추가 */
+const markets = ref([]);
+
+onMounted(async () =&gt; {
+  try {
+    const { data: symbols } = await GetSymbols();
+
+    symbols.forEach((symbol) =&gt; {
+      if (symbol.market.indexOf(&quot;KRW-&quot;) === -1) {
+        return;
+      }
+
+      /** 이 부분 수정 */
+      markets.value.push(symbol.market);
+
+      coins.value[symbol.market] = symbol;
+    });
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><code><!--[-->markets<!--]--></code> 변수를 전역으로 사용할 수 있도록 밖에 선언해주고, <code><!--[-->KRW-<!--]--></code> 코인을 필터링해서 전역 <code><!--[-->markets<!--]--></code> 변수에 넣어주었습니다.<!--]--></p><p><!--[-->자 다음은 웹 소켓 부분입니다.<!--]--></p><!--[--><pre><code>&lt;script setup&gt;
+import { v4 as uuidv4 } from &quot;uuid&quot;;
+
+onMounted(async () =&gt; {
+  try {
+    /** 생략 */
+
+    const ws = new WebSocket(&quot;wss://api.upbit.com/websocket/v1&quot;);
+
+    ws.onopen = (e) =&gt; {
+      ws.send(
+        `${JSON.stringify([
+          { ticket: uuidv4() },
+          { type: &quot;ticker&quot;, codes: markets.value },
+        ])}`
+      );
+    };
+
+    ws.onmessage = async (payload) =&gt; {
+      const ticker = await new Response(payload.data).json();
+
+      if (!coins.value[ticker.code]) {
+        return;
+      }
+
+      if (ticker.change === &quot;FALL&quot;) {
+        coins.value[ticker.code].trade_price = -ticker.trade_price;
+        coins.value[ticker.code].change_rate = -ticker.change_rate;
+        coins.value[ticker.code].change_price = -ticker.change_price;
+      } else {
+        coins.value[ticker.code].trade_price = ticker.trade_price;
+        coins.value[ticker.code].change_rate = ticker.change_rate;
+        coins.value[ticker.code].change_price = ticker.change_price;
+      }
+    };
+  } catch (err) {}
+});
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->브라우저 환경에서의 예제는 문서에도 없길래 직접 작성해보았습니다. 핵심은 응답 받는 데이터를 <code><!--[-->Response<!--]--></code> 객체로 받아서 <code><!--[-->json<!--]--></code> 포맷으로 만들어주는 부분입니다.<!--]--></p><p><!--[-->아까 말한 것 처럼 소켓을 열고 요청을 보내고, 성공하면 <code><!--[-->onMessage<!--]--></code> 부분에 업비트 웹소켓 서버에서 보내는 데이터를 계속해서 수신하게 됩니다.<!--]--></p><p><!--[-->자세한 API 사용법은 <a href="https://docs.upbit.com/docs/upbit-quotation-websocket" rel="nofollow"><!--[-->여기<!--]--></a>를 확인해주세요.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129555612-e6ee2237-701e-492a-a528-ade9b17cc307.gif" alt="Animation"><!--]--></p><p><!--[-->와! 저희가 만든 앱이 100% 실시간 업비트 데이터를 보여주고 있네요.<!--]--></p><h2 id="크롬-확장-프로그램에서-실행하기"><a href="#크롬-확장-프로그램에서-실행하기"><!--[-->크롬 확장 프로그램에서 실행하기<!--]--></a></h2><p><!--[-->고생하셨습니다. 이제 크롬 확장 프로그램으로 동작하는지만 확인하면 끝입니다.<!--]--></p><p><!--[-->다만, 지금 상태로 크롬 확장 프로그램으로 실행시키면 좌우 너비가 안맞을 가능성이 높습니다. 지정해주지 않았기 때문이죠. 그래서 마지막으로 좌우 넓이를 조정하고 테스트해보도록 하겠습니다.<!--]--></p><p><!--[--><code><!--[-->App.vue<!--]--></code>의 코드 전체를 <code><!--[-->div<!--]--></code>로 감싸고, <code><!--[-->width<!--]--></code>의 최소 너비를 <code><!--[-->30rem<!--]--></code>으로 주도록 하겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div class=&quot;min-w-[30rem]&quot;&gt;// ...&lt;/div&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[-->이제 끝입니다. 빌드를 해줍시다.<!--]--></p><!--[--><pre><code>npm run build
+</code></pre><!--]--><p><!--[-->다음은 브라우저의 확장 프로그램 관리 페이지로 이동해서 개발자 모드를 켜주시고, 우리가 빌드한 결과물인 <code><!--[-->dist<!--]--></code> 폴더를 <code><!--[-->압축해제 된 확장앱 설치<!--]--></code> 버튼을 이용해 로드해주고 실행시켜주세요.<!--]--></p><p><!--[--><img src="https://user-images.githubusercontent.com/20244536/129556666-875cf900-63e9-4489-a5f9-8a77614d9590.gif" alt="Animation1"><!--]--></p><h2 id="마무리"><a href="#마무리"><!--[-->마무리<!--]--></a></h2><p><!--[-->3부가 너무 길어서 4부까지 갈까 하다가 그냥 3부로 마무리를 했습니다.<!--]--></p><p><!--[-->이 시리즈를 보면서 이해가 안되셨어도 괜찮습니다. 코드가 200줄도 안되는 간단한 앱이지만, 생각보다 어려운 개념들이 많이 들어가있습니다.<!--]--></p><p><!--[-->그리고 약간의 버그도 있습니다. (+ 에서 -되면 색이 안변한다든지)<!--]--></p><p><!--[-->그치만 진행 중 모르는 부분을 구글링하면서 조금씩이라도 이해하셨다면 굉장히 많은 부분을 경험하신겁니다. 진짜로요.<!--]--></p><p><!--[-->하다가 잘 안되는 부분은 댓글 남겨주세요.<!--]--></p><p><!--[-->찐막으로 제가 실제 배포해서 운영 중인 코인 시세 모니터링 프로그램인 <code><!--[-->브리아나<!--]--></code> 소개해드리면서 이번 시리즈 마무리하도록 하겠습니다.<!--]--></p><p><!--[--><a href="https://store.whale.naver.com/detail/hkipiplimgkfnhbimapmehjohnialiec" rel="nofollow"><!--[-->브리아나 - 1초만에 코인 시세 확인하기<!--]--></a><img src="https://user-images.githubusercontent.com/20244536/129557679-d4986353-e84f-425c-887a-a43e3734bfad.png" alt="image"><!--]--></p><p><!--[-->여러분들도 멋진 확장 프로그램 만드시길 바랍니다.<!--]--></p></div><!--]--><!--]--></div></main><!--]--></div></div><script type="application/json" id="__NUXT_DATA__" data-ssr="true">[["Reactive",1],{"data":2,"state":2011,"_errors":2012,"serverRendered":40,"path":4,"prerenderedAt":2014},{"content-query-2l4AgphknE":3},{"_path":4,"_dir":5,"_draft":6,"_partial":6,"_locale":5,"_empty":6,"title":7,"description":8,"excerpt":9,"category":37,"updated":38,"created":38,"thumbnail":39,"published":40,"body":41,"_type":2006,"_id":2007,"_source":2008,"_file":2009,"_extension":2010},"/vuejs-chrome-extension-3","",false,"Vue.js로 크롬 확장 프로그램 만들기 강의 - 3부","이전 포스팅에서는 Vite을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다.",{"type":10,"children":11},"root",[12],{"type":13,"tag":14,"props":15,"children":16},"element","p",{},[17,25,27,35],{"type":13,"tag":18,"props":19,"children":21},"a",{"href":20},"/vuejs-chrome-extension-2",[22],{"type":23,"value":24},"text","이전 포스팅",{"type":23,"value":26},"에서는 ",{"type":13,"tag":18,"props":28,"children":32},{"href":29,"rel":30},"https://vitejs.dev/",[31],"nofollow",[33],{"type":23,"value":34},"Vite",{"type":23,"value":36},"을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다.","tech","2021-08-16T00:00:00.000Z","https://dynamisign.com/api/sign?d=peterkimzz.com&t=Vue.js%EB%A1%9C%20%ED%81%AC%EB%A1%AC%20%ED%99%95%EC%9E%A5%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%20%EB%A7%8C%EB%93%A4%EA%B8%B0%20%EA%B0%95%EC%9D%98%20-%203%EB%B6%80",true,{"type":10,"children":42,"toc":1990},[43,57,64,69,82,98,124,129,143,148,160,175,207,226,238,247,253,277,286,295,305,312,317,329,336,348,360,367,372,378,383,397,404,409,429,441,453,479,484,489,495,500,505,517,524,529,541,553,570,593,598,604,621,640,652,664,676,689,694,700,712,730,735,747,752,757,769,774,781,786,793,812,824,829,841,848,853,865,871,876,895,928,940,945,957,981,991,1005,1010,1017,1043,1061,1072,1084,1091,1096,1101,1106,1111,1116,1128,1150,1169,1178,1190,1209,1226,1239,1252,1257,1280,1292,1320,1325,1337,1344,1349,1354,1359,1364,1369,1412,1424,1436,1448,1460,1484,1496,1513,1525,1537,1542,1547,1559,1566,1571,1577,1582,1594,1608,1625,1632,1638,1643,1654,1659,1664,1669,1674,1711,1716,1721,1733,1754,1759,1771,1789,1801,1814,1822,1827,1833,1838,1843,1873,1885,1890,1902,1921,1929,1934,1939,1944,1949,1954,1959,1971,1985],{"type":13,"tag":14,"props":44,"children":45},{},[46,50,51,56],{"type":13,"tag":18,"props":47,"children":48},{"href":20},[49],{"type":23,"value":24},{"type":23,"value":26},{"type":13,"tag":18,"props":52,"children":54},{"href":29,"rel":53},[31],[55],{"type":23,"value":34},{"type":23,"value":36},{"type":13,"tag":58,"props":59,"children":61},"h2",{"id":60},"개발-시작하기",[62],{"type":23,"value":63},"개발 시작하기",{"type":13,"tag":14,"props":65,"children":66},{},[67],{"type":23,"value":68},"일단 저는 개발 단계에서 크롬 확장 프로그램으로 올려서 개발하기 보다는, 그냥 브라우저에서 핫 리로드를 하며 빠르게 개발을 하도록 하겠습니다.",{"type":13,"tag":14,"props":70,"children":71},{},[72,74,80],{"type":23,"value":73},"일단 ",{"type":13,"tag":75,"props":76,"children":77},"code-inline",{},[78],{"type":23,"value":79},"package.json",{"type":23,"value":81},"의 scripts를 조금 수정해줍시다.",{"type":13,"tag":83,"props":84,"children":89},"code",{"className":85,"code":87,"filename":79,"language":88,"meta":5},[86],"language-json","{\n  \"dev\": \"vite\",\n  \"dev:extension\": \"vite build --watch\",\n  \"build\": \"vite build\",\n  \"build:extension\": \"bestzip dist.zip dist/\"\n}\n","json",[90],{"type":13,"tag":91,"props":92,"children":93},"pre",{},[94],{"type":13,"tag":83,"props":95,"children":96},{"__ignoreMap":5},[97],{"type":23,"value":87},{"type":13,"tag":14,"props":99,"children":100},{},[101,103,108,110,115,117,122],{"type":23,"value":102},"브라우저로 개발하고 싶을 땐 ",{"type":13,"tag":75,"props":104,"children":105},{},[106],{"type":23,"value":107},"npm run dev",{"type":23,"value":109},"를, 크롬 확장 프로그램에 올려서 하고 싶을 땐 ",{"type":13,"tag":75,"props":111,"children":112},{},[113],{"type":23,"value":114},"npm run dev:extension",{"type":23,"value":116}," 으로 하면 됩니다. ",{"type":13,"tag":75,"props":118,"children":119},{},[120],{"type":23,"value":121},"build",{"type":23,"value":123},"도 똑같습니다.",{"type":13,"tag":14,"props":125,"children":126},{},[127],{"type":23,"value":128},"개발 서버를 열어줍니다.",{"type":13,"tag":83,"props":130,"children":135},{"className":131,"code":133,"filename":134,"language":134,"meta":5},[132],"language-bash","npm run dev\n# http://localhost:3000\n","bash",[136],{"type":13,"tag":91,"props":137,"children":138},{},[139],{"type":13,"tag":83,"props":140,"children":141},{"__ignoreMap":5},[142],{"type":23,"value":133},{"type":13,"tag":14,"props":144,"children":145},{},[146],{"type":23,"value":147},"이런 화면이 보인다면 정상적으로 개발 서버가 열린겁니다.",{"type":13,"tag":14,"props":149,"children":150},{},[151,153,158],{"type":23,"value":152},"일단 시작 페이지를 깔끔하게 만들어주도록 하죠. ",{"type":13,"tag":75,"props":154,"children":155},{},[156],{"type":23,"value":157},"src/App.vue",{"type":23,"value":159}," 파일을 열어주세요.",{"type":13,"tag":83,"props":161,"children":167},{"className":162,"code":164,"filename":165,"language":166,"meta":5},[163],"language-vue","\u003Ctemplate>\n  \u003Cimg alt=\"Vue logo\" src=\"./assets/logo.png\" />\n  \u003CHelloWorld msg=\"Hello Vue 3 + Vite\" />\n\u003C/template>\n\n\u003Cscript setup>\nimport HelloWorld from \"./components/HelloWorld.vue\";\n\n// This starter template is using Vue 3 experimental \u003Cscript setup> SFCs\n// Check out https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md\n\u003C/script>\n\n\u003Cstyle>\n#app {\n  font-family: Avenir, Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 60px;\n}\n\u003C/style>\n","App.vue","vue",[168],{"type":13,"tag":91,"props":169,"children":170},{},[171],{"type":13,"tag":83,"props":172,"children":173},{"__ignoreMap":5},[174],{"type":23,"value":164},{"type":13,"tag":14,"props":176,"children":177},{},[178,180,185,187,192,194,199,200,205],{"type":23,"value":179},"Vue는 ",{"type":13,"tag":75,"props":181,"children":182},{},[183],{"type":23,"value":184},"Single File Component (SFC)",{"type":23,"value":186}," 라는 기술로 한 파일에서 ",{"type":13,"tag":75,"props":188,"children":189},{},[190],{"type":23,"value":191},"HTML",{"type":23,"value":193},", ",{"type":13,"tag":75,"props":195,"children":196},{},[197],{"type":23,"value":198},"Javascript",{"type":23,"value":193},{"type":13,"tag":75,"props":201,"children":202},{},[203],{"type":23,"value":204},"CSS",{"type":23,"value":206},"를 모두 정의합니다. 이 자체로 장점이 있다면 있을 수 있고, 코드가 길어진다면 단점이 될 수도 있겠죠.",{"type":13,"tag":14,"props":208,"children":209},{},[210,212,217,219,224],{"type":23,"value":211},"기존 코드를 아래처럼 정리해주고, ",{"type":13,"tag":75,"props":213,"children":214},{},[215],{"type":23,"value":216},"src/components",{"type":23,"value":218}," 폴더에 있는 ",{"type":13,"tag":75,"props":220,"children":221},{},[222],{"type":23,"value":223},"HelloWorld.vue",{"type":23,"value":225}," 파일도 지워주세요.",{"type":13,"tag":83,"props":227,"children":230},{"className":228,"code":229,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cdiv>Hello, world!\u003C/div>\n\u003C/template>\n\n\u003Cscript setup>\u003C/script>\n\n\u003Cstyle>\u003C/style>\n",[231],{"type":13,"tag":91,"props":232,"children":233},{},[234],{"type":13,"tag":83,"props":235,"children":236},{"__ignoreMap":5},[237],{"type":23,"value":229},{"type":13,"tag":14,"props":239,"children":240},{},[241],{"type":13,"tag":242,"props":243,"children":246},"img",{"alt":244,"src":245},"image","https://user-images.githubusercontent.com/20244536/129522620-b5c4c974-3d97-42f7-9c06-ab7c010e9f03.png",[],{"type":13,"tag":58,"props":248,"children":250},{"id":249},"레이아웃-디자인",[251],{"type":23,"value":252},"레이아웃 디자인",{"type":13,"tag":14,"props":254,"children":255},{},[256,258,263,264,269,270,275],{"type":23,"value":257},"보통 웹사이트는 ",{"type":13,"tag":75,"props":259,"children":260},{},[261],{"type":23,"value":262},"Navigation Bar",{"type":23,"value":193},{"type":13,"tag":75,"props":265,"children":266},{},[267],{"type":23,"value":268},"Main Contents",{"type":23,"value":193},{"type":13,"tag":75,"props":271,"children":272},{},[273],{"type":23,"value":274},"Footer Bar",{"type":23,"value":276}," 크게 세 가지의 영역으로 나누어 디자인을 하게 됩니다. 이게 대부분의 유저들에게 가장 익숙합니다.",{"type":13,"tag":14,"props":278,"children":279},{},[280,284],{"type":13,"tag":75,"props":281,"children":282},{},[283],{"type":23,"value":262},{"type":23,"value":285}," 에는 로고와 자주 사용하는 메뉴들을 넣게 됩니다.",{"type":13,"tag":14,"props":287,"children":288},{},[289,293],{"type":13,"tag":75,"props":290,"children":291},{},[292],{"type":23,"value":268},{"type":23,"value":294}," 는 말 그대로 메인 콘텐츠가 보여집니다.",{"type":13,"tag":14,"props":296,"children":297},{},[298,303],{"type":13,"tag":75,"props":299,"children":300},{},[301],{"type":23,"value":302},"Footer bar",{"type":23,"value":304}," 영역엔 주로 회사 정보나, 사이트 내 접근 가능한 링크 혹은 외부 채널들을 넣어줍니다.",{"type":13,"tag":14,"props":306,"children":307},{},[308],{"type":13,"tag":242,"props":309,"children":311},{"alt":244,"src":310},"https://user-images.githubusercontent.com/20244536/129524227-83ddb4d9-fd9d-4310-a6a3-ca1575361ddf.png",[],{"type":13,"tag":14,"props":313,"children":314},{},[315],{"type":23,"value":316},"간단하게 위의 구조로 HTML을 작성해줍시다.",{"type":13,"tag":83,"props":318,"children":321},{"className":319,"code":320,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav>코인시세보기프로그램\u003C/nav>\n\n  \u003Cmain>Hello, world!\u003C/main>\n\n  \u003Cfooter>peterkimzz.com\u003C/footer>\n\u003C/template>\n",[322],{"type":13,"tag":91,"props":323,"children":324},{},[325],{"type":13,"tag":83,"props":326,"children":327},{"__ignoreMap":5},[328],{"type":23,"value":320},{"type":13,"tag":14,"props":330,"children":331},{},[332],{"type":13,"tag":242,"props":333,"children":335},{"alt":244,"src":334},"https://user-images.githubusercontent.com/20244536/129525100-9a13e16f-5e16-45a1-b90d-b95397317f17.png",[],{"type":13,"tag":14,"props":337,"children":338},{},[339,341,346],{"type":23,"value":340},"코드 상으로는 세 개의 영역이 확실히 구분되지만, 사람 눈에는 전혀 구분되어 보이지 않습니다. ",{"type":13,"tag":75,"props":342,"children":343},{},[344],{"type":23,"value":345},"css",{"type":23,"value":347},"를 활용해 지금보다 약간만 개선을 해봅시다.",{"type":13,"tag":83,"props":349,"children":352},{"className":350,"code":351,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav>코인시세보기프로그램\u003C/nav>\n\n  \u003Cmain>Hello, world!\u003C/main>\n\n  \u003Cfooter>peterkimzz.com\u003C/footer>\n\u003C/template>\n\n\u003Cscript setup>\u003C/script>\n\n\u003Cstyle>\nnav {\n  font-size: 1.1rem;\n  font-weight: bold;\n  padding-bottom: 0.5rem;\n  border-bottom: 1px solid #e2e2e2;\n}\n\nmain {\n  padding-top: 1rem;\n  padding-bottom: 10rem;\n}\n\nfooter {\n  font-size: 0.9rem;\n  color: gray;\n  border-top: 1px solid #e2e2e2;\n  padding-top: 0.5rem;\n}\n\u003C/style>\n",[353],{"type":13,"tag":91,"props":354,"children":355},{},[356],{"type":13,"tag":83,"props":357,"children":358},{"__ignoreMap":5},[359],{"type":23,"value":351},{"type":13,"tag":14,"props":361,"children":362},{},[363],{"type":13,"tag":242,"props":364,"children":366},{"alt":244,"src":365},"https://user-images.githubusercontent.com/20244536/129525960-0010088b-6627-4ed8-a40b-0176bc277956.png",[],{"type":13,"tag":14,"props":368,"children":369},{},[370],{"type":23,"value":371},"음.. 네 뭐 전보다는 낫네요. 예쁜게 좋은 디자인은 아닙니다. 익숙하고 편하면 좋은 겁니다.",{"type":13,"tag":58,"props":373,"children":375},{"id":374},"코인-거래소-ui-분석",[376],{"type":23,"value":377},"코인 거래소 UI 분석",{"type":13,"tag":14,"props":379,"children":380},{},[381],{"type":23,"value":382},"구조는 대충 잡았는데, 어디부터 어떻게 서비스를 만들어야 할지 막막합니다. 왜냐하면 거기까지는 생각을 안해봤거든요.",{"type":13,"tag":14,"props":384,"children":385},{},[386,388,395],{"type":23,"value":387},"그렇다면 실제 코인 거래소들은 어떤 UI를 구성했을까요? 저는 한국 거래소 1등인 ",{"type":13,"tag":18,"props":389,"children":392},{"href":390,"rel":391},"https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC",[31],[393],{"type":23,"value":394},"업비트",{"type":23,"value":396}," 를 슬쩍 보도록 하겠습니다.",{"type":13,"tag":14,"props":398,"children":399},{},[400],{"type":13,"tag":242,"props":401,"children":403},{"alt":244,"src":402},"https://user-images.githubusercontent.com/20244536/129527876-f79dd52b-828e-49f5-a052-c8c73e57473f.png",[],{"type":13,"tag":14,"props":405,"children":406},{},[407],{"type":23,"value":408},"우리가 만들어 볼 부분은 바로 여기입니다.",{"type":13,"tag":14,"props":410,"children":411},{},[412,414,420,422,427],{"type":23,"value":413},"간단히 UI를 분석해보자면, 최상단에는 ",{"type":13,"tag":415,"props":416,"children":417},"strong",{},[418],{"type":23,"value":419},"검색",{"type":23,"value":421},"과 ",{"type":13,"tag":415,"props":423,"children":424},{},[425],{"type":23,"value":426},"설정",{"type":23,"value":428},"이 있습니다.",{"type":13,"tag":14,"props":430,"children":431},{},[432,434,439],{"type":23,"value":433},"그 아래는 화폐에 따라 다른 시세를 볼 수 있는 ",{"type":13,"tag":415,"props":435,"children":436},{},[437],{"type":23,"value":438},"화폐 탭",{"type":23,"value":440},"이 있네요.",{"type":13,"tag":14,"props":442,"children":443},{},[444,446,451],{"type":23,"value":445},"그리고 아래에는 테이블 형식으로 된 ",{"type":13,"tag":415,"props":447,"children":448},{},[449],{"type":23,"value":450},"코인 시세",{"type":23,"value":452},"가 있습니다.",{"type":13,"tag":14,"props":454,"children":455},{},[456,458,463,465,470,472,477],{"type":23,"value":457},"근데 저는 개선해보고 싶은 부분이 하나 있습니다. 바로 테이블 쪽의 ",{"type":13,"tag":415,"props":459,"children":460},{},[461],{"type":23,"value":462},"거래대금",{"type":23,"value":464}," 입니다. ",{"type":13,"tag":75,"props":466,"children":467},{},[468],{"type":23,"value":469},"1,783,893백만",{"type":23,"value":471}," 이라는 숫자가 바로 읽히지 않기 때문입니다. 어차피 백만 아래 단위를 잘라서 보여줄 것 같으면 차라리 ",{"type":13,"tag":75,"props":473,"children":474},{},[475],{"type":23,"value":476},"1조 7838억",{"type":23,"value":478}," 정도로만 나와도 훨씬 이해하기 쉬울 것 같은데 말이죠.",{"type":13,"tag":14,"props":480,"children":481},{},[482],{"type":23,"value":483},"그래서 전 업비트의 UI를 참고하되, 저만의 차별점을 약간 줘보도록 하겠습니다.",{"type":13,"tag":14,"props":485,"children":486},{},[487],{"type":23,"value":488},"참고로 다른 서비스들을 최대한 많이 접해보는 게 좋습니다. 나중에 좋은 서비스를 만드는데 큰 밑거름이 됩니다. 자주 베끼고, 따라하세요. (그렇다고 아예 베끼라는 건 아닙니다)",{"type":13,"tag":58,"props":490,"children":492},{"id":491},"ui-만들기",[493],{"type":23,"value":494},"UI 만들기",{"type":13,"tag":14,"props":496,"children":497},{},[498],{"type":23,"value":499},"일단 이 강의 시리즈에서는 검색이나 설정, 화폐 탭 바꾸기 기능 등 부가 기능들은 만들지 않도록 하겠습니다. 단순히 시세를 보여주기만 하는 것 까지만 하겠습니다. (너무 많아요)",{"type":13,"tag":14,"props":501,"children":502},{},[503],{"type":23,"value":504},"그렇다면 일단 테이블만 먼저 스타일링 없이 만들어보도록 하겠습니다.",{"type":13,"tag":83,"props":506,"children":509},{"className":507,"code":508,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav>코인시세보기프로그램\u003C/nav>\n\n  \u003Ctable>\n    \u003Cthead>\n      \u003Ctr>\n        \u003Cth>한글명\u003C/th>\n        \u003Cth>현재가\u003C/th>\n        \u003Cth>전일대비\u003C/th>\n        \u003Cth>거래대금\u003C/th>\n      \u003C/tr>\n    \u003C/thead>\n    \u003Ctbody>\n      \u003Ctr>\n        \u003Ctd>\n          \u003Cdiv>도지코인\u003C/div>\n          \u003Cdiv>DOGE/KRW\u003C/div>\n        \u003C/td>\n        \u003Ctd>394\u003C/td>\n        \u003Ctd>\n          \u003Cdiv>-0.76%\u003C/div>\n          \u003Cdiv>-3.00\u003C/div>\n        \u003C/td>\n        \u003Ctd>1,783,893백만\u003C/td>\n      \u003C/tr>\n      \u003Ctr>\n        \u003Ctd>\n          \u003Cdiv>리플\u003C/div>\n          \u003Cdiv>XRP/KRW\u003C/div>\n        \u003C/td>\n        \u003Ctd>1500\u003C/td>\n        \u003Ctd>\n          \u003Cdiv>+0.67%\u003C/div>\n          \u003Cdiv>10.00\u003C/div>\n        \u003C/td>\n        \u003Ctd>1,159,312백만\u003C/td>\n      \u003C/tr>\n      \u003Ctr>\n        \u003Ctd>\n          \u003Cdiv>이더리움클래식\u003C/div>\n          \u003Cdiv>ETC/KRW\u003C/div>\n        \u003C/td>\n        \u003Ctd>85,340\u003C/td>\n        \u003Ctd>\n          \u003Cdiv>-2.33%\u003C/div>\n          \u003Cdiv>-2040\u003C/div>\n        \u003C/td>\n        \u003Ctd>933,497백만\u003C/td>\n      \u003C/tr>\n    \u003C/tbody>\n  \u003C/table>\n\n  \u003Cfooter>peterkimzz.com\u003C/footer>\n\u003C/template>\n",[510],{"type":13,"tag":91,"props":511,"children":512},{},[513],{"type":13,"tag":83,"props":514,"children":515},{"__ignoreMap":5},[516],{"type":23,"value":508},{"type":13,"tag":14,"props":518,"children":519},{},[520],{"type":13,"tag":242,"props":521,"children":523},{"alt":244,"src":522},"https://user-images.githubusercontent.com/20244536/129530856-94661816-0592-45fb-a7b6-031175c33a1c.png",[],{"type":13,"tag":14,"props":525,"children":526},{},[527],{"type":23,"value":528},"실제 데이터를 받아오기 전에, 3개의 코인 정보만 업비트랑 같은 레이아웃으로 작성했습니다.",{"type":13,"tag":14,"props":530,"children":531},{},[532,534,539],{"type":23,"value":533},"우리가 주목해야할 부분은, ",{"type":13,"tag":75,"props":535,"children":536},{},[537],{"type":23,"value":538},"\u003Ctr>",{"type":23,"value":540}," 태그 부분이 반복된다는 점입니다. 그렇다는 이야기는 자바스크립트를 이용해 좀 더 프로그램스럽게 만들 수 있다는 것이죠.",{"type":13,"tag":83,"props":542,"children":545},{"className":543,"code":544,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav>코인시세보기프로그램\u003C/nav>\n\n  \u003Ctable>\n    \u003Cthead>\n      \u003Ctr>\n        \u003Cth>한글명\u003C/th>\n        \u003Cth>현재가\u003C/th>\n        \u003Cth>전일대비\u003C/th>\n        \u003Cth>거래대금\u003C/th>\n      \u003C/tr>\n    \u003C/thead>\n    \u003Ctbody>\n      \u003Ctr v-for=\"coin in coins\" :key=\"coin.symbol\">\n        \u003Ctd>\n          \u003Cdiv>{{ coin.korean_name }}\u003C/div>\n          \u003Cdiv>{{ coin.symbol }}/KRW\u003C/div>\n        \u003C/td>\n        \u003Ctd>{{ coin.price }}\u003C/td>\n        \u003Ctd>\n          \u003Cdiv>{{ coin.change }}%\u003C/div>\n          \u003Cdiv>{{ coin.change_price }}\u003C/div>\n        \u003C/td>\n        \u003Ctd>{{ coin.volume }}백만\u003C/td>\n      \u003C/tr>\n    \u003C/tbody>\n  \u003C/table>\n\n  \u003Cfooter>peterkimzz.com\u003C/footer>\n\u003C/template>\n\n\u003Cscript setup>\nimport { ref } from \"vue\";\n\nconst coins = ref([\n  {\n    symbol: \"DOGE\",\n    korean_name: \"도지코인\",\n    price: 394,\n    change: -0.76,\n    change_price: -3.0,\n    volume: 1783783,\n  },\n  {\n    symbol: \"XRP\",\n    korean_name: \"리플\",\n    price: 1500,\n    change: 0.67,\n    change_price: 10.0,\n    volume: 1159312,\n  },\n  {\n    symbol: \"ETC\",\n    korean_name: \"이더리움클래식\",\n    price: 85340,\n    change: -2.33,\n    change_price: -2040,\n    volume: 933497,\n  },\n]);\n\u003C/script>\n",[546],{"type":13,"tag":91,"props":547,"children":548},{},[549],{"type":13,"tag":83,"props":550,"children":551},{"__ignoreMap":5},[552],{"type":23,"value":544},{"type":13,"tag":14,"props":554,"children":555},{},[556,561,563,568],{"type":13,"tag":75,"props":557,"children":558},{},[559],{"type":23,"value":560},"script",{"type":23,"value":562}," 태그에 내부에 있는 변수들을, ",{"type":13,"tag":75,"props":564,"children":565},{},[566],{"type":23,"value":567},"\u003Ctemplate>",{"type":23,"value":569}," 영역에서 참조가 가능합니다.",{"type":13,"tag":14,"props":571,"children":572},{},[573,578,580,585,587,591],{"type":13,"tag":75,"props":574,"children":575},{},[576],{"type":23,"value":577},"coins",{"type":23,"value":579}," 변수를 Vue에서 반복문을 만들 때 사용하는 ",{"type":13,"tag":75,"props":581,"children":582},{},[583],{"type":23,"value":584},"v-for",{"type":23,"value":586},"를 이용해서 연결해두었으니, 나중에 ",{"type":13,"tag":75,"props":588,"children":589},{},[590],{"type":23,"value":577},{"type":23,"value":592}," 에 실제 코인 데이터를 넣어주면 업비트랑 똑같은 정보를 보여줄 수 있겠겠요. 그렇게 어렵지 않죠?",{"type":13,"tag":14,"props":594,"children":595},{},[596],{"type":23,"value":597},"숫자가 보여지는 부분이 아까랑은 약간 다르게 보이겠지만, 나중에 개선해보도록 합시다.",{"type":13,"tag":58,"props":599,"children":601},{"id":600},"업비트-api",[602],{"type":23,"value":603},"업비트 API",{"type":13,"tag":14,"props":605,"children":606},{},[607,612,614,619],{"type":13,"tag":75,"props":608,"children":609},{},[610],{"type":23,"value":611},"API",{"type":23,"value":613}," 라는 말 들어보셨나요? ",{"type":13,"tag":75,"props":615,"children":616},{},[617],{"type":23,"value":618},"Application Programming Interface",{"type":23,"value":620}," 라는 뜻입니다. 뭔 소리냐구요? 그냥 프로그램이 사용하는 인터페이스라고 생각하시면 됩니다.",{"type":13,"tag":14,"props":622,"children":623},{},[624,626,631,633,638],{"type":23,"value":625},"인터페이스가 뭐냐구요? 그렇다면 ",{"type":13,"tag":75,"props":627,"children":628},{},[629],{"type":23,"value":630},"UI",{"type":23,"value":632}," 라는 말은 들어보셨겠죠. ",{"type":13,"tag":75,"props":634,"children":635},{},[636],{"type":23,"value":637},"User Interface",{"type":23,"value":639}," 라는 뜻입니다. 사람이 사용하는 인터페이스라는 뜻이겠죠.",{"type":13,"tag":14,"props":641,"children":642},{},[643,645,650],{"type":23,"value":644},"즉, 인터페이스는 진짜 간단하게 ",{"type":13,"tag":415,"props":646,"children":647},{},[648],{"type":23,"value":649},"사용법",{"type":23,"value":651}," 이라는 뜻입니다.",{"type":13,"tag":14,"props":653,"children":654},{},[655,657,662],{"type":23,"value":656},"그렇다면 업비트 API를 사용한다는 것은 업비트에서 제공하는 시세 데이터를 받아오거나, 매수/매도 주문을 넣거나 하는 행위를 업비트 사람이 웹사이트에서 하는 게 아니라 (이건 UI죠), ",{"type":13,"tag":415,"props":658,"children":659},{},[660],{"type":23,"value":661},"애플리케이션 끼리 하도록 하는 것",{"type":23,"value":663},"을 말합니다.",{"type":13,"tag":14,"props":665,"children":666},{},[667,674],{"type":13,"tag":18,"props":668,"children":671},{"href":669,"rel":670},"https://docs.upbit.com/docs",[31],[672],{"type":23,"value":673},"업비트 API 가이드",{"type":23,"value":675},"에는 개발자들이 쉽게 가상화폐 관련 데이터를 사용할 수 있도록 API 사용 문서가 제공되고 있습니다.",{"type":13,"tag":14,"props":677,"children":678},{},[679,681,687],{"type":23,"value":680},"일단 맛을 보기 위해 브라우저 주소창에 ",{"type":13,"tag":18,"props":682,"children":685},{"href":683,"rel":684},"https://api.upbit.com/v1/market/all",[31],[686],{"type":23,"value":683},{"type":23,"value":688},"를 입력해보세요.",{"type":13,"tag":14,"props":690,"children":691},{},[692],{"type":23,"value":693},"업비트에서 취급하는 모든 코인 목록이 보이실겁니다. 이 데이터를 이용하면 아까 우리가 만들었던 테이블을 좀 더 풍성하게 만들 수 있겠다는 생각이 드네요.",{"type":13,"tag":58,"props":695,"children":697},{"id":696},"http-요청",[698],{"type":23,"value":699},"HTTP 요청",{"type":13,"tag":14,"props":701,"children":702},{},[703,705,710],{"type":23,"value":704},"아까 브라우저에 ",{"type":13,"tag":75,"props":706,"children":707},{},[708],{"type":23,"value":709},"api.upbit.com",{"type":23,"value":711}," 어쩌구를 입력했던 게 HTTP 요청이라는 거 알고 계셨나요? 우린 사실 이미 수 많은 HTTP 요청을 하고 살아왔습니다.",{"type":13,"tag":14,"props":713,"children":714},{},[715,717,722,724,728],{"type":23,"value":716},"근데 ",{"type":13,"tag":75,"props":718,"children":719},{},[720],{"type":23,"value":721},"naver.com",{"type":23,"value":723},"을 쳤을 때는 왜 웹사이트가 보일까요? 그건 네이버에서 ",{"type":13,"tag":75,"props":725,"children":726},{},[727],{"type":23,"value":191},{"type":23,"value":729},"을 응답했기 때문입니다. 업비트는 그냥 단순 데이터를 응답한거구요. 별 거 아닙니다.",{"type":13,"tag":14,"props":731,"children":732},{},[733],{"type":23,"value":734},"이걸 브라우저에서 요청하는 게 아니라, 우리 웹사이트가 요청하도록 하기만 하면 아까 보였던 코인 목록들을 우리 웹사이트에서 활용할 수 있습니다.",{"type":13,"tag":83,"props":736,"children":739},{"className":737,"code":738,"language":134,"meta":5},[132],"npm i axios\n",[740],{"type":13,"tag":91,"props":741,"children":742},{},[743],{"type":13,"tag":83,"props":744,"children":745},{"__ignoreMap":5},[746],{"type":23,"value":738},{"type":13,"tag":14,"props":748,"children":749},{},[750],{"type":23,"value":751},"패키지 하나 설치해주세요. 자바스크립트에서 제일 많이 사용하는 HTTP 요청 라이브러리입니다.",{"type":13,"tag":14,"props":753,"children":754},{},[755],{"type":23,"value":756},"그리고 Vue script 코드를 수정해줍시다.",{"type":13,"tag":83,"props":758,"children":761},{"className":759,"code":760,"filename":165,"language":166,"meta":5},[163],"\u003Cscript setup>\nimport { ref } from \"vue\";\nimport axios from \"axios\";\n\nconst coins = ref([]);\n\nasync function GetSymbols() {\n  try {\n    const { data } = await axios.get(\"https://api.upbit.com/v1/market/all\");\n    console.log(data);\n\n    coins.value = data;\n  } catch (err) {\n    throw err;\n  }\n}\n\nGetSymbols();\n\u003C/script>\n",[762],{"type":13,"tag":91,"props":763,"children":764},{},[765],{"type":13,"tag":83,"props":766,"children":767},{"__ignoreMap":5},[768],{"type":23,"value":760},{"type":13,"tag":14,"props":770,"children":771},{},[772],{"type":23,"value":773},"저장하고, 브라우저에서 F12를 눌러 개발자 콘솔을 열어보면 255개의 배열이 응답된 것을 확인할 수 있습니다. 그리고 우리 웹사이트에도 255개의 코인 목록이 보여지고 있네요.",{"type":13,"tag":14,"props":775,"children":776},{},[777],{"type":13,"tag":242,"props":778,"children":780},{"alt":244,"src":779},"https://user-images.githubusercontent.com/20244536/129536005-a8b0d29e-c2d0-42a8-a869-b7f658fea4e2.png",[],{"type":13,"tag":14,"props":782,"children":783},{},[784],{"type":23,"value":785},"다만 단순 코인 목록만 요청했기 때문에, 시세 정보는 다른 API를 이용해 받아와야 합니다.",{"type":13,"tag":14,"props":787,"children":788},{},[789],{"type":13,"tag":242,"props":790,"children":792},{"alt":244,"src":791},"https://user-images.githubusercontent.com/20244536/129536612-e93e607f-48d1-4ee2-80c4-4df6f881860f.png",[],{"type":13,"tag":14,"props":794,"children":795},{},[796,798,803,805,810],{"type":23,"value":797},"업비트 개발 문서에서 가져왔습니다. ",{"type":13,"tag":75,"props":799,"children":800},{},[801],{"type":23,"value":802},"/v1/ticker",{"type":23,"value":804}," 주소에 ",{"type":13,"tag":75,"props":806,"children":807},{},[808],{"type":23,"value":809},"markets",{"type":23,"value":811}," 라는 값과 함께 요청하면 된다는군요. 복수로 보내려면 컴마를 이용해서 가져올 수도 있다고 합니다.",{"type":13,"tag":14,"props":813,"children":814},{},[815,817,822],{"type":23,"value":816},"그럼 아까 불러왔던 코인 목록에서 ",{"type":13,"tag":75,"props":818,"children":819},{},[820],{"type":23,"value":821},"market",{"type":23,"value":823}," 값만 추출해서 배열로 이어주고, API 요청을 날리면 되겠다는 생각을 하면 되겠네요.",{"type":13,"tag":14,"props":825,"children":826},{},[827],{"type":23,"value":828},"코드도 조금 개선해보겠습니다.",{"type":13,"tag":83,"props":830,"children":833},{"className":831,"code":832,"filename":165,"language":166,"meta":5},[163],"\u003Cscript setup>\nimport { onMounted, ref } from \"vue\";\nimport axios from \"axios\";\n\nconst coins = ref([]);\n\nfunction GetSymbols() {\n  return axios.get(\"https://api.upbit.com/v1/market/all\");\n}\n\nfunction GetTickers(markets = []) {\n  return axios.get(\"https://api.upbit.com/v1/ticker\", {\n    params: { markets: markets.join(\",\") },\n  });\n}\n\n// 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수\nonMounted(async () => {\n  try {\n    const { data: symbols } = await GetSymbols();\n\n    const markets = symbols.map((symbol) => symbol.market);\n    const { data: tickers } = await GetTickers(markets);\n\n    coins.value = tickers;\n  } catch (err) {}\n});\n\u003C/script>\n",[834],{"type":13,"tag":91,"props":835,"children":836},{},[837],{"type":13,"tag":83,"props":838,"children":839},{"__ignoreMap":5},[840],{"type":23,"value":832},{"type":13,"tag":14,"props":842,"children":843},{},[844],{"type":13,"tag":242,"props":845,"children":847},{"alt":244,"src":846},"https://user-images.githubusercontent.com/20244536/129537276-a3a206c6-61fd-4aae-ae9c-dad840f5ad55.png",[],{"type":13,"tag":14,"props":849,"children":850},{},[851],{"type":23,"value":852},"콘솔을 확인해보니, 아까보단 각 코인들이 가지고 있는 데이터가 훨씬 더 많아졌습니다. 이것만 가지고도 아까 업비트에서 봤던 UI를 만들 수 있겠다는 생각이 드네요.",{"type":13,"tag":14,"props":854,"children":855},{},[856,858,863],{"type":23,"value":857},"근데 하나 문제가 있습니다. ",{"type":13,"tag":75,"props":859,"children":860},{},[861],{"type":23,"value":862},"ticker",{"type":23,"value":864},"를 받아오는 API에는 코인 한글명을 응답해주지 않는다는 점입니다.",{"type":13,"tag":58,"props":866,"children":868},{"id":867},"데이터-합치기",[869],{"type":23,"value":870},"데이터 합치기",{"type":13,"tag":14,"props":872,"children":873},{},[874],{"type":23,"value":875},"그럼 심볼이랑 티커를 합치면 되겠네요.",{"type":13,"tag":14,"props":877,"children":878},{},[879,881,886,888,893],{"type":23,"value":880},"근데 잠깐, 데이터를 합치기 전에 잠깐 생각을 해봅시다. ",{"type":13,"tag":75,"props":882,"children":883},{},[884],{"type":23,"value":885},"symbols",{"type":23,"value":887}," 도 배열로 응답되고, ",{"type":13,"tag":75,"props":889,"children":890},{},[891],{"type":23,"value":892},"tickers",{"type":23,"value":894}," 도 배열로 응답됩니다.",{"type":13,"tag":14,"props":896,"children":897},{},[898,902,904,908,910,914,916,920,922,926],{"type":13,"tag":75,"props":899,"children":900},{},[901],{"type":23,"value":892},{"type":23,"value":903}," 안에는 ",{"type":13,"tag":75,"props":905,"children":906},{},[907],{"type":23,"value":821},{"type":23,"value":909}," 변수가 제공되니까 먼저 ",{"type":13,"tag":75,"props":911,"children":912},{},[913],{"type":23,"value":885},{"type":23,"value":915},"을 반복문 돌리고, ",{"type":13,"tag":75,"props":917,"children":918},{},[919],{"type":23,"value":885},{"type":23,"value":921},"도 반복문을 돌려서 ",{"type":13,"tag":75,"props":923,"children":924},{},[925],{"type":23,"value":821},{"type":23,"value":927}," 값으로 찾은 다음에 둘을 합쳐야겠네?",{"type":13,"tag":14,"props":929,"children":930},{},[931,933,938],{"type":23,"value":932},"라고 생각하셨나요? 그럼 배열을 255번 x 255번을 돌아야 합니다. 총 ",{"type":13,"tag":75,"props":934,"children":935},{},[936],{"type":23,"value":937},"65,025",{"type":23,"value":939}," 번이나 돌게 생겼습니다.",{"type":13,"tag":14,"props":941,"children":942},{},[943],{"type":23,"value":944},"그리고 지금은 단 2번의 응답을 받아서 괜찮지만, 이따 실시간으로 거래되는 트래픽을 받을 때는 1초에 수십, 수백번의 응답을 받게 됩니다. 그 때 마다 계속 배열 돌면서 시세를 업데이트 해준다면 분명 앱이 느려서 제대로 작동하지 않을겁니다.",{"type":13,"tag":14,"props":946,"children":947},{},[948,950,955],{"type":23,"value":949},"그럼 어떡하죠? 방법은 간단합니다. 데이터를 배열이 아니라, ",{"type":13,"tag":415,"props":951,"children":952},{},[953],{"type":23,"value":954},"객체",{"type":23,"value":956},"로 저장하면 됩니다.",{"type":13,"tag":14,"props":958,"children":959},{},[960,962,967,968,973,975,979],{"type":23,"value":961},"객체는 ",{"type":13,"tag":75,"props":963,"children":964},{},[965],{"type":23,"value":966},"Key",{"type":23,"value":193},{"type":13,"tag":75,"props":969,"children":970},{},[971],{"type":23,"value":972},"Value",{"type":23,"value":974},"로 구성되어서, ",{"type":13,"tag":75,"props":976,"children":977},{},[978],{"type":23,"value":966},{"type":23,"value":980},"를 이용해 데이터를 접근한다는 특징이 있습니다. 데이터가 많아도 매우 빠른 속도로 데이터를 찾아낼 수 있죠.",{"type":13,"tag":14,"props":982,"children":983},{},[984,989],{"type":13,"tag":75,"props":985,"children":986},{},[987],{"type":23,"value":988},"onMounted",{"type":23,"value":990}," 를 아래처럼 수정해주세요.",{"type":13,"tag":83,"props":992,"children":997},{"className":993,"code":995,"language":996,"meta":5},[994],"language-js","onMounted(async () => {\n  try {\n    const { data: symbols } = await GetSymbols();\n    symbols.forEach((symbol) => {\n      coins.value[symbol.market] = symbol;\n    });\n\n    const markets = symbols.map((symbol) => symbol.market);\n    const { data: tickers } = await GetTickers(markets);\n\n    tickers.forEach((ticker) => {\n      coins.value[ticker.market] = Object.assign(\n        coins.value[ticker.market],\n        ticker\n      );\n    });\n  } catch (err) {}\n});\n","js",[998],{"type":13,"tag":91,"props":999,"children":1000},{},[1001],{"type":13,"tag":83,"props":1002,"children":1003},{"__ignoreMap":5},[1004],{"type":23,"value":995},{"type":13,"tag":14,"props":1006,"children":1007},{},[1008],{"type":23,"value":1009},"근데 데이터를 살펴보니, 코인 데이터가 원화 마켓, BTC 마켓 등 여러 마켓이 짬뽕되어서 나오고 있습니다.",{"type":13,"tag":14,"props":1011,"children":1012},{},[1013],{"type":13,"tag":242,"props":1014,"children":1016},{"alt":244,"src":1015},"https://user-images.githubusercontent.com/20244536/129540617-8255955b-c783-4b6b-a77f-7396cba0df2d.png",[],{"type":13,"tag":14,"props":1018,"children":1019},{},[1020,1022,1027,1029,1034,1036,1041],{"type":23,"value":1021},"마켓 구분은 심볼 앞의 접두어를 보면 됩니다. ",{"type":13,"tag":75,"props":1023,"children":1024},{},[1025],{"type":23,"value":1026},"KRW-",{"type":23,"value":1028}," 은 원화 마켓, ",{"type":13,"tag":75,"props":1030,"children":1031},{},[1032],{"type":23,"value":1033},"BTC-",{"type":23,"value":1035}," 는 비트코인 마켓, ",{"type":13,"tag":75,"props":1037,"children":1038},{},[1039],{"type":23,"value":1040},"USDT-",{"type":23,"value":1042}," 는 달러 마켓입니다.",{"type":13,"tag":14,"props":1044,"children":1045},{},[1046,1048,1053,1055,1059],{"type":23,"value":1047},"우린 ",{"type":13,"tag":415,"props":1049,"children":1050},{},[1051],{"type":23,"value":1052},"원화",{"type":23,"value":1054}," 마켓 데이터만 가져오고 싶기 때문에 ",{"type":13,"tag":75,"props":1056,"children":1057},{},[1058],{"type":23,"value":1026},{"type":23,"value":1060}," 으로 시작하는 코인들만 필터링 해보도록 하겠습니다.",{"type":13,"tag":14,"props":1062,"children":1063},{},[1064,1066,1070],{"type":23,"value":1065},"변화된 데이터에 따라 ",{"type":13,"tag":75,"props":1067,"children":1068},{},[1069],{"type":23,"value":191},{"type":23,"value":1071},"도 조금 수정했습니다.",{"type":13,"tag":83,"props":1073,"children":1076},{"className":1074,"code":1075,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav>코인시세보기프로그램\u003C/nav>\n\n  \u003Ctable>\n    \u003Cthead>\n      \u003Ctr>\n        \u003Cth>한글명\u003C/th>\n        \u003Cth>현재가\u003C/th>\n        \u003Cth>전일대비\u003C/th>\n        \u003Cth>거래대금\u003C/th>\n      \u003C/tr>\n    \u003C/thead>\n    \u003Ctbody>\n      \u003Ctr v-for=\"(coin, key) in coins\" :key=\"key\">\n        \u003Ctd>\n          \u003Cdiv>{{ coin.korean_name }}\u003C/div>\n          \u003Cdiv>{{ coin.market }}/KRW\u003C/div>\n        \u003C/td>\n        \u003Ctd>{{ coin.trade_price }}\u003C/td>\n        \u003Ctd>\n          \u003Cdiv>{{ coin.change_rate * 100 }}%\u003C/div>\n          \u003Cdiv>{{ coin.change_price }}\u003C/div>\n        \u003C/td>\n        \u003Ctd>{{ coin.acc_trade_price_24h }}백만\u003C/td>\n      \u003C/tr>\n    \u003C/tbody>\n  \u003C/table>\n\n  \u003Cfooter>peterkimzz.com\u003C/footer>\n\u003C/template>\n\n\u003Cscript setup>\nimport { onMounted, ref } from \"vue\";\nimport axios from \"axios\";\n\nconst coins = ref({});\n\nfunction GetSymbols() {\n  return axios.get(\"https://api.upbit.com/v1/market/all\");\n}\n\nfunction GetTickers(markets = []) {\n  return axios.get(\"https://api.upbit.com/v1/ticker\", {\n    params: { markets: markets.join(\",\") },\n  });\n}\n\n// 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수\nonMounted(async () => {\n  try {\n    const markets = [];\n\n    const { data: symbols } = await GetSymbols();\n\n    symbols.forEach((symbol) => {\n      /** `KRW-` 으로 시작하는 마켓만 핕터링 */\n      if (symbol.market.indexOf(\"KRW-\") === -1) {\n        return;\n      }\n\n      markets.push(symbol.market);\n      coins.value[symbol.market] = symbol;\n    });\n\n    const { data: tickers } = await GetTickers(markets);\n\n    tickers.forEach((ticker) => {\n      coins.value[ticker.market] = Object.assign(\n        coins.value[ticker.market],\n        ticker\n      );\n    });\n  } catch (err) {}\n});\n\u003C/script>\n",[1077],{"type":13,"tag":91,"props":1078,"children":1079},{},[1080],{"type":13,"tag":83,"props":1081,"children":1082},{"__ignoreMap":5},[1083],{"type":23,"value":1075},{"type":13,"tag":14,"props":1085,"children":1086},{},[1087],{"type":13,"tag":242,"props":1088,"children":1090},{"alt":244,"src":1089},"https://user-images.githubusercontent.com/20244536/129541687-e6d0cba6-53d9-47e1-8234-d3dfaa4fa7a9.png",[],{"type":13,"tag":14,"props":1092,"children":1093},{},[1094],{"type":23,"value":1095},"실제 코인과 숫자가 채워지니까 아까보다 훨신 더 있어보이네요.",{"type":13,"tag":58,"props":1097,"children":1099},{"id":1098},"스타일링",[1100],{"type":23,"value":1098},{"type":13,"tag":14,"props":1102,"children":1103},{},[1104],{"type":23,"value":1105},"여기까지 스크립트는 적당히 잘 작동하는 것 같습니다.",{"type":13,"tag":14,"props":1107,"children":1108},{},[1109],{"type":23,"value":1110},"헌데.. 솔직히 디자인이 너무 구립니다. 이대로 계속 진행하기엔 저의 내재된 디자인 감각이 허용하지 않네요. UI를 조금만 개선을 해보겠습니다.",{"type":13,"tag":14,"props":1112,"children":1113},{},[1114],{"type":23,"value":1115},"본격적으로 스타일링을 하기 전에, 라이브러리 하나 설치하고 가도록 하겠습니다.",{"type":13,"tag":83,"props":1117,"children":1120},{"className":1118,"code":1119,"filename":134,"language":134,"meta":5},[132],"npm install -D tailwindcss@latest postcss@latest autoprefixer@latest\nnpx tailwindcss init -p\n",[1121],{"type":13,"tag":91,"props":1122,"children":1123},{},[1124],{"type":13,"tag":83,"props":1125,"children":1126},{"__ignoreMap":5},[1127],{"type":23,"value":1119},{"type":13,"tag":14,"props":1129,"children":1130},{},[1131,1141,1143,1148],{"type":13,"tag":18,"props":1132,"children":1135},{"href":1133,"rel":1134},"https://tailwindcss.com/",[31],[1136],{"type":13,"tag":75,"props":1137,"children":1138},{},[1139],{"type":23,"value":1140},"Tailwind CSS",{"type":23,"value":1142}," 라는 라이브러리입니다. 이걸 사용하면 매우 빠르게 스타일링을 할 수 있습니다. 저는 이 라이브러리의 도움으로, ",{"type":13,"tag":75,"props":1144,"children":1145},{},[1146],{"type":23,"value":1147},"\u003Cstyle>",{"type":23,"value":1149}," 태그를 아예 사용하지 않고 스타일링을 하고 있습니다.",{"type":13,"tag":14,"props":1151,"children":1152},{},[1153,1155,1160,1162,1167],{"type":23,"value":1154},"위 두 줄을 입력하면 ",{"type":13,"tag":75,"props":1156,"children":1157},{},[1158],{"type":23,"value":1159},"tailwind.config.js",{"type":23,"value":1161}," 파일과, ",{"type":13,"tag":75,"props":1163,"children":1164},{},[1165],{"type":23,"value":1166},"postcss.config.js",{"type":23,"value":1168}," 파일이 생성됩니다.",{"type":13,"tag":14,"props":1170,"children":1171},{},[1172,1176],{"type":13,"tag":75,"props":1173,"children":1174},{},[1175],{"type":23,"value":1159},{"type":23,"value":1177}," 파일만 조금 수정해줍시다.",{"type":13,"tag":83,"props":1179,"children":1182},{"className":1180,"code":1181,"filename":1159,"language":996,"meta":5},[994],"module.exports = {\n  mode: \"jit\",\n  purge: [\"./index.html\", \"./src/**/*.{vue,js,ts,jsx,tsx}\"],\n  darkMode: false,\n  theme: {\n    extend: {},\n  },\n  variants: {\n    extend: {},\n  },\n  plugins: [],\n};\n",[1183],{"type":13,"tag":91,"props":1184,"children":1185},{},[1186],{"type":13,"tag":83,"props":1187,"children":1188},{"__ignoreMap":5},[1189],{"type":23,"value":1181},{"type":13,"tag":14,"props":1191,"children":1192},{},[1193,1195,1200,1202,1207],{"type":23,"value":1194},"그리고 ",{"type":13,"tag":75,"props":1196,"children":1197},{},[1198],{"type":23,"value":1199},"tailwindcss",{"type":23,"value":1201}," 를 우리 프로젝트에서 사용할 수 있도록 전역 ",{"type":13,"tag":75,"props":1203,"children":1204},{},[1205],{"type":23,"value":1206},".css",{"type":23,"value":1208}," 파일을 만들고, import 해주도록 합시다.",{"type":13,"tag":14,"props":1210,"children":1211},{},[1212,1217,1219,1224],{"type":13,"tag":75,"props":1213,"children":1214},{},[1215],{"type":23,"value":1216},"src",{"type":23,"value":1218}," 폴더 아래에 ",{"type":13,"tag":75,"props":1220,"children":1221},{},[1222],{"type":23,"value":1223},"index.css",{"type":23,"value":1225}," 라는 파일을 만들어주세요.",{"type":13,"tag":83,"props":1227,"children":1231},{"className":1228,"code":1230,"filename":1223,"language":345,"meta":5},[1229],"language-css","@tailwind base;\n@tailwind components;\n@tailwind utilities;\n",[1232],{"type":13,"tag":91,"props":1233,"children":1234},{},[1235],{"type":13,"tag":83,"props":1236,"children":1237},{"__ignoreMap":5},[1238],{"type":23,"value":1230},{"type":13,"tag":83,"props":1240,"children":1244},{"className":1241,"code":1242,"filename":1243,"language":996,"meta":5},[994],"import { createApp } from \"vue\";\nimport App from \"./App.vue\";\nimport \"./index.css\";\n\ncreateApp(App).mount(\"#app\");\n","main.js",[1245],{"type":13,"tag":91,"props":1246,"children":1247},{},[1248],{"type":13,"tag":83,"props":1249,"children":1250},{"__ignoreMap":5},[1251],{"type":23,"value":1242},{"type":13,"tag":14,"props":1253,"children":1254},{},[1255],{"type":23,"value":1256},"이렇게 하면 구성이 끝났습니다.",{"type":13,"tag":14,"props":1258,"children":1259},{},[1260,1262,1266,1268,1272,1274,1278],{"type":23,"value":1261},"일단 기존 ",{"type":13,"tag":75,"props":1263,"children":1264},{},[1265],{"type":23,"value":1147},{"type":23,"value":1267}," 태그는 전부 지워주세요. 같은 스타일링을 ",{"type":13,"tag":75,"props":1269,"children":1270},{},[1271],{"type":23,"value":1199},{"type":23,"value":1273}," 를 이용해 해보도록 하겠습니다. ",{"type":13,"tag":75,"props":1275,"children":1276},{},[1277],{"type":23,"value":191},{"type":23,"value":1279}," 클래스를 주목해주세요.",{"type":13,"tag":83,"props":1281,"children":1284},{"className":1282,"code":1283,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav class=\"border-b border-gray-300 p-2 text-[1.1rem] font-bold\">\n    코인시세보기프로그램\n  \u003C/nav>\n\n  \u003Cdiv class=\"p-2\">// ...\u003C/div>\n\n  \u003Cfooter class=\"font-[0.9rem] border-t border-gray-300 p-2 text-gray-600\">\n    peterkimzz.com\n  \u003C/footer>\n\u003C/template>\n",[1285],{"type":13,"tag":91,"props":1286,"children":1287},{},[1288],{"type":13,"tag":83,"props":1289,"children":1290},{"__ignoreMap":5},[1291],{"type":23,"value":1283},{"type":13,"tag":14,"props":1293,"children":1294},{},[1295,1297,1302,1304,1309,1311,1318],{"type":23,"value":1296},"대충 이해가 가시나요? 부가 설명을 드리자면 ",{"type":13,"tag":75,"props":1298,"children":1299},{},[1300],{"type":23,"value":1301},"p-",{"type":23,"value":1303}," 는 ",{"type":13,"tag":75,"props":1305,"children":1306},{},[1307],{"type":23,"value":1308},"padding",{"type":23,"value":1310}," 관련 옵션입니다. 그리고 색깔 부분은 미리 정의된 컬러 팔레트를 사용했습니다. 각 색깔마다 100 부터 900까지 다양한 채도로 구성되어있습니다. 자세한 내용이 궁금하신 분들은 ",{"type":13,"tag":18,"props":1312,"children":1315},{"href":1313,"rel":1314},"https://tailwindcss.com/docs/customizing-colors",[31],[1316],{"type":23,"value":1317},"여기",{"type":23,"value":1319},"를 확인해보세요.",{"type":13,"tag":14,"props":1321,"children":1322},{},[1323],{"type":23,"value":1324},"전체적으로 스타일링을 조금 수정해보겠습니다.",{"type":13,"tag":83,"props":1326,"children":1329},{"className":1327,"code":1328,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav class=\"p-4 text-[1.1rem] font-bold\">코인시세보기프로그램\u003C/nav>\n\n  \u003Cdiv>\n    \u003Ctable class=\"table w-full\">\n      \u003Cthead>\n        \u003Ctr class=\"border-b border-gray-100 text-sm text-gray-500\">\n          \u003Cth class=\"py-2 px-4 text-left\">한글명\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">현재가(원)\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">전일대비\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">거래대금\u003C/th>\n        \u003C/tr>\n      \u003C/thead>\n      \u003Ctbody class=\"text-gray-900\">\n        \u003Ctr v-for=\"(coin, key) in coins\" :key=\"key\">\n          \u003Ctd class=\"py-1 px-4 text-left\">\n            \u003Cdiv class=\"font-semibold text-gray-700\">\n              {{ coin.korean_name }}\n            \u003C/div>\n            \u003Cdiv class=\"text-sm text-gray-500\">{{ coin.market }}/KRW\u003C/div>\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right align-top font-semibold\">\n            {{ coin.trade_price }}\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right\">\n            \u003Cdiv class=\"font-semibold\">{{ coin.change_rate * 100 }}%\u003C/div>\n            \u003Cdiv class=\"text-sm text-gray-500\">{{ coin.change_price }}\u003C/div>\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right\">\n            {{ coin.acc_trade_price_24h }}백만\n          \u003C/td>\n        \u003C/tr>\n      \u003C/tbody>\n    \u003C/table>\n  \u003C/div>\n\n  \u003Cfooter class=\"font-[0.9rem] border-t border-gray-300 p-4 text-gray-600\">\n    peterkimzz.com\n  \u003C/footer>\n\u003C/template>\n",[1330],{"type":13,"tag":91,"props":1331,"children":1332},{},[1333],{"type":13,"tag":83,"props":1334,"children":1335},{"__ignoreMap":5},[1336],{"type":23,"value":1328},{"type":13,"tag":14,"props":1338,"children":1339},{},[1340],{"type":13,"tag":242,"props":1341,"children":1343},{"alt":244,"src":1342},"https://user-images.githubusercontent.com/20244536/129545644-32593360-8259-4ccf-9a48-e16c041af310.png",[],{"type":13,"tag":14,"props":1345,"children":1346},{},[1347],{"type":23,"value":1348},"강조하고 싶은 부분을 좀 더 진한 색으로, 진한 폰트로. 덜 중요한 부분을 더 연한 색으로 변경해주었습니다.",{"type":13,"tag":14,"props":1350,"children":1351},{},[1352],{"type":23,"value":1353},"굳이 색을 넣지 않더라도, 보기 좋은 UI는 얼마든지 만들 수 있습니다.",{"type":13,"tag":14,"props":1355,"children":1356},{},[1357],{"type":23,"value":1358},"그리고 약간씩 간격을 조정했습니다. 숫자들만 정리되면 훨씬 더 직관적이고 깔끔해 보이겠네요.",{"type":13,"tag":58,"props":1360,"children":1362},{"id":1361},"정리하기",[1363],{"type":23,"value":1361},{"type":13,"tag":14,"props":1365,"children":1366},{},[1367],{"type":23,"value":1368},"정리하고 싶은 점을 나열해봅시다.",{"type":13,"tag":1370,"props":1371,"children":1372},"ol",{},[1373,1379,1384,1402,1407],{"type":13,"tag":1374,"props":1375,"children":1376},"li",{},[1377],{"type":23,"value":1378},"현재가는 컴마 단위로 구분되서 보이면 좋겠네요. (10100원 -> 10,000원)",{"type":13,"tag":1374,"props":1380,"children":1381},{},[1382],{"type":23,"value":1383},"전일 대비는 소숫점 2번째 자리까지만 반올림해서 보이게 해줍시다. (1.508123% -> 1.51%)",{"type":13,"tag":1374,"props":1385,"children":1386},{},[1387,1389,1394,1395,1400],{"type":23,"value":1388},"현재가와 전일대비의 등락을 ",{"type":13,"tag":75,"props":1390,"children":1391},{},[1392],{"type":23,"value":1393},"+",{"type":23,"value":193},{"type":13,"tag":75,"props":1396,"children":1397},{},[1398],{"type":23,"value":1399},"-",{"type":23,"value":1401}," 기호를 이용해 표시해주고 싶네요.",{"type":13,"tag":1374,"props":1403,"children":1404},{},[1405],{"type":23,"value":1406},"아까 말했던 전일대비의 xxx백만 단위를 xxx억 단위로 바꾸도록 하겠습니다.",{"type":13,"tag":1374,"props":1408,"children":1409},{},[1410],{"type":23,"value":1411},"마지막으로 마켓 심볼 부분의 KRW이 중복되지 않도록 정리해줍시다.",{"type":13,"tag":14,"props":1413,"children":1414},{},[1415,1417,1422],{"type":23,"value":1416},"1번은 간단합니다. 자바스크립트 숫자형 타입에 대해 기본적으로 제공되는 ",{"type":13,"tag":75,"props":1418,"children":1419},{},[1420],{"type":23,"value":1421},"toLocaleString()",{"type":23,"value":1423}," 함수를 사용하면 됩니다.",{"type":13,"tag":83,"props":1425,"children":1428},{"className":1426,"code":1427,"language":996,"meta":5},[994],"function GetCurrency(value) {\n  return Number(value).toLocaleString();\n}\n",[1429],{"type":13,"tag":91,"props":1430,"children":1431},{},[1432],{"type":13,"tag":83,"props":1433,"children":1434},{"__ignoreMap":5},[1435],{"type":23,"value":1427},{"type":13,"tag":14,"props":1437,"children":1438},{},[1439,1441,1446],{"type":23,"value":1440},"2번 또한 간단합니다. 자바스크립트 숫자형 타입에 대해 기본적으로 제공되는 ",{"type":13,"tag":75,"props":1442,"children":1443},{},[1444],{"type":23,"value":1445},"toFixed()",{"type":23,"value":1447}," 함수를 사용하면 됩니다. 파라미터는 소숫점을 제한하고 싶은 값을 넣어주면 됩니다. 이 경우에는 2를 넣어주면 되겠죠.",{"type":13,"tag":83,"props":1449,"children":1452},{"className":1450,"code":1451,"language":996,"meta":5},[994],"function GetChangeRate(value) {\n  return Number(value).toFixed(2);\n}\n",[1453],{"type":13,"tag":91,"props":1454,"children":1455},{},[1456],{"type":13,"tag":83,"props":1457,"children":1458},{"__ignoreMap":5},[1459],{"type":23,"value":1451},{"type":13,"tag":14,"props":1461,"children":1462},{},[1463,1465,1470,1471,1476,1478,1482],{"type":23,"value":1464},"3번의 경우에는 API를 받아서 데이터를 가공하는 부분을 조금 수정할 필요가 있습니다. 이유는 현재 등락을 ",{"type":13,"tag":75,"props":1466,"children":1467},{},[1468],{"type":23,"value":1469},"RISE",{"type":23,"value":193},{"type":13,"tag":75,"props":1472,"children":1473},{},[1474],{"type":23,"value":1475},"FALL",{"type":23,"value":1477}," 이라는 문자열을 별개로 응답하고 있기 때문입니다. 이러저래 깔끔하게 하려고 시도를 많이 했는데, 음수일 땐 ",{"type":13,"tag":75,"props":1479,"children":1480},{},[1481],{"type":23,"value":1399},{"type":23,"value":1483}," 값이 붙어있는 게 조작하긴 더 좋더라구요.",{"type":13,"tag":83,"props":1485,"children":1488},{"className":1486,"code":1487,"language":996,"meta":5},[994],"onMounted(async () => {\n  try {\n    const markets = [];\n\n    const { data: symbols } = await GetSymbols();\n\n    symbols.forEach((symbol) => {\n      if (symbol.market.indexOf(\"KRW-\") === -1) {\n        return;\n      }\n\n      markets.push(symbol.market);\n      coins.value[symbol.market] = symbol;\n    });\n\n    const { data: tickers } = await GetTickers(markets);\n\n    tickers.forEach((ticker) => {\n\n      /** 수정된 부분 */\n      if (ticker.change === \"FALL\") {\n        ticker.trade_price = -ticker.trade_price;\n        ticker.change_price = -ticker.change_price;\n      }\n\n      ticker.change_rate = ticker.change_rate * 100;\n      /** 수정된 부분 끝 */\n\n      coins.value[ticker.market] = Object.assign(\n        coins.value[ticker.market],\n        ticker\n      );\n    });\n  } catch (err) {}\n});\n\u003C/script>\n",[1489],{"type":13,"tag":91,"props":1490,"children":1491},{},[1492],{"type":13,"tag":83,"props":1493,"children":1494},{"__ignoreMap":5},[1495],{"type":23,"value":1487},{"type":13,"tag":14,"props":1497,"children":1498},{},[1499,1501,1511],{"type":23,"value":1500},"4번은 ",{"type":13,"tag":18,"props":1502,"children":1505},{"href":1503,"rel":1504},"https://www.npmjs.com/package/num-to-korean",[31],[1506],{"type":13,"tag":75,"props":1507,"children":1508},{},[1509],{"type":23,"value":1510},"num-to-korean",{"type":23,"value":1512}," 패키지의 도움을 받도록 하겠습니다.",{"type":13,"tag":83,"props":1514,"children":1517},{"className":1515,"code":1516,"filename":134,"language":134,"meta":5},[132],"npm i num-to-korean\n",[1518],{"type":13,"tag":91,"props":1519,"children":1520},{},[1521],{"type":13,"tag":83,"props":1522,"children":1523},{"__ignoreMap":5},[1524],{"type":23,"value":1516},{"type":13,"tag":83,"props":1526,"children":1529},{"className":1527,"code":1528,"language":996,"meta":5},[994],"function getVolume(volume) {\n  return numToKorean(Math.floor(volume / 100000000) * 100000000, \"mixed\");\n}\n",[1530],{"type":13,"tag":91,"props":1531,"children":1532},{},[1533],{"type":13,"tag":83,"props":1534,"children":1535},{"__ignoreMap":5},[1536],{"type":23,"value":1528},{"type":13,"tag":14,"props":1538,"children":1539},{},[1540],{"type":23,"value":1541},"억 단위 아래 숫자는 필요 없으니 나눴다 소숫점 버려주고, 다시 곱해주면 되겠죠.",{"type":13,"tag":14,"props":1543,"children":1544},{},[1545],{"type":23,"value":1546},"이 코드들을 참고해서 만든 전체 결과물입니다.",{"type":13,"tag":83,"props":1548,"children":1551},{"className":1549,"code":1550,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cnav class=\"p-4 text-[1.1rem] font-bold\">코인시세보기프로그램\u003C/nav>\n\n  \u003Cdiv>\n    \u003Ctable class=\"table w-full\">\n      \u003Cthead>\n        \u003Ctr class=\"border-b border-gray-100 text-sm text-gray-500\">\n          \u003Cth class=\"py-2 px-4 text-left\">한글명\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">현재가(원)\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">전일대비\u003C/th>\n          \u003Cth class=\"py-2 px-4 text-right\">거래대금\u003C/th>\n        \u003C/tr>\n      \u003C/thead>\n      \u003Ctbody class=\"text-gray-900\">\n        \u003Ctr v-for=\"(coin, key) in coins\" :key=\"key\">\n          \u003Ctd class=\"py-1 px-4 text-left\">\n            \u003Cdiv class=\"font-semibold text-gray-700\">\n              {{ coin.korean_name }}\n            \u003C/div>\n            \u003Cdiv class=\"text-sm text-gray-500\">{{ coin.market }}\u003C/div>\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right font-semibold\">\n            {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.trade_price) }}\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right\">\n            \u003Cdiv class=\"font-semibold\">\n              {{ GetRatePrefix(coin) }}{{ GetChangeRate(coin.change_rate) }}%\n            \u003C/div>\n            \u003Cdiv class=\"text-sm text-gray-500\">\n              {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.change_price) }}\n            \u003C/div>\n          \u003C/td>\n          \u003Ctd class=\"py-1 px-4 text-right font-semibold text-gray-500\">\n            {{ getVolume(coin.acc_trade_price_24h) }}\n          \u003C/td>\n        \u003C/tr>\n      \u003C/tbody>\n    \u003C/table>\n  \u003C/div>\n\n  \u003Cfooter class=\"font-[0.9rem] border-t border-gray-300 p-4 text-gray-600\">\n    peterkimzz.com\n  \u003C/footer>\n\u003C/template>\n\n\u003Cscript setup>\nimport { onMounted, ref } from \"vue\";\nimport axios from \"axios\";\nimport { numToKorean } from \"num-to-korean\";\n\nconst coins = ref({});\n\n/** Utilities */\nfunction GetCurrency(price) {\n  return Number(price).toLocaleString();\n}\nfunction GetRatePrefix(coin) {\n  switch (coin.change) {\n    case \"RISE\":\n      return \"+\";\n    default:\n      return \"\";\n  }\n}\nfunction GetChangeRate(rate) {\n  return Number(rate).toFixed(2);\n}\nfunction getVolume(volume) {\n  return numToKorean(Math.floor(volume / 100000000) * 100000000, \"mixed\");\n}\n\n/** Upbit APIs */\nfunction GetSymbols() {\n  return axios.get(\"https://api.upbit.com/v1/market/all\");\n}\nfunction GetTickers(markets = []) {\n  return axios.get(\"https://api.upbit.com/v1/ticker\", {\n    params: { markets: markets.join(\",\") },\n  });\n}\n\n/**  페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수 */\nonMounted(async () => {\n  try {\n    const markets = [];\n\n    const { data: symbols } = await GetSymbols();\n\n    symbols.forEach((symbol) => {\n      /** `KRW-` 으로 시작하는 마켓만 핕터링 */\n      if (symbol.market.indexOf(\"KRW-\") === -1) {\n        return;\n      }\n\n      markets.push(symbol.market);\n      coins.value[symbol.market] = symbol;\n    });\n\n    const { data: tickers } = await GetTickers(markets);\n\n    tickers.forEach((ticker) => {\n      if (ticker.change === \"FALL\") {\n        ticker.trade_price = -ticker.trade_price;\n        ticker.change_price = -ticker.change_price;\n      }\n\n      ticker.change_rate = ticker.change_rate * 100;\n\n      coins.value[ticker.market] = Object.assign(\n        coins.value[ticker.market],\n        ticker\n      );\n    });\n  } catch (err) {}\n});\n\u003C/script>\n",[1552],{"type":13,"tag":91,"props":1553,"children":1554},{},[1555],{"type":13,"tag":83,"props":1556,"children":1557},{"__ignoreMap":5},[1558],{"type":23,"value":1550},{"type":13,"tag":14,"props":1560,"children":1561},{},[1562],{"type":13,"tag":242,"props":1563,"children":1565},{"alt":244,"src":1564},"https://user-images.githubusercontent.com/20244536/129551073-407c021c-a542-49cd-9c17-f66dd3b42da9.png",[],{"type":13,"tag":14,"props":1567,"children":1568},{},[1569],{"type":23,"value":1570},"아까랑 비교해보니 훨씬 낫네요.",{"type":13,"tag":58,"props":1572,"children":1574},{"id":1573},"색-스타일링",[1575],{"type":23,"value":1576},"색 스타일링",{"type":13,"tag":14,"props":1578,"children":1579},{},[1580],{"type":23,"value":1581},"스타일 부분도 조금 더 개선하고 싶은 점이 있습니다. 등락을 색으로 표시해주면 더 직관적일 것 같습니다.",{"type":13,"tag":83,"props":1583,"children":1586},{"className":1584,"code":1585,"language":996,"meta":5},[994],"function GetColor(change) {\n  switch (change) {\n    case \"RISE\":\n      return \"text-red-600\";\n    case \"FALL\":\n      return \"text-blue-600\";\n    default:\n      return \"text-gray-900\";\n  }\n}\n",[1587],{"type":13,"tag":91,"props":1588,"children":1589},{},[1590],{"type":13,"tag":83,"props":1591,"children":1592},{"__ignoreMap":5},[1593],{"type":23,"value":1585},{"type":13,"tag":83,"props":1595,"children":1600},{"className":1596,"code":1598,"language":1599,"meta":5},[1597],"language-html","\u003Ctd :class=\"[GetColor(coin), 'py-1 px-4 text-right font-semibold align-top']\">\n  {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.trade_price) }}\n\u003C/td>\n\u003Ctd :class=\"[GetColor(coin), 'py-1 px-4 text-right']\">\n  \u003Cdiv class=\"font-semibold\">\n    {{ GetRatePrefix(coin) }}{{ GetChangeRate(coin.change_rate) }}%\n  \u003C/div>\n  \u003Cdiv class=\"text-sm text-gray-500\">\n    {{ GetRatePrefix(coin) }}{{ GetCurrency(coin.change_price) }}\n  \u003C/div>\n\u003C/td>\n","html",[1601],{"type":13,"tag":91,"props":1602,"children":1603},{},[1604],{"type":13,"tag":83,"props":1605,"children":1606},{"__ignoreMap":5},[1607],{"type":23,"value":1598},{"type":13,"tag":14,"props":1609,"children":1610},{},[1611,1616,1618,1623],{"type":13,"tag":75,"props":1612,"children":1613},{},[1614],{"type":23,"value":1615},"v-bind",{"type":23,"value":1617}," 를 이용해서 html ",{"type":13,"tag":75,"props":1619,"children":1620},{},[1621],{"type":23,"value":1622},"class",{"type":23,"value":1624}," 태그에 js 함수를 적용하는 부분입니다. 이런 방식을 활용해 동적으로 클래스를 계속 바꿔줄 수도 있겠죠.",{"type":13,"tag":14,"props":1626,"children":1627},{},[1628],{"type":13,"tag":242,"props":1629,"children":1631},{"alt":244,"src":1630},"https://user-images.githubusercontent.com/20244536/129552175-d678c3cf-01d8-42ac-81b4-70444ff93dff.png",[],{"type":13,"tag":58,"props":1633,"children":1635},{"id":1634},"웹-소켓",[1636],{"type":23,"value":1637},"웹 소켓",{"type":13,"tag":14,"props":1639,"children":1640},{},[1641],{"type":23,"value":1642},"실시간 데이터를 받아올 때는 HTTP 요청으로는 사실 한계가 있습니다. 뭐 매 초 HTTP 요청을 날려서 데이터를 가져올 순 있겠지만, 주식이나 코인 거래처럼 파바바박 시세가 바뀌게끔 구현하긴 어렵습니다. 한 꺼번에 숫자들이 바뀔테니까요.",{"type":13,"tag":14,"props":1644,"children":1645},{},[1646,1648,1652],{"type":23,"value":1647},"그래서 ",{"type":13,"tag":415,"props":1649,"children":1650},{},[1651],{"type":23,"value":1637},{"type":23,"value":1653},"이라는 기술이 필요합니다.",{"type":13,"tag":14,"props":1655,"children":1656},{},[1657],{"type":23,"value":1658},"HTTP는 요청, 응답 1개의 프로세스로 이루어지고 연결이 끊어집니다. 그래서 구조상 매 요청이 독립적이게 됩니다. 즉, 요청 10번이 필요할 때 무조건 10번의 호출이 필요하게 됩니다. 어떻게 보면 비효율적이죠.",{"type":13,"tag":14,"props":1660,"children":1661},{},[1662],{"type":23,"value":1663},"반면 웹 소켓은 최초 한 번 연결을 해두면, 그 이후에 연결이 끊어지기 전까지 서로 몇 번이고 요청/응답을 주고받을 수 있습니다. 실시간 데이터를 전송/수신하기엔 안성맞춤입니다.",{"type":13,"tag":14,"props":1665,"children":1666},{},[1667],{"type":23,"value":1668},"다행히 업비트에서도 웹소켓 API를 제공하고 있습니다.",{"type":13,"tag":14,"props":1670,"children":1671},{},[1672],{"type":23,"value":1673},"프로세스는 간단합니다.",{"type":13,"tag":1370,"props":1675,"children":1676},{},[1677,1689,1700],{"type":13,"tag":1374,"props":1678,"children":1679},{},[1680,1682,1687],{"type":23,"value":1681},"소켓 연결 준비하기 (",{"type":13,"tag":75,"props":1683,"children":1684},{},[1685],{"type":23,"value":1686},"Open",{"type":23,"value":1688},")",{"type":13,"tag":1374,"props":1690,"children":1691},{},[1692,1694,1699],{"type":23,"value":1693},"업비트 소켓 서버에 연결 요청 보내기 (",{"type":13,"tag":75,"props":1695,"children":1696},{},[1697],{"type":23,"value":1698},"Send",{"type":23,"value":1688},{"type":13,"tag":1374,"props":1701,"children":1702},{},[1703,1705,1710],{"type":23,"value":1704},"연결 후 데이터 수신하기 (",{"type":13,"tag":75,"props":1706,"children":1707},{},[1708],{"type":23,"value":1709},"OnMessage",{"type":23,"value":1688},{"type":13,"tag":14,"props":1712,"children":1713},{},[1714],{"type":23,"value":1715},"끝입니다. 간단하죠?",{"type":13,"tag":14,"props":1717,"children":1718},{},[1719],{"type":23,"value":1720},"일단 좀 더 깔끔한 코드 작성을 위해 기존 코드를 조금 수정해주세요.",{"type":13,"tag":83,"props":1722,"children":1725},{"className":1723,"code":1724,"language":166,"meta":5},[163],"\u003Cscript setup>\nimport { onMounted, ref } from \"vue\";\nimport axios from \"axios\";\nimport { numToKorean } from \"num-to-korean\";\nimport { v4 as uuidv4 } from \"uuid\";\n\nconst coins = ref({});\n\n/** 이 부분 추가 */\nconst markets = ref([]);\n\nonMounted(async () => {\n  try {\n    const { data: symbols } = await GetSymbols();\n\n    symbols.forEach((symbol) => {\n      if (symbol.market.indexOf(\"KRW-\") === -1) {\n        return;\n      }\n\n      /** 이 부분 수정 */\n      markets.value.push(symbol.market);\n\n      coins.value[symbol.market] = symbol;\n    });\n  } catch (err) {}\n});\n\u003C/script>\n",[1726],{"type":13,"tag":91,"props":1727,"children":1728},{},[1729],{"type":13,"tag":83,"props":1730,"children":1731},{"__ignoreMap":5},[1732],{"type":23,"value":1724},{"type":13,"tag":14,"props":1734,"children":1735},{},[1736,1740,1742,1746,1748,1752],{"type":13,"tag":75,"props":1737,"children":1738},{},[1739],{"type":23,"value":809},{"type":23,"value":1741}," 변수를 전역으로 사용할 수 있도록 밖에 선언해주고, ",{"type":13,"tag":75,"props":1743,"children":1744},{},[1745],{"type":23,"value":1026},{"type":23,"value":1747}," 코인을 필터링해서 전역 ",{"type":13,"tag":75,"props":1749,"children":1750},{},[1751],{"type":23,"value":809},{"type":23,"value":1753}," 변수에 넣어주었습니다.",{"type":13,"tag":14,"props":1755,"children":1756},{},[1757],{"type":23,"value":1758},"자 다음은 웹 소켓 부분입니다.",{"type":13,"tag":83,"props":1760,"children":1763},{"className":1761,"code":1762,"language":166,"meta":5},[163],"\u003Cscript setup>\nimport { v4 as uuidv4 } from \"uuid\";\n\nonMounted(async () => {\n  try {\n    /** 생략 */\n\n    const ws = new WebSocket(\"wss://api.upbit.com/websocket/v1\");\n\n    ws.onopen = (e) => {\n      ws.send(\n        `${JSON.stringify([\n          { ticket: uuidv4() },\n          { type: \"ticker\", codes: markets.value },\n        ])}`\n      );\n    };\n\n    ws.onmessage = async (payload) => {\n      const ticker = await new Response(payload.data).json();\n\n      if (!coins.value[ticker.code]) {\n        return;\n      }\n\n      if (ticker.change === \"FALL\") {\n        coins.value[ticker.code].trade_price = -ticker.trade_price;\n        coins.value[ticker.code].change_rate = -ticker.change_rate;\n        coins.value[ticker.code].change_price = -ticker.change_price;\n      } else {\n        coins.value[ticker.code].trade_price = ticker.trade_price;\n        coins.value[ticker.code].change_rate = ticker.change_rate;\n        coins.value[ticker.code].change_price = ticker.change_price;\n      }\n    };\n  } catch (err) {}\n});\n\u003C/script>\n",[1764],{"type":13,"tag":91,"props":1765,"children":1766},{},[1767],{"type":13,"tag":83,"props":1768,"children":1769},{"__ignoreMap":5},[1770],{"type":23,"value":1762},{"type":13,"tag":14,"props":1772,"children":1773},{},[1774,1776,1781,1783,1787],{"type":23,"value":1775},"브라우저 환경에서의 예제는 문서에도 없길래 직접 작성해보았습니다. 핵심은 응답 받는 데이터를 ",{"type":13,"tag":75,"props":1777,"children":1778},{},[1779],{"type":23,"value":1780},"Response",{"type":23,"value":1782}," 객체로 받아서 ",{"type":13,"tag":75,"props":1784,"children":1785},{},[1786],{"type":23,"value":88},{"type":23,"value":1788}," 포맷으로 만들어주는 부분입니다.",{"type":13,"tag":14,"props":1790,"children":1791},{},[1792,1794,1799],{"type":23,"value":1793},"아까 말한 것 처럼 소켓을 열고 요청을 보내고, 성공하면 ",{"type":13,"tag":75,"props":1795,"children":1796},{},[1797],{"type":23,"value":1798},"onMessage",{"type":23,"value":1800}," 부분에 업비트 웹소켓 서버에서 보내는 데이터를 계속해서 수신하게 됩니다.",{"type":13,"tag":14,"props":1802,"children":1803},{},[1804,1806,1812],{"type":23,"value":1805},"자세한 API 사용법은 ",{"type":13,"tag":18,"props":1807,"children":1810},{"href":1808,"rel":1809},"https://docs.upbit.com/docs/upbit-quotation-websocket",[31],[1811],{"type":23,"value":1317},{"type":23,"value":1813},"를 확인해주세요.",{"type":13,"tag":14,"props":1815,"children":1816},{},[1817],{"type":13,"tag":242,"props":1818,"children":1821},{"alt":1819,"src":1820},"Animation","https://user-images.githubusercontent.com/20244536/129555612-e6ee2237-701e-492a-a528-ade9b17cc307.gif",[],{"type":13,"tag":14,"props":1823,"children":1824},{},[1825],{"type":23,"value":1826},"와! 저희가 만든 앱이 100% 실시간 업비트 데이터를 보여주고 있네요.",{"type":13,"tag":58,"props":1828,"children":1830},{"id":1829},"크롬-확장-프로그램에서-실행하기",[1831],{"type":23,"value":1832},"크롬 확장 프로그램에서 실행하기",{"type":13,"tag":14,"props":1834,"children":1835},{},[1836],{"type":23,"value":1837},"고생하셨습니다. 이제 크롬 확장 프로그램으로 동작하는지만 확인하면 끝입니다.",{"type":13,"tag":14,"props":1839,"children":1840},{},[1841],{"type":23,"value":1842},"다만, 지금 상태로 크롬 확장 프로그램으로 실행시키면 좌우 너비가 안맞을 가능성이 높습니다. 지정해주지 않았기 때문이죠. 그래서 마지막으로 좌우 넓이를 조정하고 테스트해보도록 하겠습니다.",{"type":13,"tag":14,"props":1844,"children":1845},{},[1846,1850,1852,1857,1859,1864,1866,1871],{"type":13,"tag":75,"props":1847,"children":1848},{},[1849],{"type":23,"value":165},{"type":23,"value":1851},"의 코드 전체를 ",{"type":13,"tag":75,"props":1853,"children":1854},{},[1855],{"type":23,"value":1856},"div",{"type":23,"value":1858},"로 감싸고, ",{"type":13,"tag":75,"props":1860,"children":1861},{},[1862],{"type":23,"value":1863},"width",{"type":23,"value":1865},"의 최소 너비를 ",{"type":13,"tag":75,"props":1867,"children":1868},{},[1869],{"type":23,"value":1870},"30rem",{"type":23,"value":1872},"으로 주도록 하겠습니다.",{"type":13,"tag":83,"props":1874,"children":1877},{"className":1875,"code":1876,"filename":165,"language":166,"meta":5},[163],"\u003Ctemplate>\n  \u003Cdiv class=\"min-w-[30rem]\">// ...\u003C/div>\n\u003C/template>\n",[1878],{"type":13,"tag":91,"props":1879,"children":1880},{},[1881],{"type":13,"tag":83,"props":1882,"children":1883},{"__ignoreMap":5},[1884],{"type":23,"value":1876},{"type":13,"tag":14,"props":1886,"children":1887},{},[1888],{"type":23,"value":1889},"이제 끝입니다. 빌드를 해줍시다.",{"type":13,"tag":83,"props":1891,"children":1894},{"className":1892,"code":1893,"language":134,"meta":134},[132],"npm run build\n",[1895],{"type":13,"tag":91,"props":1896,"children":1897},{},[1898],{"type":13,"tag":83,"props":1899,"children":1900},{"__ignoreMap":5},[1901],{"type":23,"value":1893},{"type":13,"tag":14,"props":1903,"children":1904},{},[1905,1907,1912,1914,1919],{"type":23,"value":1906},"다음은 브라우저의 확장 프로그램 관리 페이지로 이동해서 개발자 모드를 켜주시고, 우리가 빌드한 결과물인 ",{"type":13,"tag":75,"props":1908,"children":1909},{},[1910],{"type":23,"value":1911},"dist",{"type":23,"value":1913}," 폴더를 ",{"type":13,"tag":75,"props":1915,"children":1916},{},[1917],{"type":23,"value":1918},"압축해제 된 확장앱 설치",{"type":23,"value":1920}," 버튼을 이용해 로드해주고 실행시켜주세요.",{"type":13,"tag":14,"props":1922,"children":1923},{},[1924],{"type":13,"tag":242,"props":1925,"children":1928},{"alt":1926,"src":1927},"Animation1","https://user-images.githubusercontent.com/20244536/129556666-875cf900-63e9-4489-a5f9-8a77614d9590.gif",[],{"type":13,"tag":58,"props":1930,"children":1932},{"id":1931},"마무리",[1933],{"type":23,"value":1931},{"type":13,"tag":14,"props":1935,"children":1936},{},[1937],{"type":23,"value":1938},"3부가 너무 길어서 4부까지 갈까 하다가 그냥 3부로 마무리를 했습니다.",{"type":13,"tag":14,"props":1940,"children":1941},{},[1942],{"type":23,"value":1943},"이 시리즈를 보면서 이해가 안되셨어도 괜찮습니다. 코드가 200줄도 안되는 간단한 앱이지만, 생각보다 어려운 개념들이 많이 들어가있습니다.",{"type":13,"tag":14,"props":1945,"children":1946},{},[1947],{"type":23,"value":1948},"그리고 약간의 버그도 있습니다. (+ 에서 -되면 색이 안변한다든지)",{"type":13,"tag":14,"props":1950,"children":1951},{},[1952],{"type":23,"value":1953},"그치만 진행 중 모르는 부분을 구글링하면서 조금씩이라도 이해하셨다면 굉장히 많은 부분을 경험하신겁니다. 진짜로요.",{"type":13,"tag":14,"props":1955,"children":1956},{},[1957],{"type":23,"value":1958},"하다가 잘 안되는 부분은 댓글 남겨주세요.",{"type":13,"tag":14,"props":1960,"children":1961},{},[1962,1964,1969],{"type":23,"value":1963},"찐막으로 제가 실제 배포해서 운영 중인 코인 시세 모니터링 프로그램인 ",{"type":13,"tag":75,"props":1965,"children":1966},{},[1967],{"type":23,"value":1968},"브리아나",{"type":23,"value":1970}," 소개해드리면서 이번 시리즈 마무리하도록 하겠습니다.",{"type":13,"tag":14,"props":1972,"children":1973},{},[1974,1981],{"type":13,"tag":18,"props":1975,"children":1978},{"href":1976,"rel":1977},"https://store.whale.naver.com/detail/hkipiplimgkfnhbimapmehjohnialiec",[31],[1979],{"type":23,"value":1980},"브리아나 - 1초만에 코인 시세 확인하기",{"type":13,"tag":242,"props":1982,"children":1984},{"alt":244,"src":1983},"https://user-images.githubusercontent.com/20244536/129557679-d4986353-e84f-425c-887a-a43e3734bfad.png",[],{"type":13,"tag":14,"props":1986,"children":1987},{},[1988],{"type":23,"value":1989},"여러분들도 멋진 확장 프로그램 만드시길 바랍니다.",{"title":5,"searchDepth":1991,"depth":1991,"links":1992},2,[1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005],{"id":60,"depth":1991,"text":63},{"id":249,"depth":1991,"text":252},{"id":374,"depth":1991,"text":377},{"id":491,"depth":1991,"text":494},{"id":600,"depth":1991,"text":603},{"id":696,"depth":1991,"text":699},{"id":867,"depth":1991,"text":870},{"id":1098,"depth":1991,"text":1098},{"id":1361,"depth":1991,"text":1361},{"id":1573,"depth":1991,"text":1576},{"id":1634,"depth":1991,"text":1637},{"id":1829,"depth":1991,"text":1832},{"id":1931,"depth":1991,"text":1931},"markdown","content:vuejs-chrome-extension-3.md","content","vuejs-chrome-extension-3.md","md",{},{"content-query-2l4AgphknE":2013},null,1691496033852]</script><script>window.__NUXT__={};window.__NUXT__.config={public:{HOSTNAME:"https://www.peterkimzz.com",content:{locales:[],defaultLocale:"",integrity:1691496027073,experimental:{stripQueryParameters:false,clientDB:false},respectPathCase:false,api:{baseURL:"/api/_content"},navigation:{fields:[]},tags:{p:"prose-p",a:"prose-a",blockquote:"prose-blockquote","code-inline":"prose-code-inline",code:"prose-code",em:"prose-em",h1:"prose-h1",h2:"prose-h2",h3:"prose-h3",h4:"prose-h4",h5:"prose-h5",h6:"prose-h6",hr:"prose-hr",img:"prose-img",ul:"prose-ul",ol:"prose-ol",li:"prose-li",strong:"prose-strong",table:"prose-table",thead:"prose-thead",tbody:"prose-tbody",td:"prose-td",th:"prose-th",tr:"prose-tr"},highlight:false,wsUrl:"",documentDriven:false,host:"",trailingSlash:false,anchorLinks:{depth:4,exclude:[1]}}},app:{baseURL:"/blog-v2/",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="module" src="/blog-v2/_nuxt/entry.79114c47.js" crossorigin></script></body>
+</html>

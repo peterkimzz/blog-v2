@@ -1,6 +1,6 @@
 ---
 category: tech
-title: "[Nuxt 3] 사이드 프로젝트 만들기 - 개발 환경 설정편"
+title: '[Nuxt 3] 사이드 프로젝트 만들기 - 개발 환경 설정편'
 updated: 2022-03-12
 created: 2022-03-12
 thumbnail: https://user-images.githubusercontent.com/20244536/158020130-9fbf9873-9bdf-43ca-81a8-45cbe5ac900b.png
@@ -246,10 +246,10 @@ npx tailwindcss init
 다음은 `nuxt.config.ts` 파일을 수정해줄게요.
 
 ```ts [nuxt.config.ts]
-import { defineNuxtConfig } from "nuxt3";
+import { defineNuxtConfig } from 'nuxt3'
 
 export default defineNuxtConfig({
-  css: ["~/assets/css/tailwind.css"],
+  css: ['~/assets/css/tailwind.css'],
   build: {
     postcss: {
       postcssOptions: {
@@ -260,7 +260,7 @@ export default defineNuxtConfig({
       },
     },
   },
-});
+})
 ```
 
 그리고 마지막으로 `tailwind.config.js` 파일을 수정해주면 끝입니다.
@@ -268,16 +268,16 @@ export default defineNuxtConfig({
 ```js [tailwind.config.js]
 module.exports = {
   content: [
-    "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
-    "./plugins/**/*.{js,ts}",
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './plugins/**/*.{js,ts}',
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}
 ```
 
 잘 적용됐는지 확인하기위해 `pages/index.vue` 를 조금 수정합시다.
@@ -333,10 +333,10 @@ module.exports = {
 
 ```ts [ohmyfetch]
 // ESM / Typescript
-import { $fetch } from "ohmyfetch";
+import { $fetch } from 'ohmyfetch'
 
 // CommonJS
-const { $fetch } = require("ohmyfetch");
+const { $fetch } = require('ohmyfetch')
 ```
 
 저도 처음봤습니다. 브라우저랑 노드에서 둘 다 사용 가능하다고 합니다. `axios`에 비해 어떤 이점이 있는지 문서를 읽어봤는데 크게 어떤 이점이 있는지는 잘 모르겠습니다. 하나 꼽자면 타입스크립트 친화적이라는 점 정도 있을 것 같습니다.
@@ -345,7 +345,7 @@ const { $fetch } = require("ohmyfetch");
 
 ```vue [nuxt3]
 <script setup lang="ts">
-const { data, error, pending, refresh } = await useFetch("https://...");
+const { data, error, pending, refresh } = await useFetch('https://...')
 </script>
 ```
 
@@ -374,8 +374,8 @@ const { data, error, pending, refresh } = await useFetch("https://...");
 
 <script setup lang="ts">
 const { data, pending, error, refresh } = await useFetch(
-  "https://jsonplaceholder.typicode.com/todos/1"
-);
+  'https://jsonplaceholder.typicode.com/todos/1'
+)
 </script>
 ```
 
@@ -394,20 +394,20 @@ const { data, pending, error, refresh } = await useFetch(
 ```ts [composables/useApi.ts]
 export default (url: string) => {
   return useFetch(url, {
-    baseURL: "https://api.example.com",
+    baseURL: 'https://api.example.com',
     onRequest: (context) => {
-      const isDev = process.env.NODE_ENV === "development";
+      const isDev = process.env.NODE_ENV === 'development'
       if (isDev) {
         // 이 부분은 왜 이렇게밖에 못하는지 모르겠는데, 차후 개선이 되면 좋겠네요.
         // 참고: https://github.com/nuxt/framework/issues/2557#issuecomment-1003865620
-        context.options.headers = new Headers(context.options.headers);
-        context.options.headers.append("Authrization", "Bearer TOKEN_FOR_DEV");
+        context.options.headers = new Headers(context.options.headers)
+        context.options.headers.append('Authrization', 'Bearer TOKEN_FOR_DEV')
       }
 
-      return null;
+      return null
     },
-  });
-};
+  })
+}
 ```
 
 이렇게 해주고 프로젝트를 재시작하면 아래처럼 커스텀 `composition`을 전역에서 사용이 가능합니다.
@@ -436,9 +436,9 @@ export default (url: string) => {
 `Pinia`의 주요 변경 사항 중 하나는 기존에는 데이터에 변화를 줄 때 비동기 여부에 따라 `actions`와 `commit` 함수를 나누어 사용했는데, 이제는 `actions`에 모두 통합되었습니다. 그거 말고는 똑같습니다.
 
 ```ts [stores/user.ts]
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
   }),
@@ -447,10 +447,10 @@ export const useUserStore = defineStore("user", {
   },
   actions: {
     save(user?: any) {
-      this.user = user;
+      this.user = user
     },
   },
-});
+})
 ```
 
 사용하는 방법도 조금 다른데요, 기존에는 최상위 `store` 객체를 가져와서 미리 정의된 고유한 문자열을 키로 삼아 전역 상태 값을 가져오거나 변경했었습니다.

@@ -7,9 +7,9 @@ thumbnail: https://user-images.githubusercontent.com/20244536/133209740-1982eec8
 published: true
 ---
 
-저는 이 블로그를 운영하면서 가장 귀찮은 일이 하나 있습니다.
+저는 이 블로그를 운영하면서 가장 귀찮은 일이 하나 있습니다. 바로 **이미지 주소**를 만드는 일인데요, 저는 `@nuxt/content` 모듈을 이용해 마크다운 포맷을 이용하는 정적 블로그를 운영 중이라 글 작성 중에 원격 이미지 주소를 삽입하는 기능을 사용하지 않습니다.
 
-바로 **이미지 주소**를 만드는 일인데요, 저는 `@nuxt/content` 모듈을 이용해 마크다운 포맷을 이용하는 정적 블로그를 운영 중이라 글 작성 중에 원격 이미지 주소를 삽입하는 기능을 사용하지 않습니다.
+<!--more-->
 
 그래서 이미지를 삽입할 땐 클립보드에 저장된 이미지나 가지고 있는 이미지를 제 `GitHub Issue` 아무거나 골라 댓글에 붙여넣기해서 만들어진 URL을 사용하고 있습니다.
 
@@ -17,8 +17,6 @@ published: true
 _이런 식으로 블로그에 삽입할 이미지 주소를 무료로 만들어서 사용 중입니다_
 
 이렇게 하는 이유는 이 블로그 리파지토리에 이미지 리소스를 저장하기 싫고, 외부 저장소를 사용하는 비용을 지불하고 싶지 않기 때문입니다. (참고로 깃허브 저장소는 용량이 무제한이 아니다)
-
-<!--more-->
 
 ## 좀 더 편하게 링크를 만들어보자
 
@@ -95,11 +93,11 @@ module.exports = {
 ```
 
 ```js [main.js]
-import { createApp } from 'vue'
-import App from './App.vue'
-import './index.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import "./index.css";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");
 ```
 
 `tailwindcss` 설정은 이걸로 끝입니다.
@@ -144,25 +142,25 @@ clipboard-to-url
 </template>
 
 <script setup>
-import NavigationBar from '~/components/NavigationBar.vue'
+import NavigationBar from "~/components/NavigationBar.vue";
 </script>
 ```
 
 여기서 `import` 하는 파일의 경로를 보면 `~` 표시가 있습니다. 이는 현재 파일의 위치에 상관없이 파일을 불러오고 싶을 때 사용하는 `alias` 라는 개념입니다. `vite.config.js` 파일로 가서 설정해주도록 합니다.
 
 ```js [vite.config.js]
-import path from 'path'
-import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import path from "path";
+import vue from "@vitejs/plugin-vue";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, 'src'),
+      "~": path.resolve(__dirname, "src"),
     },
   },
   plugins: [vue()],
-})
+});
 ```
 
 ![image](https://user-images.githubusercontent.com/20244536/133067193-c315f86d-5f43-4d46-bea7-013611e30b09.png)
@@ -224,8 +222,8 @@ export default defineConfig({
 </template>
 
 <script setup>
-import NavigationBar from '~/components/NavigationBar/index.vue'
-import ImageUploadZone from '~/components/Image/UploadZone.vue'
+import NavigationBar from "~/components/NavigationBar/index.vue";
+import ImageUploadZone from "~/components/Image/UploadZone.vue";
 </script>
 ```
 
@@ -304,12 +302,12 @@ $ yarn add uuid
 먼저 `src` 폴더 아래 `utils` 폴더를 만들고, `supabase.js` 파일을 만들어줍니다.
 
 ```js [utils/supabase.js]
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 ```
 
 그리고 프로젝트 루트 폴더에 `.env` 파일도 만들고 `supabase` 의 API 주소와, `ANON_KEY` 를 환경 변수로 저장합니다. 여기에는 자기 프로젝트에 해당하는 값을 넣어주면 됩니다.
@@ -323,31 +321,31 @@ VITE_SUPABASE_ANON_KEY=ey...
 
 ```vue [App.vue]
 <script setup>
-import { v4 as uuidv4 } from 'uuid'
-import { supabase } from './utils/supabase'
+import { v4 as uuidv4 } from "uuid";
+import { supabase } from "./utils/supabase";
 
 document.onpaste = async (event) => {
   try {
-    const items = event.clipboardData.items
-    const blob = items?.[0]?.getAsFile()
+    const items = event.clipboardData.items;
+    const blob = items?.[0]?.getAsFile();
 
     if (!blob) {
-      return
+      return;
     }
 
-    const key = uuidv4()
-    const bucket = 'images' // supabase 에 미리 만들어둔 public 버킷 이름
+    const key = uuidv4();
+    const bucket = "images"; // supabase 에 미리 만들어둔 public 버킷 이름
 
     await supabase.storage.from(bucket).upload(key, blob, {
-      cacheControl: '3600',
-    })
+      cacheControl: "3600",
+    });
 
-    const { publicURL } = await supabase.storage.from(bucket).getPublicUrl(key)
-    console.log(publicURL)
+    const { publicURL } = await supabase.storage.from(bucket).getPublicUrl(key);
+    console.log(publicURL);
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
 </script>
 ```
 

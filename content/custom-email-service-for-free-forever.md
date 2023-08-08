@@ -7,9 +7,7 @@ thumbnail: https://user-images.githubusercontent.com/20244536/135378482-9ac193f6
 published: true
 ---
 
-안녕하세요. 또 다시 찾아온 **평생 무료** 시리즈입니다.
-
-저는 틈만나면 1인 사이드 프로젝트를 진행하기 때문에, 어떻게든 공짜로 서버를 돌리기 위해 온갖 노력을 하고 있습니다. 그래서 무료로 이용하는 방법에 관한 글을 몇 개 올렸는데 GA를 살펴보니 다른 주제보다 조회수가 높더군요. 역시 공짜가 좋네요.
+안녕하세요. 또 다시 찾아온 **평생 무료** 시리즈입니다. 저는 틈만나면 1인 사이드 프로젝트를 진행하기 때문에, 어떻게든 공짜로 서버를 돌리기 위해 온갖 노력을 하고 있습니다. 그래서 무료로 이용하는 방법에 관한 글을 몇 개 올렸는데 GA를 살펴보니 다른 주제보다 조회수가 높더군요. 역시 공짜가 좋네요.
 
 <!--more-->
 
@@ -97,39 +95,39 @@ $ npm i -D @types/nodemailer # typescript 사용하는 경우
 패키지 설치 후, 코드 재사용성을 위해 아래와 같이 모듈화 해줍니다.
 
 ```ts [typescript]
-import nodemailer from 'nodemailer'
+import nodemailer from "nodemailer";
 
 export type mailOptions = {
-  to: string | string[]
-  subject: string
-  html: string
-}
+  to: string | string[];
+  subject: string;
+  html: string;
+};
 
 export class Nodemailer {
-  private transporter
+  private transporter;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.daum.net',
+      host: "smtp.daum.net",
       port: 465,
       secure: true,
       auth: {
-        user: '다음 계정 아이디',
-        pass: '다음 계정 비밀번호',
+        user: "다음 계정 아이디",
+        pass: "다음 계정 비밀번호",
       },
-    })
+    });
   }
 
   public sendMail(options: mailOptions) {
     return this.transporter.sendMail({
-      priority: 'normal',
-      sender: '브리아나랩스',
-      from: '브리아나랩스 <contact@brianalabs.com>',
-      to: 'contact@brianalabs.com',
+      priority: "normal",
+      sender: "브리아나랩스",
+      from: "브리아나랩스 <contact@brianalabs.com>",
+      to: "contact@brianalabs.com",
       bcc: options.to,
       subject: options.subject,
       html: options.html,
-    })
+    });
   }
 }
 ```
@@ -147,12 +145,12 @@ export class Nodemailer {
 사용 예제는 이렇습니다.
 
 ```ts [typescript]
-const mailer = new Nodemailer()
+const mailer = new Nodemailer();
 const info = await mailer.sendMail({
-  to: 'tmna1234@naver.com',
-  subject: '이메일 인증 코드를 보내드립니다.',
-  html: '인증번호는 [000000] 입니다.',
-})
+  to: "tmna1234@naver.com",
+  subject: "이메일 인증 코드를 보내드립니다.",
+  html: "인증번호는 [000000] 입니다.",
+});
 ```
 
 ![image](https://user-images.githubusercontent.com/20244536/135374752-bcb31d0b-11db-4fd5-b561-4b4ba6ede6f6.png)

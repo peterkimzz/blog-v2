@@ -7,9 +7,7 @@ created: 2021-02-09
 published: true
 ---
 
-`번들링` 이라는 말을 프론트엔드 개발자라면 많이 들어보셨을겁니다. 번들링은, 파일을 하나로 묶는 것을 말합니다.
-
-그럼 왜 굳이 파일을 하나로 묶어야 할까요? 바로 **HTTP 통신의 특성 때문입니다.**
+`번들링` 이라는 말을 프론트엔드 개발자라면 많이 들어보셨을겁니다. 번들링은, 파일을 하나로 묶는 것을 말합니다. 그럼 왜 굳이 파일을 하나로 묶어야 할까요? 바로 **HTTP 통신의 특성 때문입니다.**
 
 <!--more-->
 
@@ -72,24 +70,24 @@ project
 자 그러면 진입점이 될 파일인 `main.js`를 작성하기 전에, `faker.js`을 이용해서 랜덤한 이름을 만들어주는 우리의 모듈(함수)부터 만들어보도록 하겠습니다.
 
 ```js [src/faker.js]
-import faker from 'faker'
+import faker from "faker";
 
 export const GenerateName = () => {
-  return faker.name.findName()
-}
+  return faker.name.findName();
+};
 ```
 
 방금 만든 모듈을 이용해서 `main.js`를 구성해보도록 하겠습니다.
 
 ```js [src/main.js]
-import { GenerateName } from './faker'
+import { GenerateName } from "./faker";
 
 function Init() {
-  const name = GenerateName()
-  console.log(`name: ${name}`)
+  const name = GenerateName();
+  console.log(`name: ${name}`);
 }
 
-Init()
+Init();
 ```
 
 이상으로 프로젝트를 실행시킬 때 마다 이름을 랜덤으로 출력해주는 간단한 모듈을 만들어보았습니다.
@@ -131,18 +129,18 @@ created dist/main.js in 43ms
 성공적으로 번들링되었습니다! 현재는 경고가 하나 뜨는걸로 보이는데, 일단은 결과 파일을 살펴보도록 하겠습니다.
 
 ```js [dist/main.js]
-import faker from 'faker'
+import faker from "faker";
 
 const GenerateName = () => {
-  return faker.name.findName()
-}
+  return faker.name.findName();
+};
 
 function Init() {
-  const name = GenerateName()
-  console.log(`name: ${name}`)
+  const name = GenerateName();
+  console.log(`name: ${name}`);
 }
 
-Init()
+Init();
 ```
 
 분리되어있던 `faker.js` 파일의 코드들이 `main.js`에 합쳐져있음을 확인할 수 있습니다.
@@ -185,26 +183,26 @@ import 구문을 사용할 수 없다는 오류가 출력되고 있습니다. �
 ```js
 // dist/main.js
 
-'use strict'
+"use strict";
 
-var faker = require('faker')
+var faker = require("faker");
 
 function _interopDefaultLegacy(e) {
-  return e && typeof e === 'object' && 'default' in e ? e : { default: e }
+  return e && typeof e === "object" && "default" in e ? e : { default: e };
 }
 
-var faker__default = /*#__PURE__*/ _interopDefaultLegacy(faker)
+var faker__default = /*#__PURE__*/ _interopDefaultLegacy(faker);
 
 const GenerateName = () => {
-  return faker__default['default'].name.findName()
-}
+  return faker__default["default"].name.findName();
+};
 
 function Init() {
-  const name = GenerateName()
-  console.log(`name: ${name}`)
+  const name = GenerateName();
+  console.log(`name: ${name}`);
 }
 
-Init()
+Init();
 ```
 
 이것 저것 코드가 많이 추가되었는데 다시 테스트 해보도록 하겠습니다.
@@ -233,15 +231,15 @@ name: Cesar Greenholt
 ```js
 // src/faker.js
 
-import faker from 'faker'
+import faker from "faker";
 
 export const GenerateName = () => {
-  return faker.name.findName()
-}
+  return faker.name.findName();
+};
 
 export const Test = () => {
-  return 'Some string'
-}
+  return "Some string";
+};
 ```
 
 기존에 작성했던 `faker.js` 파일에 `Test()` 함수를 추가해서 내보내도록 했습니다.
@@ -249,14 +247,14 @@ export const Test = () => {
 **main.js**
 
 ```js
-import { GenerateName, Test } from './faker'
+import { GenerateName, Test } from "./faker";
 
 function Init() {
-  const name = GenerateName()
-  console.log(`name: ${name}`)
+  const name = GenerateName();
+  console.log(`name: ${name}`);
 }
 
-Init()
+Init();
 ```
 
 그리고 `Test` 함수를 가져오도록 코드를 추가하고 번들링을 해보면 `Test` 함수가 포함되어 있어야 할 것 같지만, 모듈을 가져오는 부분에서 실제로 사용하진 않고 있기 때문에 결과물에 포함시키지 않습니다.
@@ -289,12 +287,12 @@ $ touch rollup.config.js
 
 ```js [rollup.config.js]
 export default {
-  input: 'src/main.js',
+  input: "src/main.js",
   output: {
-    dir: 'dist',
-    format: 'cjs'
-  }
-}
+    dir: "dist",
+    format: "cjs",
+  },
+};
 ```
 
 이렇게 구성해주면 원래 작성했던 cli 코드와 설정이 같아집니다. 테스트를 위해 `yarn build`를 이용해 번들링해보면 이전과 같은 결과가 나옵니다.

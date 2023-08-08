@@ -1,31 +1,23 @@
-import type { Config } from "tailwindcss";
-
 export default defineNuxtConfig({
-  modules: ["@nuxt/content", "@nuxtjs/tailwindcss"],
-  content: {
-    highlight: {
-      theme: "github-dark",
-      preload: [
-        "diff",
-        "json",
-        "js",
-        "ts",
-        "css",
-        "shell",
-        "html",
-        "md",
-        "yaml",
-        "vue",
-      ],
+  devtools: { enabled: true },
+  modules: ["@nuxt/content", "@nuxtjs/tailwindcss", "dayjs-nuxt"],
+  runtimeConfig: {
+    public: {
+      HOSTNAME: "https://www.peterkimzz.com",
     },
   },
-  // TODO: @nuxt/tailwindcss intelicense bug
-  hooks: {
-    "tailwindcss:config": (config: Config) => {
-      config.plugins?.push(
-        require("@tailwindcss/typography"),
-        require("@tailwindcss/line-clamp")
-      );
+  tailwindcss: {
+    viewer: false,
+  },
+  dayjs: {
+    locales: ["ko"],
+    defaultLocale: "ko",
+  },
+  ssr: false,
+  nitro: {
+    preset: "github-pages",
+    prerender: {
+      routes: ["/sitemap.xml"],
     },
   },
 });

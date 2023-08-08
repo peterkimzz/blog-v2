@@ -7,9 +7,7 @@ thumbnail: https://dynamisign.com/api/sign?t=%EC%A0%95%EB%A7%90%20%EB%84%88%EB%A
 published: true
 ---
 
-우리가 [`Docker`](https://docker.com)를 사용해야하는 가장 큰 이유는, 어떤 컴퓨터에서든 똑같은 개발 환경을 보장해주기 떄문입니다.
-
-로컬 컴퓨터에서 열심히 개발하고 `AWS`에 코드를 올렸는데, 에러를 마주하며 스트레스를 받았던 경험이 한 번쯤은 있을겁니다. 내 컴퓨터랑 클라우드 컴퓨터의 환경이 100% 똑같지 않기 때문이죠. 근데 이 어려움을 한 번에 해결해준다? 쓰지 말아야 할 이유가 없습니다.
+우리가 [`Docker`](https://docker.com)를 사용해야하는 가장 큰 이유는, 어떤 컴퓨터에서든 똑같은 개발 환경을 보장해주기 떄문입니다. 로컬 컴퓨터에서 열심히 개발하고 `AWS`에 코드를 올렸는데, 에러를 마주하며 스트레스를 받았던 경험이 한 번쯤은 있을겁니다. 내 컴퓨터랑 클라우드 컴퓨터의 환경이 100% 똑같지 않기 때문이죠. 근데 이 어려움을 한 번에 해결해준다? 쓰지 말아야 할 이유가 없습니다.
 
 <!--more-->
 
@@ -52,15 +50,15 @@ node-docker/
 `express`는 노드에서 가장 많이 사용하는 서버 라이브러리입니다. 그럼 바로 스크립트를 작성하도록 합니다.
 
 ```ts [index.ts]
-import express from 'express'
-const app = express()
+import express from "express";
+const app = express();
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello, Docker!' })
-})
+app.get("/", (req, res) => {
+  res.json({ message: "Hello, Docker!" });
+});
 
-app.listen(3000)
-console.log('http://localhost:3000..')
+app.listen(3000);
+console.log("http://localhost:3000..");
 ```
 
 서버에 요청할 때 마다 `Hello, Docker!`를 응답하는 간단한 서버입니다.
@@ -208,13 +206,13 @@ $ docker rm -f 36f74a13d90d
 그래서 여러 이미지를 한 번에 관리할 수 있게끔 개발된 게 `Docker Compose` 입니다. 바로 예제를 보도록 하죠.
 
 ```yaml [docker-compose.yml]
-version: '3.9'
+version: "3.9"
 
 services:
   app: # 이미지 이름 (마음대로 설정해도 됩니다)
     build: . # Dockerfile이 있는 경로를 넣어주기
     ports:
-      - '3000:3000' # docker CLI의 "-p 3000:3000" 과 같은 표현
+      - "3000:3000" # docker CLI의 "-p 3000:3000" 과 같은 표현
 ```
 
 프로젝트 루트 디렉토리에 `docker-compose.yml` 파일을 만들어 주고 터미널에 `docker compose up` 을 입력하면 정상적으로 컨테이너가 생성되고, 로컬호스트로 접근이 가능해집니다.
@@ -224,28 +222,28 @@ services:
 그리고 여러 개의 컨테이너를 한 꺼번에 띄우고 싶다면 이런식으로 하면 됩니다.
 
 ```yaml [docker-compose.yml]
-version: '3.9'
+version: "3.9"
 
 services:
   app1:
     build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
 
   app2:
     build: .
     ports:
-      - '3001:3000'
+      - "3001:3000"
 
   app3:
     build: .
     ports:
-      - '3002:3000'
+      - "3002:3000"
 
   app4:
     build: .
     ports:
-      - '3003:3000'
+      - "3003:3000"
 ```
 
 이러고 3000 ~ 3003 포트까지 들어가보면 잘 접속됩니다.
@@ -270,16 +268,16 @@ _이미지가 잘 안보이는데, 아무튼 4개 앱이 각자 다른 포트로
 해결 방법은 간단합니다. 내 로컬 컴퓨터와 컨테이너의 **저장 공간**을 공유하면 됩니다. 로컬 코드를 수정하면 바로 컨테이너 안의 코드도 같이 수정이 되는거죠.
 
 ```yaml [docker-compose.yml]
-version: '3.9'
+version: "3.9"
 
 services:
   app:
     build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
-      - '.:/usr/src/api' # Dockerfile의 WORKDIR와 맞추기
-      - '/usr/src/api/node_modules' # 핫 리로드 성능 개선
+      - ".:/usr/src/api" # Dockerfile의 WORKDIR와 맞추기
+      - "/usr/src/api/node_modules" # 핫 리로드 성능 개선
 ```
 
 이렇게 하고 `docker compose up --build` 명령어로 새로 빌드하면서 컨테이너를 띄워주고, 코드를 수정하면 바로 서버가 다시 시작하게 됩니다.
@@ -312,13 +310,13 @@ CMD [ "yarn", "start" ] # `yarn dev`에서 `yarn start`로 변경
 그리고 기존 `docker-compose.yml` 도 이름을 `docker-compose.dev.yml` 로 바꾸고, 새로운 컴포즈 파일을 만들고 아래 내용을 작성합니다.
 
 ```yaml [docker-compose.yml]
-version: '3.9'
+version: "3.9"
 
 services:
   app:
     build: .
     ports:
-      - '80:3000'
+      - "80:3000"
 ```
 
 물론 배포용 앱을 웹서버 없이 그냥 올리는 사람은 없을겁니다. `nginx` 같은 웹서버로 프록시를 해줘야 하지만, 여기서 다루면 또 내용이 비대해지기 때문에, 일단은 대충 이렇게 한다는 걸 알아두시면 되겠습니다.
@@ -328,7 +326,7 @@ services:
 도커파일은 똑같고, 컴포즈 파일은 조금 수정이 필요합니다.
 
 ```yaml [docker-compose.dev.yml]
-version: '3.9'
+version: "3.9"
 
 services:
   app:
@@ -336,10 +334,10 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
-      - '.:/usr/src/app'
-      - '/usr/src/app/node_modules'
+      - ".:/usr/src/app"
+      - "/usr/src/app/node_modules"
 ```
 
 `build` 부분이 조금 바뀌는데, 개발 때는 `Dockerfile.dev` 을 읽도록 바꿔주었습니다.

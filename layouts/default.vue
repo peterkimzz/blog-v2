@@ -1,9 +1,7 @@
 <template>
   <div>
-    <TopHeader />
+    <TopHeader class="sticky top-0" />
 
     <slot />
-
-    <Footer />
   </div>
 </template>

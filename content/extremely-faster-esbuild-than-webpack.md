@@ -7,9 +7,7 @@ created: 2021-03-14
 published: true
 ---
 
-이번 포스팅은 떠오르는 차세대 자바스크립트 번들러 [`esbuild`](https://esbuild.github.io/)에 대한 내용입니다.
-
-작년 Github에서 떠오르는 번들링 프로젝트 중 1위를 차지했고, 오늘을 기준으로 20만개의 가까운 Github Star를 받았습니다.
+이번 포스팅은 떠오르는 차세대 자바스크립트 번들러 [`esbuild`](https://esbuild.github.io/)에 대한 내용입니다. 작년 Github에서 떠오르는 번들링 프로젝트 중 1위를 차지했고, 오늘을 기준으로 20만개의 가까운 Github Star를 받았습니다.
 
 <!--more-->
 
@@ -64,11 +62,11 @@ $ touch src/main.js
 ```js [src/main.js]
 class Animal {
   constructor(sound) {
-    this.sound = sound
+    this.sound = sound;
   }
 
   Bark() {
-    console.log(this.sound + '!')
+    console.log(this.sound + "!");
   }
 }
 ```
@@ -80,21 +78,21 @@ class Animal {
 ```js [src/main.js]
 class Animal {
   constructor(sound) {
-    this.sound = sound
+    this.sound = sound;
   }
 
   Bark() {
-    console.log(this.sound + '!')
+    console.log(this.sound + "!");
   }
 }
 
 class Dog extends Animal {
   constructor() {
-    super('멍멍')
+    super("멍멍");
   }
 }
 
-new Dog().Bark()
+new Dog().Bark();
 // 멍멍!
 ```
 
@@ -125,23 +123,23 @@ $ esbuild src/main.js --bundle --outdir=dist
 결과물 파일은 이렇습니다.
 
 ```js [dist/main.js]
-;(() => {
+(() => {
   // src/main.js
   var Animal = class {
     constructor(sound) {
-      this.sound = sound
+      this.sound = sound;
     }
     Bark() {
-      console.log(this.sound + '!')
+      console.log(this.sound + "!");
     }
-  }
+  };
   var Dog = class extends Animal {
     constructor() {
-      super('\uBA4D\uBA4D')
+      super("\uBA4D\uBA4D");
     }
-  }
-  new Dog().Bark()
-})()
+  };
+  new Dog().Bark();
+})();
 ```
 
 애초에 ES6로 작성해서 그런지, 딱히 바뀐 건 크게 없어보입니다. 한글로 된 부분은 유니코드로 변환되었고, 상단에 코드의 출처를 주석으로 달아주었네요.
@@ -196,14 +194,14 @@ $ touch scripts/build.js
 ```
 
 ```js [scripts/build.js]
-require('esbuild')
+require("esbuild")
   .build({
-    entryPoints: ['src/main.js'],
-    outdir: 'dist',
+    entryPoints: ["src/main.js"],
+    outdir: "dist",
     bundle: true,
-    platform: 'node'
+    platform: "node",
   })
-  .catch(() => process.exit(1))
+  .catch(() => process.exit(1));
 ```
 
 프로젝트에 scripts 폴더를 만들고, 그 아래 build.js 파일을 만들었습니다. 아까 명령어를 이해했으면, 이 설정 값도 직관적으로 바로 이해가 됩니다.
@@ -231,7 +229,7 @@ require('esbuild')
 ```js [src/main.js]
 export class Dog extends Animal {
   constructor() {
-    super('멍멍')
+    super("멍멍");
   }
 }
 ```
@@ -239,9 +237,9 @@ export class Dog extends Animal {
 Dog 클래스에 export 접두어를 붙여주었습니다. 이 상태에서 빌드를 하면 다른 노드 프로젝트에서 이런 식으로 불러서 쓸 수 있게 됩니다.
 
 ```js [test.js]
-import { Dog } from './dist/main'
+import { Dog } from "./dist/main";
 
-new Dog().Bark()
+new Dog().Bark();
 ```
 
 루트 디렉토리에 `test.js`를 만들었고, 잘 작동하는지 테스트하기 위해 실행시켜줍시다.
@@ -271,24 +269,24 @@ SyntaxError: Cannot use import statement outside a module
 
 ```ts [src/main.ts]
 export interface IAnimal {
-  sound: string
+  sound: string;
 }
 
 class Animal implements IAnimal {
-  sound: string
+  sound: string;
 
   constructor(sound: string) {
-    this.sound = sound
+    this.sound = sound;
   }
 
   Bark() {
-    console.log(this.sound + '!')
+    console.log(this.sound + "!");
   }
 }
 
 export class Dog extends Animal {
   constructor() {
-    super('멍멍')
+    super("멍멍");
   }
 }
 ```

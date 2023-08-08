@@ -7,9 +7,7 @@ thumbnail: https://dynamisign.com/api/sign?d=peterkimzz.com&t=Vue.js%EB%A1%9C%20
 published: true
 ---
 
-[이전 포스팅](/vuejs-chrome-extension-2)에서는 [Vite](https://vitejs.dev/)을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다.
-
-본격적으로 Vue.js 코드를 작성해보도록 합시다.
+[이전 포스팅](/vuejs-chrome-extension-2)에서는 [Vite](https://vitejs.dev/)을 이용해 크롬 확장 프로그램을 만들기 위한 기본적인 프로젝트 환경 설정까지 마쳤습니다. 본격적으로 Vue.js 코드를 작성해보도록 합시다.
 
 <!--more-->
 
@@ -48,7 +46,7 @@ npm run dev
 </template>
 
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
 // Check out https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md
@@ -271,34 +269,34 @@ footer {
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const coins = ref([
   {
-    symbol: 'DOGE',
-    korean_name: '도지코인',
+    symbol: "DOGE",
+    korean_name: "도지코인",
     price: 394,
     change: -0.76,
     change_price: -3.0,
     volume: 1783783,
   },
   {
-    symbol: 'XRP',
-    korean_name: '리플',
+    symbol: "XRP",
+    korean_name: "리플",
     price: 1500,
     change: 0.67,
     change_price: 10.0,
     volume: 1159312,
   },
   {
-    symbol: 'ETC',
-    korean_name: '이더리움클래식',
+    symbol: "ETC",
+    korean_name: "이더리움클래식",
     price: 85340,
     change: -2.33,
     change_price: -2040,
     volume: 933497,
   },
-])
+]);
 </script>
 ```
 
@@ -342,23 +340,23 @@ npm i axios
 
 ```vue [App.vue]
 <script setup>
-import { ref } from 'vue'
-import axios from 'axios'
+import { ref } from "vue";
+import axios from "axios";
 
-const coins = ref([])
+const coins = ref([]);
 
 async function GetSymbols() {
   try {
-    const { data } = await axios.get('https://api.upbit.com/v1/market/all')
-    console.log(data)
+    const { data } = await axios.get("https://api.upbit.com/v1/market/all");
+    console.log(data);
 
-    coins.value = data
+    coins.value = data;
   } catch (err) {
-    throw err
+    throw err;
   }
 }
 
-GetSymbols()
+GetSymbols();
 </script>
 ```
 
@@ -378,32 +376,32 @@ GetSymbols()
 
 ```vue [App.vue]
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import { onMounted, ref } from "vue";
+import axios from "axios";
 
-const coins = ref([])
+const coins = ref([]);
 
 function GetSymbols() {
-  return axios.get('https://api.upbit.com/v1/market/all')
+  return axios.get("https://api.upbit.com/v1/market/all");
 }
 
 function GetTickers(markets = []) {
-  return axios.get('https://api.upbit.com/v1/ticker', {
-    params: { markets: markets.join(',') },
-  })
+  return axios.get("https://api.upbit.com/v1/ticker", {
+    params: { markets: markets.join(",") },
+  });
 }
 
 // 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수
 onMounted(async () => {
   try {
-    const { data: symbols } = await GetSymbols()
+    const { data: symbols } = await GetSymbols();
 
-    const markets = symbols.map((symbol) => symbol.market)
-    const { data: tickers } = await GetTickers(markets)
+    const markets = symbols.map((symbol) => symbol.market);
+    const { data: tickers } = await GetTickers(markets);
 
-    coins.value = tickers
+    coins.value = tickers;
   } catch (err) {}
-})
+});
 </script>
 ```
 
@@ -434,22 +432,22 @@ onMounted(async () => {
 ```js
 onMounted(async () => {
   try {
-    const { data: symbols } = await GetSymbols()
+    const { data: symbols } = await GetSymbols();
     symbols.forEach((symbol) => {
-      coins.value[symbol.market] = symbol
-    })
+      coins.value[symbol.market] = symbol;
+    });
 
-    const markets = symbols.map((symbol) => symbol.market)
-    const { data: tickers } = await GetTickers(markets)
+    const markets = symbols.map((symbol) => symbol.market);
+    const { data: tickers } = await GetTickers(markets);
 
     tickers.forEach((ticker) => {
       coins.value[ticker.market] = Object.assign(
         coins.value[ticker.market],
         ticker
-      )
-    })
+      );
+    });
   } catch (err) {}
-})
+});
 ```
 
 근데 데이터를 살펴보니, 코인 데이터가 원화 마켓, BTC 마켓 등 여러 마켓이 짬뽕되어서 나오고 있습니다.
@@ -495,48 +493,48 @@ onMounted(async () => {
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import { onMounted, ref } from "vue";
+import axios from "axios";
 
-const coins = ref({})
+const coins = ref({});
 
 function GetSymbols() {
-  return axios.get('https://api.upbit.com/v1/market/all')
+  return axios.get("https://api.upbit.com/v1/market/all");
 }
 
 function GetTickers(markets = []) {
-  return axios.get('https://api.upbit.com/v1/ticker', {
-    params: { markets: markets.join(',') },
-  })
+  return axios.get("https://api.upbit.com/v1/ticker", {
+    params: { markets: markets.join(",") },
+  });
 }
 
 // 페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수
 onMounted(async () => {
   try {
-    const markets = []
+    const markets = [];
 
-    const { data: symbols } = await GetSymbols()
+    const { data: symbols } = await GetSymbols();
 
     symbols.forEach((symbol) => {
       /** `KRW-` 으로 시작하는 마켓만 핕터링 */
-      if (symbol.market.indexOf('KRW-') === -1) {
-        return
+      if (symbol.market.indexOf("KRW-") === -1) {
+        return;
       }
 
-      markets.push(symbol.market)
-      coins.value[symbol.market] = symbol
-    })
+      markets.push(symbol.market);
+      coins.value[symbol.market] = symbol;
+    });
 
-    const { data: tickers } = await GetTickers(markets)
+    const { data: tickers } = await GetTickers(markets);
 
     tickers.forEach((ticker) => {
       coins.value[ticker.market] = Object.assign(
         coins.value[ticker.market],
         ticker
-      )
-    })
+      );
+    });
   } catch (err) {}
-})
+});
 </script>
 ```
 
@@ -565,8 +563,8 @@ npx tailwindcss init -p
 
 ```js [tailwind.config.js]
 module.exports = {
-  mode: 'jit',
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  mode: "jit",
+  purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   darkMode: false,
   theme: {
     extend: {},
@@ -575,7 +573,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
 
 그리고 `tailwindcss` 를 우리 프로젝트에서 사용할 수 있도록 전역 `.css` 파일을 만들고, import 해주도록 합시다.
@@ -589,11 +587,11 @@ module.exports = {
 ```
 
 ```js [main.js]
-import { createApp } from 'vue'
-import App from './App.vue'
-import './index.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import "./index.css";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");
 ```
 
 이렇게 하면 구성이 끝났습니다.
@@ -687,7 +685,7 @@ createApp(App).mount('#app')
 
 ```js
 function GetCurrency(value) {
-  return Number(value).toLocaleString()
+  return Number(value).toLocaleString();
 }
 ```
 
@@ -695,7 +693,7 @@ function GetCurrency(value) {
 
 ```js
 function GetChangeRate(value) {
-  return Number(value).toFixed(2)
+  return Number(value).toFixed(2);
 }
 ```
 
@@ -748,7 +746,7 @@ npm i num-to-korean
 
 ```js
 function getVolume(volume) {
-  return numToKorean(Math.floor(volume / 100000000) * 100000000, 'mixed')
+  return numToKorean(Math.floor(volume / 100000000) * 100000000, "mixed");
 }
 ```
 
@@ -803,75 +801,75 @@ function getVolume(volume) {
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import { numToKorean } from 'num-to-korean'
+import { onMounted, ref } from "vue";
+import axios from "axios";
+import { numToKorean } from "num-to-korean";
 
-const coins = ref({})
+const coins = ref({});
 
 /** Utilities */
 function GetCurrency(price) {
-  return Number(price).toLocaleString()
+  return Number(price).toLocaleString();
 }
 function GetRatePrefix(coin) {
   switch (coin.change) {
-    case 'RISE':
-      return '+'
+    case "RISE":
+      return "+";
     default:
-      return ''
+      return "";
   }
 }
 function GetChangeRate(rate) {
-  return Number(rate).toFixed(2)
+  return Number(rate).toFixed(2);
 }
 function getVolume(volume) {
-  return numToKorean(Math.floor(volume / 100000000) * 100000000, 'mixed')
+  return numToKorean(Math.floor(volume / 100000000) * 100000000, "mixed");
 }
 
 /** Upbit APIs */
 function GetSymbols() {
-  return axios.get('https://api.upbit.com/v1/market/all')
+  return axios.get("https://api.upbit.com/v1/market/all");
 }
 function GetTickers(markets = []) {
-  return axios.get('https://api.upbit.com/v1/ticker', {
-    params: { markets: markets.join(',') },
-  })
+  return axios.get("https://api.upbit.com/v1/ticker", {
+    params: { markets: markets.join(",") },
+  });
 }
 
 /**  페이지가 로드되면 자동으로 호출되는 Vue.js의 사전 정의 함수 */
 onMounted(async () => {
   try {
-    const markets = []
+    const markets = [];
 
-    const { data: symbols } = await GetSymbols()
+    const { data: symbols } = await GetSymbols();
 
     symbols.forEach((symbol) => {
       /** `KRW-` 으로 시작하는 마켓만 핕터링 */
-      if (symbol.market.indexOf('KRW-') === -1) {
-        return
+      if (symbol.market.indexOf("KRW-") === -1) {
+        return;
       }
 
-      markets.push(symbol.market)
-      coins.value[symbol.market] = symbol
-    })
+      markets.push(symbol.market);
+      coins.value[symbol.market] = symbol;
+    });
 
-    const { data: tickers } = await GetTickers(markets)
+    const { data: tickers } = await GetTickers(markets);
 
     tickers.forEach((ticker) => {
-      if (ticker.change === 'FALL') {
-        ticker.trade_price = -ticker.trade_price
-        ticker.change_price = -ticker.change_price
+      if (ticker.change === "FALL") {
+        ticker.trade_price = -ticker.trade_price;
+        ticker.change_price = -ticker.change_price;
       }
 
-      ticker.change_rate = ticker.change_rate * 100
+      ticker.change_rate = ticker.change_rate * 100;
 
       coins.value[ticker.market] = Object.assign(
         coins.value[ticker.market],
         ticker
-      )
-    })
+      );
+    });
   } catch (err) {}
-})
+});
 </script>
 ```
 
@@ -886,12 +884,12 @@ onMounted(async () => {
 ```js
 function GetColor(change) {
   switch (change) {
-    case 'RISE':
-      return 'text-red-600'
-    case 'FALL':
-      return 'text-blue-600'
+    case "RISE":
+      return "text-red-600";
+    case "FALL":
+      return "text-blue-600";
     default:
-      return 'text-gray-900'
+      return "text-gray-900";
   }
 }
 ```
@@ -938,32 +936,32 @@ HTTP는 요청, 응답 1개의 프로세스로 이루어지고 연결이 끊어�
 
 ```vue
 <script setup>
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import { numToKorean } from 'num-to-korean'
-import { v4 as uuidv4 } from 'uuid'
+import { onMounted, ref } from "vue";
+import axios from "axios";
+import { numToKorean } from "num-to-korean";
+import { v4 as uuidv4 } from "uuid";
 
-const coins = ref({})
+const coins = ref({});
 
 /** 이 부분 추가 */
-const markets = ref([])
+const markets = ref([]);
 
 onMounted(async () => {
   try {
-    const { data: symbols } = await GetSymbols()
+    const { data: symbols } = await GetSymbols();
 
     symbols.forEach((symbol) => {
-      if (symbol.market.indexOf('KRW-') === -1) {
-        return
+      if (symbol.market.indexOf("KRW-") === -1) {
+        return;
       }
 
       /** 이 부분 수정 */
-      markets.value.push(symbol.market)
+      markets.value.push(symbol.market);
 
-      coins.value[symbol.market] = symbol
-    })
+      coins.value[symbol.market] = symbol;
+    });
   } catch (err) {}
-})
+});
 </script>
 ```
 
@@ -973,42 +971,42 @@ onMounted(async () => {
 
 ```vue
 <script setup>
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid";
 
 onMounted(async () => {
   try {
     /** 생략 */
 
-    const ws = new WebSocket('wss://api.upbit.com/websocket/v1')
+    const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
 
     ws.onopen = (e) => {
       ws.send(
         `${JSON.stringify([
           { ticket: uuidv4() },
-          { type: 'ticker', codes: markets.value },
+          { type: "ticker", codes: markets.value },
         ])}`
-      )
-    }
+      );
+    };
 
     ws.onmessage = async (payload) => {
-      const ticker = await new Response(payload.data).json()
+      const ticker = await new Response(payload.data).json();
 
       if (!coins.value[ticker.code]) {
-        return
+        return;
       }
 
-      if (ticker.change === 'FALL') {
-        coins.value[ticker.code].trade_price = -ticker.trade_price
-        coins.value[ticker.code].change_rate = -ticker.change_rate
-        coins.value[ticker.code].change_price = -ticker.change_price
+      if (ticker.change === "FALL") {
+        coins.value[ticker.code].trade_price = -ticker.trade_price;
+        coins.value[ticker.code].change_rate = -ticker.change_rate;
+        coins.value[ticker.code].change_price = -ticker.change_price;
       } else {
-        coins.value[ticker.code].trade_price = ticker.trade_price
-        coins.value[ticker.code].change_rate = ticker.change_rate
-        coins.value[ticker.code].change_price = ticker.change_price
+        coins.value[ticker.code].trade_price = ticker.trade_price;
+        coins.value[ticker.code].change_rate = ticker.change_rate;
+        coins.value[ticker.code].change_price = ticker.change_price;
       }
-    }
+    };
   } catch (err) {}
-})
+});
 </script>
 ```
 

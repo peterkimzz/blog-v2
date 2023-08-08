@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ko">
+<head><meta charset="utf-8">
+<title>[Nuxt 3] Composition API로 자동 스크롤링 기능 구현하기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="[Nuxt 3] Composition API로 자동 스크롤링 기능 구현하기">
+<meta name="description" content="이번 포스팅에서는 실시간 채팅 서비스에서 새로운 대화 내용이 추가되었을 때 자동으로 스크롤이 계속해서 아래로 내려가면서, 스크롤을 조작함에 따라 자동 스크롤이 활성화/비활성화되는 기능을 Vue 3에서 새로 추가된 Composition API를 통해 만들어볼겁니다.">
+<meta property="og:description" content="이번 포스팅에서는 실시간 채팅 서비스에서 새로운 대화 내용이 추가되었을 때 자동으로 스크롤이 계속해서 아래로 내려가면서, 스크롤을 조작함에 따라 자동 스크롤이 활성화/비활성화되는 기능을 Vue 3에서 새로 추가된 Composition API를 통해 만들어볼겁니다."><link rel="preload" as="fetch" crossorigin="anonymous" href="/blog-v2/nuxt3-auto-scrolling-with-composition-api/_payload.json"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/entry.6ca96203.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/default.f7900b61.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/nuxt-link.fb9cee82.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.5204135f.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/_plugin-vue_export-helper.c27b6911.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.9a35aaae.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentDoc.efdeda4a.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentRenderer.dac9f858.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentRendererMarkdown.715a734e.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/index.a6ef77ff.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/preview.d3b28cf3.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ContentQuery.e1f6b068.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/query.585a360a.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/utils.b0a9533d.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseP.e8146b8a.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseA.965814d0.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseH2.72f486e5.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseCode.c3bcac22.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseCodeInline.779c7820.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseOl.94a45fdc.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseLi.05d2936e.js"><link rel="modulepreload" as="script" crossorigin href="/blog-v2/_nuxt/ProseImg.a97d4ff4.js"><link rel="prefetch" as="script" crossorigin href="/blog-v2/_nuxt/error-404.1f1baed9.js"><link rel="prefetch" as="script" crossorigin href="/blog-v2/_nuxt/error-500.78ac30f5.js"><style>pre code .line{display:block;min-height:1rem}</style><style>/*! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:""}html{-webkit-text-size-adjust:100%;font-feature-settings:normal;font-family:Pretendard Variable,Pretendard,-apple-system,BlinkMacSystemFont,system-ui,Roboto,Helvetica Neue,Segoe UI,Apple SD Gothic Neo,Noto Sans KR,Malgun Gothic,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,sans-serif;font-variation-settings:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{font-feature-settings:inherit;color:inherit;font-family:inherit;font-size:100%;font-variation-settings:inherit;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}html{--tw-bg-opacity:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#fff;background-color:rgb(255 255 255/var(--tw-bg-opacity));line-height:1.75rem}a{text-underline-offset:4px}a:hover{text-decoration-line:underline}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\!container{max-width:1536px!important}.container{max-width:1536px}}.prose{color:var(--tw-prose-body);max-width:65ch}.prose :where(p):not(:where([class~=not-prose] *)){margin-bottom:1.25em;margin-top:1.25em}.prose :where([class~=lead]):not(:where([class~=not-prose] *)){color:var(--tw-prose-lead);font-size:1.25em;line-height:1.6;margin-bottom:1.2em;margin-top:1.2em}.prose :where(a):not(:where([class~=not-prose] *)){color:var(--tw-prose-links);font-weight:500;text-decoration:underline}.prose :where(strong):not(:where([class~=not-prose] *)){color:var(--tw-prose-bold);font-weight:600}.prose :where(a strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(ol):not(:where([class~=not-prose] *)){list-style-type:decimal;margin-bottom:1.25em;margin-top:1.25em;padding-left:1.625em}.prose :where(ol[type=A]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=A s]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a s]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=I]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type=I s]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i s]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type="1"]):not(:where([class~=not-prose] *)){list-style-type:decimal}.prose :where(ul):not(:where([class~=not-prose] *)){list-style-type:disc;margin-bottom:1.25em;margin-top:1.25em;padding-left:1.625em}.prose :where(ol>li):not(:where([class~=not-prose] *))::marker{color:var(--tw-prose-counters);font-weight:400}.prose :where(ul>li):not(:where([class~=not-prose] *))::marker{color:var(--tw-prose-bullets)}.prose :where(hr):not(:where([class~=not-prose] *)){border-color:var(--tw-prose-hr);border-top-width:1px;margin-bottom:3em;margin-top:3em}.prose :where(blockquote):not(:where([class~=not-prose] *)){border-left-color:var(--tw-prose-quote-borders);border-left-width:.25rem;color:var(--tw-prose-quotes);font-style:italic;font-weight:500;margin-bottom:1.6em;margin-top:1.6em;padding-left:1em;quotes:"\201C""\201D""\2018""\2019"}.prose :where(blockquote p:first-of-type):not(:where([class~=not-prose] *)):before{content:open-quote}.prose :where(blockquote p:last-of-type):not(:where([class~=not-prose] *)):after{content:close-quote}.prose :where(h1):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:2.25em;font-weight:800;line-height:1.1111111;margin-bottom:.8888889em;margin-top:0}.prose :where(h1 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:900}.prose :where(h2):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:1.5em;font-weight:700;line-height:1.3333333;margin-bottom:1em;margin-top:2em}.prose :where(h2 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:800}.prose :where(h3):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-size:1.25em;font-weight:600;line-height:1.6;margin-bottom:.6em;margin-top:1.6em}.prose :where(h3 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:700}.prose :where(h4):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;line-height:1.5;margin-bottom:.5em;margin-top:1.5em}.prose :where(h4 strong):not(:where([class~=not-prose] *)){color:inherit;font-weight:700}.prose :where(img):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(figure>*):not(:where([class~=not-prose] *)){margin-bottom:0;margin-top:0}.prose :where(figcaption):not(:where([class~=not-prose] *)){color:var(--tw-prose-captions);font-size:.875em;line-height:1.4285714;margin-top:.8571429em}.prose :where(code):not(:where([class~=not-prose] *)){color:var(--tw-prose-code);font-size:.875em;font-weight:600}.prose :where(code):not(:where([class~=not-prose] *)):before{content:"`"}.prose :where(code):not(:where([class~=not-prose] *)):after{content:"`"}.prose :where(a code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h1 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h2 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.875em}.prose :where(h3 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.9em}.prose :where(h4 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(pre):not(:where([class~=not-prose] *)){background-color:var(--tw-prose-pre-bg);border-radius:.375rem;color:var(--tw-prose-pre-code);font-size:.875em;font-weight:400;line-height:1.7142857;margin-bottom:1.7142857em;margin-top:1.7142857em;overflow-x:auto;padding:.8571429em 1.1428571em}.prose :where(pre code):not(:where([class~=not-prose] *)){background-color:transparent;border-radius:0;border-width:0;color:inherit;font-family:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;padding:0}.prose :where(pre code):not(:where([class~=not-prose] *)):before{content:none}.prose :where(pre code):not(:where([class~=not-prose] *)):after{content:none}.prose :where(table):not(:where([class~=not-prose] *)){font-size:.875em;line-height:1.7142857;margin-bottom:2em;margin-top:2em;table-layout:auto;text-align:left;width:100%}.prose :where(thead):not(:where([class~=not-prose] *)){border-bottom-color:var(--tw-prose-th-borders);border-bottom-width:1px}.prose :where(thead th):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;padding-bottom:.5714286em;padding-left:.5714286em;padding-right:.5714286em;vertical-align:bottom}.prose :where(tbody tr):not(:where([class~=not-prose] *)){border-bottom-color:var(--tw-prose-td-borders);border-bottom-width:1px}.prose :where(tbody tr:last-child):not(:where([class~=not-prose] *)){border-bottom-width:0}.prose :where(tbody td):not(:where([class~=not-prose] *)){vertical-align:baseline}.prose :where(tfoot):not(:where([class~=not-prose] *)){border-top-color:var(--tw-prose-th-borders);border-top-width:1px}.prose :where(tfoot td):not(:where([class~=not-prose] *)){vertical-align:top}.prose{--tw-prose-body:#374151;--tw-prose-headings:#111827;--tw-prose-lead:#4b5563;--tw-prose-links:#111827;--tw-prose-bold:#111827;--tw-prose-counters:#6b7280;--tw-prose-bullets:#d1d5db;--tw-prose-hr:#e5e7eb;--tw-prose-quotes:#111827;--tw-prose-quote-borders:#e5e7eb;--tw-prose-captions:#6b7280;--tw-prose-code:#111827;--tw-prose-pre-code:#e5e7eb;--tw-prose-pre-bg:#1f2937;--tw-prose-th-borders:#d1d5db;--tw-prose-td-borders:#e5e7eb;--tw-prose-invert-body:#d1d5db;--tw-prose-invert-headings:#fff;--tw-prose-invert-lead:#9ca3af;--tw-prose-invert-links:#fff;--tw-prose-invert-bold:#fff;--tw-prose-invert-counters:#9ca3af;--tw-prose-invert-bullets:#4b5563;--tw-prose-invert-hr:#374151;--tw-prose-invert-quotes:#f3f4f6;--tw-prose-invert-quote-borders:#374151;--tw-prose-invert-captions:#9ca3af;--tw-prose-invert-code:#fff;--tw-prose-invert-pre-code:#d1d5db;--tw-prose-invert-pre-bg:rgba(0,0,0,.5);--tw-prose-invert-th-borders:#4b5563;--tw-prose-invert-td-borders:#374151;font-size:1rem;line-height:1.75}.prose :where(video):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(figure):not(:where([class~=not-prose] *)){margin-bottom:2em;margin-top:2em}.prose :where(li):not(:where([class~=not-prose] *)){margin-bottom:.5em;margin-top:.5em}.prose :where(ol>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(ul>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(.prose>ul>li p):not(:where([class~=not-prose] *)){margin-bottom:.75em;margin-top:.75em}.prose :where(.prose>ul>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ul>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(.prose>ol>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ol>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose] *)){margin-bottom:.75em;margin-top:.75em}.prose :where(hr+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h2+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h3+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h4+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(thead th:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(thead th:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(tbody td,tfoot td):not(:where([class~=not-prose] *)){padding:.5714286em}.prose :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(.prose>:first-child):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(.prose>:last-child):not(:where([class~=not-prose] *)){margin-bottom:0}.relative{position:relative}.sticky{position:sticky}.top-0{top:0}.\!m-0{margin:0!important}.mx-auto{margin-left:auto;margin-right:auto}.mt-2{margin-top:.5rem}.mt-6{margin-top:1.5rem}.line-clamp-3{-webkit-box-orient:vertical;-webkit-line-clamp:3;display:-webkit-box;overflow:hidden}.block{display:block}.flex{display:flex}.table{display:table}.grid{display:grid}.aspect-video{aspect-ratio:16/9}.h-12{height:3rem}.h-\[100dvh\]{height:100dvh}.h-full{height:100%}.w-12{width:3rem}.w-\[180px\]{width:180px}.w-full{width:100%}.min-w-\[30rem\]{min-width:30rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-prose{max-width:65ch}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-12{gap:3rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:0;margin-bottom:calc(.25rem*var(--tw-space-y-reverse));margin-top:.25rem;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)))}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:0;margin-bottom:calc(1.25rem*var(--tw-space-y-reverse));margin-top:1.25rem;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)))}.overflow-hidden{overflow:hidden}.overflow-y-scroll{overflow-y:scroll}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.border{border-width:1px}.border-0{border-width:0}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-gray-100{--tw-border-opacity:1;border-color:#f3f4f6;border-color:rgb(243 244 246/var(--tw-border-opacity))}.border-gray-200{--tw-border-opacity:1;border-color:#e5e7eb;border-color:rgb(229 231 235/var(--tw-border-opacity))}.border-gray-300{--tw-border-opacity:1;border-color:#d1d5db;border-color:rgb(209 213 219/var(--tw-border-opacity))}.border-gray-400{--tw-border-opacity:1;border-color:#9ca3af;border-color:rgb(156 163 175/var(--tw-border-opacity))}.bg-gray-100\/50{background-color:rgba(243,244,246,.5)}.bg-white{--tw-bg-opacity:1;background-color:#fff;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-10{padding-bottom:2.5rem;padding-top:2.5rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.py-3{padding-bottom:.75rem;padding-top:.75rem}.pb-2{padding-bottom:.5rem}.pb-6{padding-bottom:1.5rem}.pt-1{padding-top:.25rem}.pt-5{padding-top:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[1\.1rem\]{font-size:1.1rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-\[0\.9rem\]{font-weight:.9rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-tight{line-height:1.25}.tracking-\[-0\.01em\]{letter-spacing:-.01em}.tracking-wide{letter-spacing:.025em}.text-black{--tw-text-opacity:1;color:#000;color:rgb(0 0 0/var(--tw-text-opacity))}.text-blue-600{--tw-text-opacity:1;color:#2563eb;color:rgb(37 99 235/var(--tw-text-opacity))}.text-gray-400{--tw-text-opacity:1;color:#9ca3af;color:rgb(156 163 175/var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:#6b7280;color:rgb(107 114 128/var(--tw-text-opacity))}.text-gray-600{--tw-text-opacity:1;color:#4b5563;color:rgb(75 85 99/var(--tw-text-opacity))}.text-gray-600\/90{color:rgba(75,85,99,.9)}.text-gray-700{--tw-text-opacity:1;color:#374151;color:rgb(55 65 81/var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:#111827;color:rgb(17 24 39/var(--tw-text-opacity))}.text-indigo-600{--tw-text-opacity:1;color:#4f46e5;color:rgb(79 70 229/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:#dc2626;color:rgb(220 38 38/var(--tw-text-opacity))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color);box-shadow:0 0 #0000,0 0 #0000,0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:0 0 #0000,0 0 #0000,0 1px 2px 0 rgba(0,0,0,.05);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.grayscale{--tw-grayscale:grayscale(100%);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) grayscale(100%) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-colors{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1)}@media (min-width:768px){.md\:prose-lg{font-size:1.125rem;line-height:1.7777778}.md\:prose-lg :where(p):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em}.md\:prose-lg :where([class~=lead]):not(:where([class~=not-prose] *)){font-size:1.2222222em;line-height:1.4545455;margin-bottom:1.0909091em;margin-top:1.0909091em}.md\:prose-lg :where(blockquote):not(:where([class~=not-prose] *)){margin-bottom:1.6666667em;margin-top:1.6666667em;padding-left:1em}.md\:prose-lg :where(h1):not(:where([class~=not-prose] *)){font-size:2.6666667em;line-height:1;margin-bottom:.8333333em;margin-top:0}.md\:prose-lg :where(h2):not(:where([class~=not-prose] *)){font-size:1.6666667em;line-height:1.3333333;margin-bottom:1.0666667em;margin-top:1.8666667em}.md\:prose-lg :where(h3):not(:where([class~=not-prose] *)){font-size:1.3333333em;line-height:1.5;margin-bottom:.6666667em;margin-top:1.6666667em}.md\:prose-lg :where(h4):not(:where([class~=not-prose] *)){line-height:1.5555556;margin-bottom:.4444444em;margin-top:1.7777778em}.md\:prose-lg :where(img):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(video):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(figure):not(:where([class~=not-prose] *)){margin-bottom:1.7777778em;margin-top:1.7777778em}.md\:prose-lg :where(figure>*):not(:where([class~=not-prose] *)){margin-bottom:0;margin-top:0}.md\:prose-lg :where(figcaption):not(:where([class~=not-prose] *)){font-size:.8888889em;line-height:1.5;margin-top:1em}.md\:prose-lg :where(code):not(:where([class~=not-prose] *)){font-size:.8888889em}.md\:prose-lg :where(h2 code):not(:where([class~=not-prose] *)){font-size:.8666667em}.md\:prose-lg :where(h3 code):not(:where([class~=not-prose] *)){font-size:.875em}.md\:prose-lg :where(pre):not(:where([class~=not-prose] *)){border-radius:.375rem;font-size:.8888889em;line-height:1.75;margin-bottom:2em;margin-top:2em;padding:1em 1.5em}.md\:prose-lg :where(ol):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em;padding-left:1.5555556em}.md\:prose-lg :where(ul):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em;margin-top:1.3333333em;padding-left:1.5555556em}.md\:prose-lg :where(li):not(:where([class~=not-prose] *)){margin-bottom:.6666667em;margin-top:.6666667em}.md\:prose-lg :where(ol>li):not(:where([class~=not-prose] *)){padding-left:.4444444em}.md\:prose-lg :where(ul>li):not(:where([class~=not-prose] *)){padding-left:.4444444em}.md\:prose-lg :where(.md\:prose-lg>ul>li p):not(:where([class~=not-prose] *)){margin-bottom:.8888889em;margin-top:.8888889em}.md\:prose-lg :where(.md\:prose-lg>ul>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ul>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ol>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.3333333em}.md\:prose-lg :where(.md\:prose-lg>ol>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.3333333em}.md\:prose-lg :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose] *)){margin-bottom:.8888889em;margin-top:.8888889em}.md\:prose-lg :where(hr):not(:where([class~=not-prose] *)){margin-bottom:3.1111111em;margin-top:3.1111111em}.md\:prose-lg :where(hr+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h2+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h3+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(h4+*):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(table):not(:where([class~=not-prose] *)){font-size:.8888889em;line-height:1.5}.md\:prose-lg :where(thead th):not(:where([class~=not-prose] *)){padding-bottom:.75em;padding-left:.75em;padding-right:.75em}.md\:prose-lg :where(thead th:first-child):not(:where([class~=not-prose] *)){padding-left:0}.md\:prose-lg :where(thead th:last-child):not(:where([class~=not-prose] *)){padding-right:0}.md\:prose-lg :where(tbody td,tfoot td):not(:where([class~=not-prose] *)){padding:.75em}.md\:prose-lg :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose] *)){padding-left:0}.md\:prose-lg :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose] *)){padding-right:0}.md\:prose-lg :where(.md\:prose-lg>:first-child):not(:where([class~=not-prose] *)){margin-top:0}.md\:prose-lg :where(.md\:prose-lg>:last-child):not(:where([class~=not-prose] *)){margin-bottom:0}}.hover\:border-gray-600:hover{--tw-border-opacity:1;border-color:#4b5563;border-color:rgb(75 85 99/var(--tw-border-opacity))}.hover\:no-underline:hover{text-decoration-line:none}.group:hover .group-hover\:underline{text-decoration-line:underline}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style></head>
+<body ><div id="__nuxt"><div><header class="bg-white border-b sticky top-0"><div class="mx-auto max-w-7xl px-6"><!--[--><nav class="flex items-center justify-between"><a href="/blog-v2/" class="font-bold text-xl italic tracking-wide"><span>PETERKIM</span><span class="text-gray-600">ZZ</span></a><ul class="flex items-center gap-5 font-semibold"><li><a href="https://resume.peterkimzz.com" rel="noopener noreferrer" target="_blank" class="py-3 block"> Résumé </a></li><li><a href="https://github.com/peterkimzz" rel="noopener noreferrer" target="_blank" class="py-3 block"> GitHub </a></li></ul></nav><!--]--></div></header><!--[--><main><div class="mx-auto max-w-7xl px-6 max-w-prose"><!--[--><!--[--><div class="prose md:prose-lg"><p><!--[-->이번 포스팅에서는 실시간 채팅 서비스에서 새로운 대화 내용이 추가되었을 때 자동으로 스크롤이 계속해서 아래로 내려가면서, 스크롤을 조작함에 따라 자동 스크롤이 활성화/비활성화되는 기능을 Vue 3에서 새로 추가된 <a href="https://vuejs.org/guide/extras/composition-api-faq.html#what-is-composition-api" rel="nofollow"><!--[-->Composition API<!--]--></a>를 통해 만들어볼겁니다.<!--]--></p><h2 id="composition-api"><a href="#composition-api"><!--[-->Composition API<!--]--></a></h2><p><!--[-->이제는 공개된지 꽤 지나서 대부분 Composition API에 대해 익숙하실겁니다. 그래도 이 코드 작성 방법이 기존 방식에 비해 뭐가 더 좋고, 어떻게 사용하는건지 간단하게 먼저 알아보도록 하겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div&gt;count: {{ count }}&lt;/div&gt;
+  &lt;div&gt;double count: {{ getDoubleCount }}&lt;/div&gt;
+  &lt;button @click=&quot;addCount&quot;&gt;Add count&lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      count: 1,
+    }
+  },
+  computed: {
+    getDoubleCount() {
+      return this.count * 2
+    },
+  },
+  methods: {
+    addCount() {
+      this.count++
+    },
+  },
+  mounted() {
+    console.log(&#39;mounted&#39;)
+  },
+}
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->먼저 Vue 2의 Options API입니다. 이 방식은 Vue의 빌트인 기능들을 사용할 때 <code><!--[-->count<!--]--></code> 같은 반응형 데이터와 <code><!--[-->computed<!--]--></code>,<code><!--[-->mounted<!--]--></code> 같은 라이프사이클 함수들을 호출하는 <code><!--[-->.vue<!--]--></code> 파일 안에 위치시켜야 했습니다. 그리고 특히 이 요소들을 밖으로 빼내서 재사용하기가 어려웠습니다.<!--]--></p><p><!--[-->그리고 지금은 코드가 짧아서 보기에 문제가 없어보이지만, 코드가 많아졌을 때 원하는 코드를 찾기가 매우 힘들었습니다.<!--]--></p><p><!--[-->자 그럼 이제 Composition API를 활용해 재사용성을 높인 코드를 봅시다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div&gt;count: {{ count }}&lt;/div&gt;
+  &lt;div&gt;double count: {{ getDoubleCount }}&lt;/div&gt;
+  &lt;button @click=&quot;addCount&quot;&gt;Add count&lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { useCount } from &#39;./useCount&#39;
+
+const { count, getDoubleCount, addCount } = useCount()
+&lt;/script&gt;
+</code></pre><!--]--><!--[--><pre><code>import { ref, computed, onMounted } from &#39;vue&#39;
+
+export function useCount() {
+  const count = ref(1)
+  const getDoubleCount = computed(() =&gt; count.value)
+
+  function addCount() {
+    count.value++
+  }
+
+  onMounted(() =&gt; {
+    console.log(&#39;useCount is mounted.&#39;)
+  })
+
+  return { count, getDoubleCount, addCount }
+}
+</code></pre><!--]--><p><!--[-->차이점이 보이시나요? Vue 빌트인 기능들을 외부로 빼두고 필요한 곳에서 불러다 쓰니, 호출하는 곳에선 내부 구현에 대해 전혀 알 필요가 없어졌습니다. 확실하게 관심사를 분리할 수 있게 되었습니다.<!--]--></p><p><!--[-->아 참고로 Vue 파일 <code><!--[-->&lt;script&gt;<!--]--></code> 태그에 <code><!--[-->setup<!--]--></code> 키워드가 들어가있어야 위 코드가 동작합니다.<!--]--></p><h2 id="자동-스크롤링-기능-만들기"><a href="#자동-스크롤링-기능-만들기"><!--[-->자동 스크롤링 기능 만들기<!--]--></a></h2><p><!--[-->최근 회사에서 실시간 채팅 비슷한 UI/UX가 필요한 서비스를 만들었고, 이 때 Composition API를 활용해 나름 보기 좋은 코드를 작성했습니다. 여러분들도 읽어보시고 작업 중인 프로젝트에 응용해보세요.<!--]--></p><p><!--[-->먼저 해당 기능을 구현하기 위한 설계를 먼저 해봅시다.<!--]--></p><ol><!--[--><li><!--[-->가로가 좁고 세로가 긴 화면으로 만든다.<!--]--></li><li><!--[-->유튜브/트위치 실시간 채팅창처럼 주기적으로 채팅이 생성된다.<!--]--></li><li><!--[-->채팅은 화면 상단부터 시작해 화면 하단까지 순서대로 쌓인다.<!--]--></li><li><!--[-->화면이 꽉 찬 상태에서 채팅이 생성되면 스크롤 바가 생성되며 화면 가장 아래로 이동한다.<!--]--></li><!--]--></ol><p><!--[-->간단하게 이렇게 설계하고, 이걸 해당 API 사용부에서는 최소한의 정보만을 넘기면서 해당 기능을 재사용할 수 있는 형태가 나오면 되겠습니다.<!--]--></p><h2 id="프로젝트-시작하기"><a href="#프로젝트-시작하기"><!--[-->프로젝트 시작하기<!--]--></a></h2><p><!--[-->일단 프로젝트를 새로 만들어주세요. Node 16버전 이상 설치되어 있어야 합니다.<!--]--></p><!--[--><pre><code>npx nuxi@latest init auto-scrolling-project
+cd auto-scrolling-project
+yarn &amp;&amp; yarn dev
+</code></pre><!--]--><p><!--[-->정상적으로 설치가 되었다면 <a href="http://localhost:3000" rel="nofollow"><!--[--><code><!--[-->http://localhost:3000<!--]--></code><!--]--></a> 주소로 로컬 서버가 열리게 됩니다.<!--]--></p><p><!--[-->마지막으로 <code><!--[-->css<!--]--></code> 적용을 위해 <a href="https://tailwindcss.com/" rel="nofollow"><!--[--><code><!--[-->Tailwind CSS<!--]--></code><!--]--></a>를 설치해주겠습니다.<!--]--></p><!--[--><pre><code>yarn i -D @nuxtjs/tailwindcss
+</code></pre><!--]--><p><!--[-->패키지 설치 후 사용을 위해 <code><!--[-->nuxt.config.ts<!--]--></code> 파일을 수정해주세요.<!--]--></p><!--[--><pre><code>export default defineNuxtConfig({
+  modules: [&#39;@nuxtjs/tailwindcss&#39;],
+})
+</code></pre><!--]--><p><!--[-->잘 적용이 됐는지 확인을 위해 HTML 코드를 수정해주겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;text-2xl font-bold&quot;&gt;Hi!&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/fe39f827-7238-463a-9b1c-fe687972d298" alt><!--]--></p><h2 id="화면-구성하기"><a href="#화면-구성하기"><!--[-->화면 구성하기<!--]--></a></h2><p><!--[-->아까 설계했던 대로, 채팅방 형태의 화면이어야 하기 때문에 화면 좌우가 너무 넓을 필요는 없습니다. 그리고 화면 세로가 꽉 차면 좋겠네요. 아 그리고 채팅이 채워지는 공간과 바깥 배경이 시각적으로 분리되면 좋을 것 같으니 배경색이 구분되어 보이면 되겠습니다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div class=&quot;h-[100dvh]&quot;&gt;
+    &lt;div class=&quot;mx-auto flex h-full max-w-sm flex-col&quot;&gt;
+      &lt;header class=&quot;flex-1 border-b py-3&quot;&gt;
+        &lt;h1 class=&quot;text-lg font-bold&quot;&gt;Chat Room with Auto Scrolling&lt;/h1&gt;
+      &lt;/header&gt;
+
+      &lt;main class=&quot;h-full bg-gray-100/50 py-2&quot;&gt;
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque
+        excepturi facilis suscipit, nihil dolorem porro accusamus sapiente
+        veritatis atque nesciunt placeat! Dolore ab aut error rerum beatae
+        aliquid nulla obcaecati?
+      &lt;/main&gt;
+
+      &lt;footer class=&quot;flex-1 border-t py-2&quot;&gt;
+        Nuxt 3 + Composition API + TailwindCSS
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[-->말한대로 화면이 구성되게끔 <code><!--[-->app.vue<!--]--></code>의 내용을 수정해주었습니다. 이렇게 하면 채팅이 들어가는 영역이 차지할 수 있는 만큼 모든 높이를 차지하게 됩니다.<!--]--></p><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/fab48203-d2e4-47f8-b2da-0be9afd649db" alt><!--]--></p><h2 id="채팅-데이터를-주기적으로-만들기"><a href="#채팅-데이터를-주기적으로-만들기"><!--[-->채팅 데이터를 주기적으로 만들기<!--]--></a></h2><p><!--[-->다음으로는 <code><!--[-->faker<!--]--></code> 패키지를 이용해 더미 채팅 데이터를 계속해서 만들어보고, 그 데이터를 화면에 그려보도록 하겠습니다.<!--]--></p><p><!--[-->먼저 더미 데이터를 만들기 위해 패키지를 설치해주세요.<!--]--></p><!--[--><pre><code>yarn add @faker-js/faker
+</code></pre><!--]--><p><!--[-->일단은 채팅 데이터 하나를 응답할 함수 하나를 작성합시다.<!--]--></p><!--[--><pre><code>&lt;script lang=&quot;ts&quot; setup&gt;
+import { fakerDE as faker } from &#39;@faker-js/faker&#39;
+
+type Chat = { id: string; name: string; message: string }
+
+function getChat(): Promise&lt;Chat&gt; {
+  return new Promise((resolve) =&gt; {
+    setTimeout(
+      () =&gt;
+        resolve({
+          id: faker.string.uuid(),
+          name: faker.person.fullName(),
+          message: faker.lorem.sentence(),
+        }),
+      500 // 0.5 seconds to respond
+    )
+  })
+}
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->물론 실제 상황이라면 소켓 연결을 통해 실시간으로 채팅 데이터를 받아오겠지만, 지금은 거기까지 가면 너무 복잡해지니까 지속적으로 이 함수를 호출하는 방식으로 갑시다.<!--]--></p><p><!--[-->다음은 <code><!--[-->setInterval<!--]--></code> 함수를 이용해 주기적으로 채팅 데이터를 배열에 넣는 역할을 하는 녀석을 만들어보겠습니다.<!--]--></p><!--[--><pre><code>&lt;script lang=&quot;ts&quot; setup&gt;
+const chats = ref&lt;Chat[]&gt;([])
+
+function pollingChats() {
+  const INTERVAL = 2000 // 2 seconds
+  setInterval(async () =&gt; {
+    const chat = await getChat()
+    chats.value.push(chat)
+  }, INTERVAL)
+}
+
+pollingChats()
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;div class=&quot;h-[100dvh]&quot;&gt;
+    &lt;div class=&quot;mx-auto flex h-full max-w-sm flex-col px-5&quot;&gt;
+      &lt;header class=&quot;flex-1 border-b py-3&quot;&gt;
+        &lt;h1 class=&quot;text-lg font-bold&quot;&gt;Chat Room with Auto Scrolling&lt;/h1&gt;
+      &lt;/header&gt;
+
+      &lt;main class=&quot;h-full bg-gray-100/50 py-2&quot;&gt;
+        &lt;ul v-if=&quot;chats.length&quot; class=&quot;space-y-5&quot;&gt;
+          &lt;li v-for=&quot;chat in chats&quot; :key=&quot;chat.id&quot;&gt;
+            &lt;div&gt;{{ chat.name }}&lt;/div&gt;
+            &lt;p&gt;{{ chat.message }}&lt;/p&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/main&gt;
+
+      &lt;footer class=&quot;flex-1 border-t py-2&quot;&gt;
+        Nuxt 3 + Composition API + TailwindCSS
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[-->이렇게하면 대충 채팅이 쌓이는 것 처럼은 보이게 됐습니다.<!--]--></p><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/c6c4864f-202e-4f87-900d-779b9b71124e" alt="Jul-18-2023 01-54-02"><!--]--></p><p><!--[-->근데 화면이 꽉 차면 Footer의 위치는 그대로인데, 채팅은 계속 아래로 쌓여서 글자가 겹쳐보이는 현상이 있습니다. 간단하게 CSS를 수정해봅시다.<!--]--></p><!--[--><pre><code>&lt;template&gt;
+  &lt;div class=&quot;h-[100dvh]&quot;&gt;
+    &lt;div class=&quot;mx-auto flex h-full max-w-sm flex-col overflow-hidden px-5&quot;&gt;
+      &lt;header class=&quot;flex-1 border-b py-3&quot;&gt;
+        &lt;h1 class=&quot;text-lg font-bold&quot;&gt;Chat Room with Auto Scrolling&lt;/h1&gt;
+      &lt;/header&gt;
+
+      &lt;main class=&quot;h-full overflow-y-scroll bg-gray-100/50 py-2&quot;&gt;
+        &lt;ul v-if=&quot;chats.length&quot; class=&quot;space-y-5&quot;&gt;
+          &lt;li v-for=&quot;chat in chats&quot; :key=&quot;chat.id&quot;&gt;
+            &lt;div&gt;{{ chat.name }}&lt;/div&gt;
+            &lt;p&gt;{{ chat.message }}&lt;/p&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/main&gt;
+
+      &lt;footer class=&quot;flex-1 border-t py-2&quot;&gt;
+        Nuxt 3 + Composition API + TailwindCSS
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre><!--]--><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/937d1b27-90ff-4e96-a61d-60d09fcc4192" alt="Jul-18-2023 01-57-06"><!--]--></p><p><!--[-->css의 <code><!--[-->overflow<!--]--></code> 속성을 이용해 아주 쉽게 Header와 Footer는 고정시키면서 가운데 영역의 콘텐츠가 꽉 찼을 때만 스크롤이 되게끔 동작하게 됐습니다.<!--]--></p><h2 id="자동-스크롤-구현하기"><a href="#자동-스크롤-구현하기"><!--[-->자동 스크롤 구현하기<!--]--></a></h2><p><!--[-->다음으로는 채팅이 쌓여 스크롤이 길어질 때 마다 가장 아래로 화면을 스크롤시키면 됩니다. 근데 어떻게 할까요?<!--]--></p><p><!--[-->채팅이 새로 추가가 됐을때 가운데 영역이 차지하는 영역 높이를 계산 후 스크롤을 아래로 보내면 됩니다. 말로는 약간 복잡한데 코드로 보면 쉽습니다.<!--]--></p><p><!--[-->채팅을 감싸는 HTML 태그에 접근할 수 있도록 변수에 담고, 아까 만든 <code><!--[-->pollingChats<!--]--></code> 함수를 약간 수정합시다.<!--]--></p><!--[--><pre><code>function pollingChats() {
+  const INTERVAL = 2000 // 2 seconds
+  setInterval(async () =&gt; {
+    const chat = await getChat()
+    chats.value.push(chat)
+
+    if (chatContainer.value) {
+      chatContainer.value.scrollTo(0, chatContainer.value.scrollHeight)
+    }
+  }, INTERVAL)
+}
+</code></pre><!--]--><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/e3abbba8-1cb6-43f5-b695-ea68a84660ee" alt="Jul-18-2023 02-08-17"><!--]--></p><p><!--[-->채팅이 새로 생겼을 때 자동으로 밑으로 내려가기는 하지만 뭔가 이상합니다. 마지막으로 생성된 채팅으로 이동하는 게 아니라, 그 위에까지만 이동하고 있습니다.<!--]--></p><p><!--[-->이유는 채팅이 실제로 그려진 이후 영역이 늘어난 다음에 스크롤이 이동해야하기 때문입니다. 현재 코드는 화면이 새로 업데이트가 되기도 전에 스크롤이 이동하기 때문에 마지막 위치로 이동하지 못하는 것이죠.<!--]--></p><p><!--[-->여기서 꿀팁은 Vue의 <code><!--[-->nextTick<!--]--></code> 함수를 이용하면 아주 쉽게 구현이 됩니다. 이 녀석의 역할을 간단하게 설명드리면 데이터 변화로 인한 화면 업데이트 이후 콜백이 실행되는 함수입니다. 다시 코드를 조금만 수정해주겠습니다.<!--]--></p><!--[--><pre><code>function pollingChats() {
+  const INTERVAL = 2000 // 2 seconds
+  setInterval(async () =&gt; {
+    const chat = await getChat()
+    chats.value.push(chat)
+
+    nextTick(() =&gt; {
+      if (chatContainer.value) {
+        chatContainer.value.scrollTo(0, chatContainer.value.scrollHeight)
+      }
+    })
+  }, INTERVAL)
+}
+</code></pre><!--]--><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/3392318a-beb7-497e-aaf0-5ae981c8eeed" alt="Jul-18-2023 02-13-04"><!--]--></p><p><!--[-->마지막 채팅이 추가되는 순간에 그 위치로 스크롤이 이동하고 있습니다.<!--]--></p><h2 id="역할-분리하기"><a href="#역할-분리하기"><!--[-->역할 분리하기<!--]--></a></h2><p><!--[-->지금까지 크게 2개의 역할을 수행하는 함수를 만들어습니다. 하나는 채팅 데이터를 관리하는 녀석, 나머지 하나는 스크롤링을 하는 녀석입니다.<!--]--></p><p><!--[-->이렇게 분리하는 이유는 채팅 데이터를 관리하는 녀석은 다른 페이지에서 그대로 다시 보여줄 가능성이 높고, 스크롤링을 하는 함수는 이 역할만 다른 곳에서 또 재사용해서 사용할 가능성이 높기 때문입니다. 그리고 초반부에 말씀드렸다시피 <code><!--[-->app.vue<!--]--></code>의 입장에서 굳이 채팅을 가져오는 부분과 스크롤링을 하는 내부 구현을 알 필요가 없기 때문입니다.<!--]--></p><p><!--[-->Nuxt 3에는 최상위 디렉토리에 <code><!--[-->composables<!--]--></code> 라는 폴더가 있으면서 그 아래에 파일이 있으면 자동으로 함수를 전역으로 주입해줍니다. 먼저 채팅을 관리하는 녀석부터 분리해봅시다.<!--]--></p><p><!--[-->프로젝트 최상위 디렉토리에 <code><!--[-->composables<!--]--></code> 폴더를 만들고 그 안에 <code><!--[-->useChat.ts<!--]--></code> 파일을 만들어주세요.<!--]--></p><!--[--><pre><code>import { fakerDE as faker } from &#39;@faker-js/faker&#39;
+
+type Chat = { id: string; name: string; message: string }
+
+export function useChat() {
+  const chats = ref&lt;Chat[]&gt;([])
+
+  function getChat(): Promise&lt;Chat&gt; {
+    return new Promise((resolve) =&gt; {
+      setTimeout(
+        () =&gt;
+          resolve({
+            id: faker.string.uuid(),
+            name: faker.person.fullName(),
+            message: faker.lorem.sentence(),
+          }),
+        500 // 0.5 seconds to respond
+      )
+    })
+  }
+
+  function pollingChats() {
+    const INTERVAL = 2000 // 2 seconds
+    setInterval(async () =&gt; {
+      const chat = await getChat()
+      chats.value.push(chat)
+    }, INTERVAL)
+  }
+
+  return { chats, getChat, pollingChats }
+}
+</code></pre><!--]--><p><!--[-->그리고 <code><!--[-->app.vue<!--]--></code> 파일의 <code><!--[-->script<!--]--></code> 부분을 수정해주세요.<!--]--></p><!--[--><pre><code>&lt;script lang=&quot;ts&quot; setup&gt;
+const { chats, pollingChats } = useChat()
+
+const chatContainer = ref&lt;HTMLElement&gt;()
+
+pollingChats()
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[-->근데 여기서 잠깐, 채팅과 관련된 녀석의 역할을 분리함으로써 오히려 자동 스크롤을 구현하기가 어려워졌습니다. <code><!--[-->pollingChats<!--]--></code> 함수 마지막 부분에서 <code><!--[-->chatContainer.scrollTo<!--]--></code>를 호출하고 있었는데 역할 분리에 따라 자동 스크롤과 관련된 코드를 넣기가 어려워졌기 때문입니다.<!--]--></p><p><!--[-->저는 2가지 해결 방법이 떠오르는데요, <code><!--[-->pollingChats()<!--]--></code>의 파라미터로 <code><!--[-->setInterval<!--]--></code> 호출 이후 콜백을 받을 수 있게 하든가, 아니면 Vue의 빌트인 함수인 <code><!--[-->watch<!--]--></code>를 사용하는 방법이 생각났습니다.<!--]--></p><p><!--[-->저는 좀 더 Vue스럽게 문제를 해결하기 위해 두 번째 방법을 시도하겠습니다. 일단 자동 스크롤과 관련된 녀석을 분리하기 위해 <code><!--[-->useAutoScroll.ts<!--]--></code> 파일을 <code><!--[-->composables<!--]--></code> 폴더 아래에 만들어줍시다.<!--]--></p><!--[--><pre><code>export function useAutoScroll(container: Ref&lt;HTMLElement | undefined&gt;) {
+  function scrollToBottom() {
+    nextTick(() =&gt; {
+      if (!container.value) {
+        return
+      }
+
+      container.value.scrollTo(0, container.value.scrollHeight)
+    })
+  }
+
+  return { scrollToBottom }
+}
+</code></pre><!--]--><p><!--[-->여기서 언급할만한 부분은 이 함수의 인자로 자동 스크롤을 적용하고 싶은 Vue의 반응형 HTML Element를 옵셔널로 받게끔 해주는 겁니다. 옵셔널로 해주는 이유는 <code><!--[-->app.vue<!--]--></code> 즉 이 함수를 호출하는 곳에서 옵셔널을 신경쓰지 않게끔 해주기 위함입니다. 이건 아래 코드를 보면 더 이해가 빠릅니다. 이제 <code><!--[-->app.vue<!--]--></code> 파일을 수정해줍시다.<!--]--></p><!--[--><pre><code>&lt;script lang=&quot;ts&quot; setup&gt;
+const { chats, pollingChats } = useChat()
+
+const chatContainer = ref&lt;HTMLElement&gt;()
+const { scrollToBottom } = useAutoScroll(chatContainer)
+
+watch(
+  () =&gt; chats.value.length,
+  () =&gt; {
+    scrollToBottom()
+  }
+)
+
+pollingChats()
+&lt;/script&gt;
+</code></pre><!--]--><p><!--[--><code><!--[-->watch<!--]--></code> 함수에 대한 설명으로는, 첫 번째 반환값에 데이터 변화를 감지하고 싶은 녀석을 넣어주면 두 번째 응답 콜백에서는 데이터 변화가 일어났을 때 이 콜백이 실행됩니다.<!--]--></p><p><!--[-->즉 위 코드는 채팅 데이터를 담고 있는 녀석의 배열 갯수가 달라질때마다 스크롤을 화면 밑으로 내려라가 됩니다.<!--]--></p><p><!--[-->이렇게 하면 역할을 분리하기 전과 동일하게 작동하고, 관심사가 분리되어 훨씬 더 보기 좋은 코드가됐습니다.<!--]--></p><h2 id="ux-개선하기"><a href="#ux-개선하기"><!--[-->UX 개선하기<!--]--></a></h2><p><!--[-->블로그를 마무리하기 전에 조금 신경쓰이는 부분이 있습니다.<!--]--></p><p><!--[-->보통 우리가 지금까지 만든 실시간 채팅 형태의 UX에선 지나간 채팅을 보기 위해 스크롤을 올리면 자동 스크롤이 멈춥니다. 그리고 다시 스크롤을 가장 아래로 내리면 알아서 다시 자동 스크롤이 시작됩니다.<!--]--></p><p><!--[-->마지막으로 이걸 개선해봅시다.<!--]--></p><p><!--[-->일단 채팅과는 관련이 없기 때문에 이건 <code><!--[-->useAutoScroll.ts<!--]--></code> 파일로 가서 수정합시다.<!--]--></p><!--[--><pre><code>export function useAutoScroll(container: Ref&lt;HTMLElement | undefined&gt;) {
+  const isAutoScrolling = ref&lt;boolean&gt;(true)
+
+  watch(
+    () =&gt; container.value,
+    () =&gt; {
+      if (container.value) {
+        container.value.addEventListener(&#39;scroll&#39;, () =&gt; {
+          const scrollTop = container.value!.scrollTop
+          const scrollHeight = container.value!.scrollHeight
+          const clientHeight = container.value!.clientHeight
+
+          const reachBottom = scrollTop + clientHeight &gt;= scrollHeight
+
+          if (reachBottom) {
+            isAutoScrolling.value = true
+          } else {
+            isAutoScrolling.value = false
+          }
+        })
+      }
+    }
+  )
+
+  function scrollToBottom() {
+    nextTick(() =&gt; {
+      if (!container.value || !isAutoScrolling.value) {
+        return
+      }
+
+      container.value.scrollTo(0, container.value.scrollHeight)
+    })
+  }
+
+  return { scrollToBottom }
+}
+</code></pre><!--]--><p><!--[-->코드는 간단합니다.<!--]--></p><p><!--[-->이 <code><!--[-->useAutoScroll<!--]--></code> 내부에 아까처럼 <code><!--[-->watch<!--]--></code> 를 이용해 <code><!--[-->container<!--]--></code> 변화를 감지해서 실제로 <code><!--[-->container<!--]--></code> 가 생겼을 때 <code><!--[-->addEventListener<!--]--></code> 를 붙여주고, 스크롤할 때 마다 높이를 감지해서 바닥에 스크롤이 닿았으면 <code><!--[-->boolean<!--]--></code> 값을 <code><!--[-->true<!--]--></code>으로 만들고, 아니면 <code><!--[-->false<!--]--></code> 로 만들어주면 됩니다.<!--]--></p><p><!--[--><img src="https://github.com/peterkimzz/blog/assets/20244536/5141b946-3ac3-419d-a2d7-24d9d6cf14a1" alt="Jul-24-2023 21-00-15"><!--]--></p><p><!--[-->잘 되네요!<!--]--></p><h2 id="마무리"><a href="#마무리"><!--[-->마무리<!--]--></a></h2><p><!--[-->Vue 3 Composition API 에서 새로 추가된 몇 가지 기능들과 Nuxt 3에서 새로 추가된 <code><!--[-->composables<!--]--></code> 을 활용해 간단한 예제와 함께 알아보았습니다. Composition API를 사용하면 훨씬 더 가독성 좋은 코드를 작성할 수 있고, 장기적으로 유지보수하기에 좋아지기 때문에 익숙하게 사용하신다면 매우 도움이 될 것 같습니다.<!--]--></p><p><!--[-->Nuxt 3에 대해 조금 더 자세히 알고 싶으시다면 <a href="/blog-v2/nuxt3-sideproject-2" class=""><!--[-->[Nuxt 3] 사이드 프로젝트 만들기 - 개발 환경 설정편<!--]--></a>를 읽어주세요.<!--]--></p></div><!--]--><!--]--></div></main><!--]--></div></div><script type="application/json" id="__NUXT_DATA__" data-ssr="true" data-src="/blog-v2/nuxt3-auto-scrolling-with-composition-api/_payload.json">[{"state":1,"_errors":3,"serverRendered":6,"path":7,"prerenderedAt":8},["Reactive",2],{},["Reactive",4],{"content-query-RLjE0kNcNY":5},null,true,"/nuxt3-auto-scrolling-with-composition-api",1691494669431]</script><script>window.__NUXT__={};window.__NUXT__.config={public:{HOSTNAME:"https://www.peterkimzz.com",content:{locales:[],defaultLocale:"",integrity:1691494662853,experimental:{stripQueryParameters:false,clientDB:false},respectPathCase:false,api:{baseURL:"/api/_content"},navigation:{fields:[]},tags:{p:"prose-p",a:"prose-a",blockquote:"prose-blockquote","code-inline":"prose-code-inline",code:"prose-code",em:"prose-em",h1:"prose-h1",h2:"prose-h2",h3:"prose-h3",h4:"prose-h4",h5:"prose-h5",h6:"prose-h6",hr:"prose-hr",img:"prose-img",ul:"prose-ul",ol:"prose-ol",li:"prose-li",strong:"prose-strong",table:"prose-table",thead:"prose-thead",tbody:"prose-tbody",td:"prose-td",th:"prose-th",tr:"prose-tr"},highlight:false,wsUrl:"",documentDriven:false,host:"",trailingSlash:false,anchorLinks:{depth:4,exclude:[1]}}},app:{baseURL:"/blog-v2/",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="module" src="/blog-v2/_nuxt/entry.6ca96203.js" crossorigin></script></body>
+</html>
